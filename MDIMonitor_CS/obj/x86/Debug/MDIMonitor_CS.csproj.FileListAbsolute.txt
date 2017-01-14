@@ -1,0 +1,8 @@
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.exe
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.pdb
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.FrameWin.resources
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.Properties.Resources.resources
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.SerialPortForm.resources
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csproj.GenerateResource.Cache
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.exe
+c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.pdb
