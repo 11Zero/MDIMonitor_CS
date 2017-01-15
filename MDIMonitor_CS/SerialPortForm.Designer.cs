@@ -45,6 +45,12 @@
             this.rich_Receive = new System.Windows.Forms.RichTextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.btn_test1 = new System.Windows.Forms.Button();
+            this.btn_test2 = new System.Windows.Forms.Button();
+            this.btn_endthread = new System.Windows.Forms.Button();
+            this.btn_stopthread = new System.Windows.Forms.Button();
+            this.btn_resumethread = new System.Windows.Forms.Button();
+            this.btn_killthread = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cbox_PortName
@@ -145,6 +151,7 @@
             this.btn_Open.TabIndex = 2;
             this.btn_Open.Text = "打开串口";
             this.btn_Open.UseVisualStyleBackColor = true;
+            this.btn_Open.Click += new System.EventHandler(this.btn_Open_Click);
             // 
             // btn_Close
             // 
@@ -154,6 +161,7 @@
             this.btn_Close.TabIndex = 2;
             this.btn_Close.Text = "关闭串口";
             this.btn_Close.UseVisualStyleBackColor = true;
+            this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
             // 
             // btn_SendData
             // 
@@ -163,6 +171,7 @@
             this.btn_SendData.TabIndex = 2;
             this.btn_SendData.Text = "发送数据";
             this.btn_SendData.UseVisualStyleBackColor = true;
+            this.btn_SendData.Click += new System.EventHandler(this.btn_SendData_Click);
             // 
             // rich_Send
             // 
@@ -198,14 +207,80 @@
             this.label7.TabIndex = 1;
             this.label7.Text = "接收窗";
             // 
+            // btn_test1
+            // 
+            this.btn_test1.Location = new System.Drawing.Point(503, 30);
+            this.btn_test1.Name = "btn_test1";
+            this.btn_test1.Size = new System.Drawing.Size(75, 23);
+            this.btn_test1.TabIndex = 4;
+            this.btn_test1.Text = "测试1";
+            this.btn_test1.UseVisualStyleBackColor = true;
+            this.btn_test1.Click += new System.EventHandler(this.btn_test1_Click);
+            // 
+            // btn_test2
+            // 
+            this.btn_test2.Location = new System.Drawing.Point(503, 59);
+            this.btn_test2.Name = "btn_test2";
+            this.btn_test2.Size = new System.Drawing.Size(75, 23);
+            this.btn_test2.TabIndex = 4;
+            this.btn_test2.Text = "测试2";
+            this.btn_test2.UseVisualStyleBackColor = true;
+            this.btn_test2.Click += new System.EventHandler(this.btn_test2_Click);
+            // 
+            // btn_endthread
+            // 
+            this.btn_endthread.Location = new System.Drawing.Point(503, 89);
+            this.btn_endthread.Name = "btn_endthread";
+            this.btn_endthread.Size = new System.Drawing.Size(75, 23);
+            this.btn_endthread.TabIndex = 2;
+            this.btn_endthread.Text = "结束线程";
+            this.btn_endthread.UseVisualStyleBackColor = true;
+            this.btn_endthread.Click += new System.EventHandler(this.btn_endthread_Click);
+            // 
+            // btn_stopthread
+            // 
+            this.btn_stopthread.Location = new System.Drawing.Point(503, 121);
+            this.btn_stopthread.Name = "btn_stopthread";
+            this.btn_stopthread.Size = new System.Drawing.Size(75, 23);
+            this.btn_stopthread.TabIndex = 5;
+            this.btn_stopthread.Text = "暂停线程";
+            this.btn_stopthread.UseVisualStyleBackColor = true;
+            this.btn_stopthread.Click += new System.EventHandler(this.btn_stopthread_Click);
+            // 
+            // btn_resumethread
+            // 
+            this.btn_resumethread.Location = new System.Drawing.Point(503, 151);
+            this.btn_resumethread.Name = "btn_resumethread";
+            this.btn_resumethread.Size = new System.Drawing.Size(75, 23);
+            this.btn_resumethread.TabIndex = 6;
+            this.btn_resumethread.Text = "恢复线程";
+            this.btn_resumethread.UseVisualStyleBackColor = true;
+            this.btn_resumethread.Click += new System.EventHandler(this.btn_resumethread_Click);
+            // 
+            // btn_killthread
+            // 
+            this.btn_killthread.Location = new System.Drawing.Point(503, 181);
+            this.btn_killthread.Name = "btn_killthread";
+            this.btn_killthread.Size = new System.Drawing.Size(75, 23);
+            this.btn_killthread.TabIndex = 7;
+            this.btn_killthread.Text = "终止线程";
+            this.btn_killthread.UseVisualStyleBackColor = true;
+            this.btn_killthread.Click += new System.EventHandler(this.btn_killthread_Click);
+            // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(601, 276);
+            this.Controls.Add(this.btn_killthread);
+            this.Controls.Add(this.btn_resumethread);
+            this.Controls.Add(this.btn_stopthread);
+            this.Controls.Add(this.btn_test2);
+            this.Controls.Add(this.btn_test1);
             this.Controls.Add(this.rich_Receive);
             this.Controls.Add(this.rich_Send);
             this.Controls.Add(this.btn_SendData);
+            this.Controls.Add(this.btn_endthread);
             this.Controls.Add(this.btn_Close);
             this.Controls.Add(this.btn_Open);
             this.Controls.Add(this.label7);
@@ -230,23 +305,29 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox cbox_PortName;
+        public System.Windows.Forms.ComboBox cbox_PortName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox cbox_Baud;
+        public System.Windows.Forms.ComboBox cbox_Baud;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cbox_Parity;
+        public System.Windows.Forms.ComboBox cbox_Parity;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox cbox_Bits;
+        public System.Windows.Forms.ComboBox cbox_Bits;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ComboBox cbox_Stop;
+        public System.Windows.Forms.ComboBox cbox_Stop;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btn_Open;
         private System.Windows.Forms.Button btn_Close;
         private System.Windows.Forms.Button btn_SendData;
-        private System.Windows.Forms.RichTextBox rich_Send;
-        private System.Windows.Forms.RichTextBox rich_Receive;
+        public System.Windows.Forms.RichTextBox rich_Send;
+        public System.Windows.Forms.RichTextBox rich_Receive;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btn_test1;
+        private System.Windows.Forms.Button btn_test2;
+        private System.Windows.Forms.Button btn_endthread;
+        private System.Windows.Forms.Button btn_stopthread;
+        private System.Windows.Forms.Button btn_resumethread;
+        private System.Windows.Forms.Button btn_killthread;
 
     }
 }

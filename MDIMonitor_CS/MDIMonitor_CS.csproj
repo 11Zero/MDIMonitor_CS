@@ -61,6 +61,7 @@
     <Compile Include="SerialPortForm.Designer.cs">
       <DependentUpon>SerialPortForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserThread.cs" />
     <EmbeddedResource Include="FrameWin.resx">
       <DependentUpon>FrameWin.cs</DependentUpon>
     </EmbeddedResource>

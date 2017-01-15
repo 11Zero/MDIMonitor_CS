@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.splitterLeft = new System.Windows.Forms.Splitter();
-            this.splitterRight = new System.Windows.Forms.Splitter();
             this.StatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -45,42 +46,35 @@
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // splitterLeft
-            // 
-            this.splitterLeft.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.splitterLeft.Location = new System.Drawing.Point(0, 0);
-            this.splitterLeft.Name = "splitterLeft";
-            this.splitterLeft.Size = new System.Drawing.Size(179, 456);
-            this.splitterLeft.TabIndex = 5;
-            this.splitterLeft.TabStop = false;
-            // 
-            // splitterRight
-            // 
-            this.splitterRight.Location = new System.Drawing.Point(179, 0);
-            this.splitterRight.Name = "splitterRight";
-            this.splitterRight.Size = new System.Drawing.Size(780, 456);
-            this.splitterRight.TabIndex = 6;
-            this.splitterRight.TabStop = false;
-            // 
             // StatusLabel1
             // 
             this.StatusLabel1.Name = "StatusLabel1";
             this.StatusLabel1.Size = new System.Drawing.Size(131, 17);
             this.StatusLabel1.Text = "toolStripStatusLabel1";
             // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Size = new System.Drawing.Size(959, 456);
+            this.splitContainer.SplitterDistance = 235;
+            this.splitContainer.TabIndex = 8;
+            // 
             // FrameWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 478);
-            this.Controls.Add(this.splitterRight);
-            this.Controls.Add(this.splitterLeft);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.statusStrip1);
             this.IsMdiContainer = true;
             this.Name = "FrameWin";
             this.Text = "Form1";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -89,9 +83,8 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.Splitter splitterLeft;
-        private System.Windows.Forms.Splitter splitterRight;
-        private System.Windows.Forms.ToolStripStatusLabel StatusLabel1;
+        public System.Windows.Forms.ToolStripStatusLabel StatusLabel1;
+        private System.Windows.Forms.SplitContainer splitContainer;
 
 
     }

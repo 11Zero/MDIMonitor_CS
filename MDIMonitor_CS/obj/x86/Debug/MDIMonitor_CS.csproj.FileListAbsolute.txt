@@ -6,3 +6,11 @@ c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMo
 c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csproj.GenerateResource.Cache
 c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.exe
 c:\users\administrator\documents\visual studio 2010\Projects\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.FrameWin.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.Properties.Resources.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.SerialPortForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csproj.GenerateResource.Cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.pdb

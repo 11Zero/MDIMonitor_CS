@@ -1,0 +1,9 @@
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.FrameWin.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Properties.Resources.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.SerialPortForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csproj.GenerateResource.Cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache
