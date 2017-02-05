@@ -61,6 +61,7 @@
     <Compile Include="SerialPortForm.Designer.cs">
       <DependentUpon>SerialPortForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserSerialPort.cs" />
     <Compile Include="UserThread.cs" />
     <EmbeddedResource Include="FrameWin.resx">
       <DependentUpon>FrameWin.cs</DependentUpon>
@@ -77,6 +78,7 @@
     <EmbeddedResource Include="SerialPortForm.resx">
       <DependentUpon>SerialPortForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

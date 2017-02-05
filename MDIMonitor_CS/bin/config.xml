@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Soft>  
+  <SN RegCode="01234567890"></SN>  
+  <LoginConfig SqlServer="." SqlDB="db" UserCode="sa" UserPwd="123">  
+  </LoginConfig>  
+</Soft>

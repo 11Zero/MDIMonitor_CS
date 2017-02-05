@@ -31,8 +31,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.main_btn_1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,11 +57,26 @@
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.IsSplitterFixed = true;
             this.splitContainer.Location = new System.Drawing.Point(0, 0);
             this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.main_btn_1);
             this.splitContainer.Size = new System.Drawing.Size(959, 456);
-            this.splitContainer.SplitterDistance = 235;
+            this.splitContainer.SplitterDistance = 230;
             this.splitContainer.TabIndex = 8;
+            // 
+            // main_btn_1
+            // 
+            this.main_btn_1.Location = new System.Drawing.Point(48, 24);
+            this.main_btn_1.Name = "main_btn_1";
+            this.main_btn_1.Size = new System.Drawing.Size(111, 28);
+            this.main_btn_1.TabIndex = 0;
+            this.main_btn_1.Text = "串口设置";
+            this.main_btn_1.UseVisualStyleBackColor = true;
+            this.main_btn_1.Click += new System.EventHandler(this.main_btn_1_Click);
             // 
             // FrameWin
             // 
@@ -69,10 +86,12 @@
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.statusStrip1);
             this.IsMdiContainer = true;
+            this.MaximizeBox = false;
             this.Name = "FrameWin";
             this.Text = "Form1";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -85,6 +104,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         public System.Windows.Forms.ToolStripStatusLabel StatusLabel1;
         private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.Button main_btn_1;
 
 
     }

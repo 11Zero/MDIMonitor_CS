@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="gb2312"?>
+<Soft>
+  <COM id="1" Parity="None" DataBits="One" BaudRate="115200" StopBits="None">
+  </COM>
+  <COM id="2" Parity="None" DataBits="One" BaudRate="9600" StopBits="OnePointFive">
+  </COM>
+</Soft>

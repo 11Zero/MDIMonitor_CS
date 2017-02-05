@@ -25,24 +25,7 @@ namespace MDIMonitor_CS
             this.m_ParentForm.PostMessage(6);
         }
 
-        private void cbox_Baud_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void btn_Open_Click(object sender, EventArgs e)
-        {
-            this.m_ParentForm.PostMessage(3);
-        }
-
-        private void btn_Close_Click(object sender, EventArgs e)
-        {
-            this.m_ParentForm.PostMessage(4);
-        }
-        private void btn_SendData_Click(object sender, EventArgs e)
-        {
-            this.m_ParentForm.PostMessage(5);
-        }
 
 
 
@@ -56,6 +39,44 @@ namespace MDIMonitor_CS
             this.m_ParentForm.PostMessage(2);
         }
 
+        //private void btn_Open_Click(object sender, EventArgs e)
+        //{
+        //    this.m_ParentForm.PostMessage(3);
+        //}
+
+        //private void btn_Close_Click(object sender, EventArgs e)
+        //{
+        //    this.m_ParentForm.PostMessage(4);
+        //}
+        private void btn_SensorSendData_Click(object sender, EventArgs e)//发送测量数据
+        {
+            this.m_ParentForm.PostMessage(5);
+        }
+
+        private void btn_PhoneSendData_Click(object sender, EventArgs e)//发送手机数据
+        {
+            this.m_ParentForm.PostMessage(11);
+        }
+
+       private void btn_ok_Click(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(7);//post确认端口修改消息
+        }
+
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(8);//post取消端口修改消息
+        }
+
+        private void check_PhonePort_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(10);//变更Phone端口开关
+        }
+
+        private void check_SensorPort_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9);//变更Sensor端口开关
+        }
 
         private void btn_stopthread_Click(object sender, EventArgs e)
         {
@@ -75,6 +96,14 @@ namespace MDIMonitor_CS
         {
             this.m_ParentForm.PostMessage(-4);
         }
+
+
+
+        private void SerialPortForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
 
     }
 }

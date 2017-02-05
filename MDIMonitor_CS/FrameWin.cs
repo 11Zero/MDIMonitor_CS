@@ -43,5 +43,13 @@ namespace MDIMonitor_CS
             else if (msgid == -4)
                 this.thread.End();
         }
+
+        private void main_btn_1_Click(object sender, EventArgs e)
+        {
+            this.splitContainer.Panel2.Controls.Clear();
+            SerialForm.Size = this.splitContainer.Panel2.Size;
+            SerialForm.Parent = this.splitContainer.Panel2;
+            SerialForm.Show();
+        }
     }
 }
