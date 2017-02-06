@@ -32,6 +32,8 @@
             this.StatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.main_btn_1 = new System.Windows.Forms.Button();
+            this.btn_CurDataView = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -63,6 +65,8 @@
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.button1);
+            this.splitContainer.Panel1.Controls.Add(this.btn_CurDataView);
             this.splitContainer.Panel1.Controls.Add(this.main_btn_1);
             this.splitContainer.Size = new System.Drawing.Size(959, 456);
             this.splitContainer.SplitterDistance = 230;
@@ -77,6 +81,26 @@
             this.main_btn_1.Text = "串口设置";
             this.main_btn_1.UseVisualStyleBackColor = true;
             this.main_btn_1.Click += new System.EventHandler(this.main_btn_1_Click);
+            // 
+            // btn_CurDataView
+            // 
+            this.btn_CurDataView.Location = new System.Drawing.Point(48, 85);
+            this.btn_CurDataView.Name = "btn_CurDataView";
+            this.btn_CurDataView.Size = new System.Drawing.Size(75, 23);
+            this.btn_CurDataView.TabIndex = 1;
+            this.btn_CurDataView.Text = "实时数据";
+            this.btn_CurDataView.UseVisualStyleBackColor = true;
+            this.btn_CurDataView.Click += new System.EventHandler(this.btn_CurDataView_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(138, 85);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "主动扫描";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FrameWin
             // 
@@ -105,6 +129,8 @@
         public System.Windows.Forms.ToolStripStatusLabel StatusLabel1;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Button main_btn_1;
+        private System.Windows.Forms.Button btn_CurDataView;
+        private System.Windows.Forms.Button button1;
 
 
     }

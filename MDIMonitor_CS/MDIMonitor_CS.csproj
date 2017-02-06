@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CurDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CurDataForm.Designer.cs">
+      <DependentUpon>CurDataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrameWin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +69,9 @@
     </Compile>
     <Compile Include="UserSerialPort.cs" />
     <Compile Include="UserThread.cs" />
+    <EmbeddedResource Include="CurDataForm.resx">
+      <DependentUpon>CurDataForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrameWin.resx">
       <DependentUpon>FrameWin.cs</DependentUpon>
     </EmbeddedResource>
