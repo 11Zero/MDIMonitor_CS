@@ -28,45 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richText_DataRec = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            this.CurChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            ((System.ComponentModel.ISupportInitialize)(this.CurChart)).BeginInit();
             this.SuspendLayout();
             // 
-            // richText_DataRec
+            // CurChart
             // 
-            this.richText_DataRec.Location = new System.Drawing.Point(150, 67);
-            this.richText_DataRec.Name = "richText_DataRec";
-            this.richText_DataRec.Size = new System.Drawing.Size(250, 83);
-            this.richText_DataRec.TabIndex = 0;
-            this.richText_DataRec.Text = "";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(150, 49);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 12);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "数据接收口";
+            chartArea1.Name = "ChartArea1";
+            this.CurChart.ChartAreas.Add(chartArea1);
+            this.CurChart.Location = new System.Drawing.Point(33, 23);
+            this.CurChart.Name = "CurChart";
+            this.CurChart.Size = new System.Drawing.Size(624, 351);
+            this.CurChart.TabIndex = 4;
+            this.CurChart.Text = "chart1";
             // 
             // CurDataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(802, 452);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.richText_DataRec);
+            this.Controls.Add(this.CurChart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CurDataForm";
             this.Text = "CurDataForm";
+            ((System.ComponentModel.ISupportInitialize)(this.CurChart)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        public System.Windows.Forms.RichTextBox richText_DataRec;
+        public System.Windows.Forms.DataVisualization.Charting.Chart CurChart;
+
+
+
     }
 }

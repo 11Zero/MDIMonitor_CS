@@ -31,9 +31,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.main_btn_1 = new System.Windows.Forms.Button();
-            this.btn_CurDataView = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.btn_CurDataView = new System.Windows.Forms.Button();
+            this.main_btn_1 = new System.Windows.Forms.Button();
+            this.btn_TestCurData = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -65,6 +66,7 @@
             // 
             // splitContainer.Panel1
             // 
+            this.splitContainer.Panel1.Controls.Add(this.btn_TestCurData);
             this.splitContainer.Panel1.Controls.Add(this.button1);
             this.splitContainer.Panel1.Controls.Add(this.btn_CurDataView);
             this.splitContainer.Panel1.Controls.Add(this.main_btn_1);
@@ -72,15 +74,15 @@
             this.splitContainer.SplitterDistance = 230;
             this.splitContainer.TabIndex = 8;
             // 
-            // main_btn_1
+            // button1
             // 
-            this.main_btn_1.Location = new System.Drawing.Point(48, 24);
-            this.main_btn_1.Name = "main_btn_1";
-            this.main_btn_1.Size = new System.Drawing.Size(111, 28);
-            this.main_btn_1.TabIndex = 0;
-            this.main_btn_1.Text = "串口设置";
-            this.main_btn_1.UseVisualStyleBackColor = true;
-            this.main_btn_1.Click += new System.EventHandler(this.main_btn_1_Click);
+            this.button1.Location = new System.Drawing.Point(138, 85);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "主动扫描";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btn_CurDataView
             // 
@@ -92,15 +94,25 @@
             this.btn_CurDataView.UseVisualStyleBackColor = true;
             this.btn_CurDataView.Click += new System.EventHandler(this.btn_CurDataView_Click);
             // 
-            // button1
+            // main_btn_1
             // 
-            this.button1.Location = new System.Drawing.Point(138, 85);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "主动扫描";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.main_btn_1.Location = new System.Drawing.Point(48, 24);
+            this.main_btn_1.Name = "main_btn_1";
+            this.main_btn_1.Size = new System.Drawing.Size(111, 28);
+            this.main_btn_1.TabIndex = 0;
+            this.main_btn_1.Text = "串口设置";
+            this.main_btn_1.UseVisualStyleBackColor = true;
+            this.main_btn_1.Click += new System.EventHandler(this.main_btn_1_Click);
+            // 
+            // btn_TestCurData
+            // 
+            this.btn_TestCurData.Location = new System.Drawing.Point(48, 131);
+            this.btn_TestCurData.Name = "btn_TestCurData";
+            this.btn_TestCurData.Size = new System.Drawing.Size(122, 23);
+            this.btn_TestCurData.TabIndex = 3;
+            this.btn_TestCurData.Text = "测试CurData";
+            this.btn_TestCurData.UseVisualStyleBackColor = true;
+            this.btn_TestCurData.Click += new System.EventHandler(this.btn_TestCurData_Click);
             // 
             // FrameWin
             // 
@@ -131,6 +143,7 @@
         private System.Windows.Forms.Button main_btn_1;
         private System.Windows.Forms.Button btn_CurDataView;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_TestCurData;
 
 
     }

@@ -9,7 +9,8 @@ using System.Xml.Linq;
 using System.Xml;
 using System.Management;
 using System.Timers;
-
+using System.Data.SQLite;
+using System.IO;
 namespace MDIMonitor_CS
 {
     public class UserThread
@@ -23,6 +24,7 @@ namespace MDIMonitor_CS
         private int[] portPhoneAttribute = new int[4];
         private int[] portSensorAttribute = new int[4];
         private static string xmlName;
+        public int delayTime = 500;//默认延时0.5s扫描节点；
         private bool end = false;//结束线程标志
         private bool kill = false;//终结线程标志
         private bool stop = false;//暂停线程标志
@@ -144,7 +146,7 @@ namespace MDIMonitor_CS
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
-                }
+               }
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束
                     break;
@@ -160,16 +162,19 @@ namespace MDIMonitor_CS
             {
                 if (Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex == -1)
                     return false;
-                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
-                {
-                    Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
-                    return false;
-                }
                 portSensor.PortName = Parent.SerialForm.cbox_Sensor_PortName.Text;
             }
             else
             {
                 Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
+                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                {
+                    if (portPhone.IsOpen)
+                    {
+                        Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
+                        return false;
+                    }
+                }
             }
 
             int[] tempPortSensorAttribute = new int[4];
@@ -236,7 +241,7 @@ namespace MDIMonitor_CS
                         portSensor.StopBits = StopBits.Two;
                 }
             }
-
+            portSensor.ReadBufferSize = 40;
 
             //根据选择的数据，设置奇偶校验位
 
@@ -307,17 +312,20 @@ namespace MDIMonitor_CS
             {
                 if (Parent.SerialForm.cbox_Phone_PortName.SelectedIndex == -1)
                     return false;
-                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
-                {
-                    Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
-                    return false;
-                }
                 portPhone.PortName = Parent.SerialForm.cbox_Phone_PortName.Text;
             }
             else
             {
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName);
-            }
+                 if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                {
+                    if (portSensor.IsOpen)
+                    {
+                        Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
+                        return false;
+                    }
+                }
+           }
 
             int[] tempPortPhoneAttribute = new int[4];//临时存储属性
             tempPortPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
@@ -466,7 +474,7 @@ namespace MDIMonitor_CS
                 //MessageBox.Show(currentline);
                 //在这里对接收到的数据进行显示
                 //如果不在窗体加载的事件里写上：Form.CheckForIllegalCrossThreadCalls = false; 就会报错）
-                Parent.CurForm.richText_DataRec.AppendText("[" + DateTime.Now.TimeOfDay.ToString() + "]:" + currentline + "\n");
+                //Parent.CurForm.richText_DataRec.AppendText("[" + DateTime.Now.TimeOfDay.ToString() + "]:" + currentline + "\n");
                 return;
             }
             catch (Exception ex)
@@ -494,40 +502,58 @@ namespace MDIMonitor_CS
         }
         private void SensorRecFun()//(object Sensorer, SerialDataReceivedEventArgs e)//测量端口需主动扫描，因此不委托接收事件
         {
+            if (!portSensor.IsOpen)
+                return;
             try
             {
-                int totalNodeCount = 4;
-                byte addr_id = 1;
+                int totalNodeCount = 1;
+                int[] nodeChNum = {1};
                 for (int i = 0; i < totalNodeCount; i++)
                 {
-                    #region 测控485网络
+                    TakeMeasure485((byte)(i + 1));
+                    System.Threading.Thread.Sleep(delayTime);//测量时间间隔
+                    int bufferLength = portSensor.BytesToRead;
+                    if (bufferLength > 0)
+                    {
+                        byte[] readBuffer = new byte[bufferLength];
+                        portSensor.Read(readBuffer, 0, bufferLength);
+                        if (bufferLength == 21)
+                        {
+                            uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
+                            uint rcCRC = (uint)readBuffer[bufferLength - 1];
+                            rcCRC = (rcCRC<<8) & 0x0ff00;
+                            rcCRC += (uint)readBuffer[bufferLength - 2];
+                            if (rcCRC == CRC16Code)
+                            {
+                                for (int j = 0; j < nodeChNum[i]; j++)
+                                {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
+                                    string[] dataUnit = new string[8];
+                                    dataUnit[0] = String.Format("{0}",i);//节点
+                                    dataUnit[1] = String.Format("{0}", j);//通道
+                                    dataUnit[2] = String.Format("名称");//名称
+                                    dataUnit[3] = String.Format("{0}", DateTime.Now.TimeOfDay);//时间
+                                    double LMD = 3.1415;
+                                    dataUnit[4] = String.Format("{0}",LMD);//灵敏度
+                                    uint dataValue = readBuffer[j*2+3];
+                                    dataValue = (dataValue << 8) & 0x0ff00;
+                                    dataValue = dataValue + readBuffer[j * 2 + 4];
+                                    int value = (int)dataValue;
+                                    dataUnit[5] = String.Format("{0}", i);
+                                    dataUnit[6] = String.Format("单位");
+                                    dataUnit[7] = String.Format("位置");
+                                    string strview = "";
+                                    for (int k = 0; k < 8; k++)
+                                    {
+                                        strview += dataUnit[i];
+                                        strview += ",";
+                                    }
+                                    MessageBox.Show(strview);
+                                }
+                            }
+                        }
+                    }
 
-                    uint[] sendDataPack = new uint[100];
-                    int packLength = 0;
-                    sendDataPack[packLength++] = addr_id;
-                    sendDataPack[packLength++] = 4;
-                    sendDataPack[packLength++] = 0;
-                    sendDataPack[packLength++] = 0;
-                    sendDataPack[packLength++] = 0;
-                    sendDataPack[packLength++] = 8;
-                    uint CRC16Code = CRC16Caclu(ref sendDataPack, packLength);
-                    sendDataPack[packLength++] = (CRC16Code & 0x0ff);
-                    sendDataPack[packLength++] = (CRC16Code >> 8) & 0x0ff;
-                    //待继续添加发送数据方法，疑惑是已二进制发送还是16进制发送
-                    #endregion
                 }
-                string currentline = "";
-                //循环接收串口中的数据
-                while (portSensor.BytesToRead > 0)
-                {
-                    char ch = (char)portSensor.ReadByte();
-                    currentline += ch.ToString();
-                }
-                //portPhone.DiscardInBuffer();
-                //MessageBox.Show(currentline);
-                //在这里对接收到的数据进行显示
-                //如果不在窗体加载的事件里写上：Form.CheckForIllegalCrossThreadCalls = false; 就会报错）
-                Parent.CurForm.richText_DataRec.AppendText("[" + DateTime.Now.TimeOfDay.ToString() + "]:" + currentline + "\n");
                 return;
             }
             catch (Exception ex)
@@ -536,6 +562,10 @@ namespace MDIMonitor_CS
                 return;
             }
         }
+        /// <summary>
+        /// 向测量端口发送命令
+        /// </summary>
+        /// <param name="CommandString">命令字符串</param>
         private void SensorCommand(string CommandString)
         {
 
@@ -553,27 +583,76 @@ namespace MDIMonitor_CS
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-
-        private uint CRC16Caclu(ref uint[] buffer, int length)
+        ///// <summary>
+        ///// 计算CRC16校验码
+        ///// </summary>
+        ///// <param name="buffer">数据缓存</param>
+        ///// <param name="length">数据长度</param>
+        ///// <returns></returns>
+        //private uint CRC16Caclu(ref uint[] buffer, int length)
+        //{
+        //    uint checkCode = 0x0ffff;
+        //    uint tempCode;
+        //    for (int i = 0; i < length; i++)
+        //    {
+        //        tempCode = buffer[i];
+        //        checkCode = checkCode ^ tempCode;
+        //        for (int j = 0; j < 8; j++)
+        //        {
+        //            if ((checkCode & 0x1) == 1)
+        //            {
+        //                checkCode = checkCode >> 1;
+        //                checkCode = checkCode ^ 0x0a001;
+        //            }
+        //            else
+        //                checkCode = checkCode >> 1;
+        //        }
+        //    }
+        //    return checkCode;
+        //}
+        /// <summary>
+        /// 网上找的CRC16校验码计算算法并修改
+        /// </summary>
+        /// <param name="data">待计算数据</param>
+        /// <param name="len">数据长度</param>
+        /// <returns>校验码</returns>
+        private uint CRC16Caclu(byte[] data, int len)
         {
-            uint checkCode = 0x0ffff;
-            uint tempCode;
-            for (int i = 0; i < length; i++)
+            uint xda;
+            int i, j;
+            xda = 0xFFFF;
+            for (i = 0; i < len; i++)
             {
-                tempCode = buffer[i];
-                checkCode = checkCode ^ tempCode;
-                for (int j = 0; j < 8; j++)
+                xda ^= data[i];
+                for (j = 0; j < 8; j++)
                 {
-                    if ((checkCode & 0x1) == 1)
-                    {
-                        checkCode = checkCode >> 1;
-                        checkCode = checkCode ^ 0x0a001;
-                    }
+                    if ((xda & 0x01) == 1)
+                        xda = (xda >> 1) ^ 0xA001;
                     else
-                        checkCode = checkCode >> 1;
+                        xda >>= 1;
                 }
             }
-            return checkCode;
+            return xda;
+        }
+        /// <summary>
+        /// 测控485网络
+        /// </summary>
+        /// <param name="addr_id">节点id</param>
+        private void TakeMeasure485(byte addr_id)
+        {
+            byte[] sendDataPack = new byte[2048];
+            int packLength = 0;
+            sendDataPack[packLength++] = 1;
+            sendDataPack[packLength++] = 4;
+            sendDataPack[packLength++] = 0;
+            sendDataPack[packLength++] = 0;
+            sendDataPack[packLength++] = 0;
+            sendDataPack[packLength++] = 8;
+            uint CRC16Code = CRC16Caclu(sendDataPack, packLength);
+            sendDataPack[packLength++] = (byte)(CRC16Code & 0x0ff);
+            sendDataPack[packLength++] = (byte)((CRC16Code >> 8) & 0x0ff);
+            portSensor.Write(sendDataPack, 0, packLength);
+            //待继续添加发送数据方法，疑惑是已二进制发送还是16进制发送
         }
 
         #region 读XML文件
@@ -673,40 +752,24 @@ namespace MDIMonitor_CS
 
         private void msgFunction_1()//对应消息码为1的时要执行的函数
         {
-            setXmlValue("COM", "id", "2", "StopBits", "OnePointFive");
+            if (portSensor.IsOpen)
+            {
+                SensorRecFun();
+                Parent.StatusLabel1.Text = "主动扫描测量端口成功";
+            }
+            else
+            {
+                Parent.StatusLabel1.Text = "测量端口未开启";
+            }
         }
         private void msgFunction_2()//对应消息码为2的时要执行的函数
         {
-            Parent.StatusLabel1.Text = String.Format("id = {0}", msgQueue.Peek());
-            System.Threading.Thread.Sleep(3000);
         }
         private void msgFunction_3()//对应消息码为3的时要执行的函数
         {
-            //if (Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex == -1)
-            //{
-            //    this.Parent.StatusLabel1.Text = "请确认串口端口";
-            //    return;
-            //}
-            //if (Parent.SerialForm.cbox_Sensor_PortName.Text == "COM2")
-            //{
-            //    OpenSensorPort();
-            //}
-            //if (Parent.SerialForm.cbox_Sensor_PortName.Text == "COM1")
-            //{
-            //    OpenPhonePort();
-            //}
         }
         private void msgFunction_4()//对应消息码为3的时要执行的函数
         {
-            //if (portSensor.IsOpen)
-            //{
-            //    portSensor.Close();
-            //}
-            //if (portPhone.IsOpen)
-            //{
-            //    portPhone.Close();
-            //}
-            //this.Parent.StatusLabel1.Text = "the port is closed";
         }
         private void msgFunction_5()////发送测量数据
         {
@@ -878,6 +941,7 @@ namespace MDIMonitor_CS
             Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
             //循环该计算机上所有串行端口的集合
             Parent.SerialForm.cbox_Sensor_PortName.Items.Clear();
+            Parent.SerialForm.cbox_Phone_PortName.Items.Clear();
             foreach (string s in pc.Ports.SerialPortNames)
             {
                 Parent.SerialForm.cbox_Sensor_PortName.Items.Add(s);
@@ -902,15 +966,7 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_13()//主动扫描测量节点内数据
         {
-            if (portSensor.IsOpen)
-            {
-                SensorRecFun();
-                Parent.StatusLabel1.Text = "主动扫描测量端口成功";
-            }
-            else
-            {
-                Parent.StatusLabel1.Text = "测量端口未开启";
-            }
         }
+
     }
 }

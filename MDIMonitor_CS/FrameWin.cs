@@ -15,10 +15,12 @@ namespace MDIMonitor_CS
         public SerialPortForm SerialForm = null;
         public  CurDataForm CurForm = null;
         private UserThread thread = null;
+        private UIThread UIthread = null;
         public FrameWin()
         {
             InitializeComponent();
             thread = new UserThread(this);
+            UIthread = new UIThread(this);
 
             SerialForm = new SerialPortForm(this);
             SerialForm.MdiParent = this;
@@ -39,19 +41,37 @@ namespace MDIMonitor_CS
         ~FrameWin()
         {
             this.thread.End();
+            this.UIthread.End();
         }
-        public void PostMessage(int msgid)
+        public void PostMessage(int msgid,int thread_id)
         {
-            if (msgid > 0)
-                this.thread.PostMessage(msgid);
-            else if (msgid == -1)
-                this.thread.Stop();
-            else if (msgid == -2)
-                this.thread.Resume();
-            else if (msgid == -3)
-                this.thread.Kill();
-            else if (msgid == -4)
-                this.thread.End();
+            if (thread_id == 0)
+            {
+                if (msgid > 0)
+                    this.thread.PostMessage(msgid);
+                else if (msgid == -1)
+                    this.thread.Stop();
+                else if (msgid == -2)
+                    this.thread.Resume();
+                else if (msgid == -3)
+                    this.thread.Kill();
+                else if (msgid == -4)
+                    this.thread.End();
+            }
+            if (thread_id == 1)
+            {
+                if (msgid > 0)
+                    this.UIthread.PostMessage(msgid);
+                else if (msgid == -1)
+                    this.UIthread.Stop();
+                else if (msgid == -2)
+                    this.UIthread.Resume();
+                else if (msgid == -3)
+                    this.UIthread.Kill();
+                else if (msgid == -4)
+                    this.UIthread.End();
+                
+            }
         }
 
         private void main_btn_1_Click(object sender, EventArgs e)
@@ -74,7 +94,12 @@ namespace MDIMonitor_CS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.thread.PostMessage(13);//发送消息主动扫描测量节点内数据
+            this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
+        }
+
+        private void btn_TestCurData_Click(object sender, EventArgs e)
+        {
+            this.PostMessage(1,1);
         }
     }
 }
