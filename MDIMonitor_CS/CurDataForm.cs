@@ -14,9 +14,9 @@ namespace MDIMonitor_CS
     {
         FrameWin m_ParentForm = null;
         public DataTable dataTable = new DataTable();
-        public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
         private DateTime nowtime = new DateTime();
-        private object[] invokeChartData = new object[2];
+        //public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
+        //private object[] invokeChartData = new object[2];
         public CurDataForm(FrameWin parent)
         {
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace MDIMonitor_CS
         }
         private void InitChart()//初始化chart
         {
-            dataTable.Columns.Add("日期", typeof(String));
+            dataTable.Columns.Add("时间", typeof(String));
             dataTable.Columns.Add("数据", typeof(double));
             Random ran = new Random();
             DateTime stime = new DateTime(2014, 1, 1, 0, 0, 0);
@@ -42,10 +42,10 @@ namespace MDIMonitor_CS
             for (int j = 0; j < 100; j++)
             {
                 nowtime = nowtime + step;
-                dataTable.Rows.Add(nowtime.ToString("HH:mm:ss"), ran.Next(0, 20));
+                dataTable.Rows.Add(nowtime.ToString("无效数据"), 0);
             }
-            Series series = new Series("测试");
-            series.Points.DataBind(dataTable.AsEnumerable(), "日期", "数据", "");
+            Series series = new Series("监测1");
+            series.Points.DataBind(dataTable.AsEnumerable(), "时间", "数据", "");
             series.ChartType = SeriesChartType.Spline;
             this.CurChart.Series.Add(series);
             CurChart.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
@@ -55,8 +55,8 @@ namespace MDIMonitor_CS
             CurChart.ChartAreas[0].AxisX.ScaleView.Position = CurChart.Series[0].Points.Count - CurChart.ChartAreas[0].AxisX.ScaleView.Size;
             CurChart.ChartAreas[0].AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
             CurChart.ChartAreas[0].AxisX.ScrollBar.LineColor = System.Drawing.Color.Black;
-            invokeChartData[0] = CurChart;
-            invokeChartData[1] = dataTable;
+            //invokeChartData[0] = CurChart;
+            //invokeChartData[1] = dataTable;
 
             /*Chart.ChartAreas[0].AxisY.ScrollBar.Enabled = true;
             Chart.ChartAreas[0].CursorY.AutoScroll = true;
@@ -70,23 +70,23 @@ namespace MDIMonitor_CS
             Chart.ChartAreas[0].AxisY.ScrollBar.LineColor = System.Drawing.Color.Black;
              */
         }
-        /// <summary>
-        /// 执行委托
-        /// </summary>
-        public void UpdateChart()
-        {
-            CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
-        }
+        ///// <summary>
+        ///// 执行委托
+        ///// </summary>
+        //public void UpdateChart()
+        //{
+        //    CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
+        //}
 
-        /// <summary>
-        /// 委托方法
-        /// </summary>
-        /// <param name="_Chart">要更新的Chart控件</param>
-        /// <param name="_dataTable">要写入的数据</param>
-        public void ChartDelegateMethod(Chart _Chart, DataTable _dataTable)
-        {
-            _Chart.Series[0].Points.DataBind(this.dataTable.AsEnumerable(), "日期", "数据", "");
-        }
+        ///// <summary>
+        ///// 委托方法
+        ///// </summary>
+        ///// <param name="_Chart">要更新的Chart控件</param>
+        ///// <param name="_dataTable">要写入的数据</param>
+        //public void ChartDelegateMethod(Chart _Chart, DataTable _dataTable)
+        //{
+        //    _Chart.Series[0].Points.DataBind(this.dataTable.AsEnumerable(), "时间", "数据", "");
+        //}
 
 
     }

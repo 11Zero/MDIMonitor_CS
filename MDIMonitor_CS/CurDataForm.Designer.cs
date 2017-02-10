@@ -37,9 +37,9 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.CurChart.ChartAreas.Add(chartArea1);
-            this.CurChart.Location = new System.Drawing.Point(33, 23);
+            this.CurChart.Location = new System.Drawing.Point(0, 0);
             this.CurChart.Name = "CurChart";
-            this.CurChart.Size = new System.Drawing.Size(624, 351);
+            this.CurChart.Size = new System.Drawing.Size(731, 425);
             this.CurChart.TabIndex = 4;
             this.CurChart.Text = "chart1";
             // 
@@ -47,7 +47,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(802, 452);
+            this.ClientSize = new System.Drawing.Size(959, 425);
             this.Controls.Add(this.CurChart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CurDataForm";

@@ -24,13 +24,14 @@ namespace MDIMonitor_CS
         private int[] portPhoneAttribute = new int[4];
         private int[] portSensorAttribute = new int[4];
         private static string xmlName;
-        public int delayTime = 500;//默认延时0.5s扫描节点；
+        public int delayTime = 500;//默认延时0.5s扫描节点
         private bool end = false;//结束线程标志
         private bool kill = false;//终结线程标志
         private bool stop = false;//暂停线程标志
         private Thread thread = null;//恢复线程标志
         private Queue<int> msgQueue = null;//存储消息队列
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
+        
         public UserThread(Form parent)
         {
             Parent = (FrameWin)parent;//强制转换
@@ -38,10 +39,12 @@ namespace MDIMonitor_CS
             msgQueue = new Queue<int>();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
         }
+
         ~UserThread()
         {
             this.End();//析构时结束线程
         }
+
         public void PostMessage(int id)//id为传入的消息标识
         {
             if (end || kill)//如果线程结束或终止，不执行任何动作
@@ -53,6 +56,7 @@ namespace MDIMonitor_CS
             if (!this.thread.IsAlive)//如果线程未开启，将启动线程
                 this.thread.Start();
         }
+
         public void Start()
         {
             if (end || kill)//如果线程已被结束或终止，将不执行任何动作
@@ -60,27 +64,32 @@ namespace MDIMonitor_CS
             if (!this.thread.IsAlive)//如果线程未开启，将启动线程
                 thread.Start();
         }
+
         public void End()
         {
             end = true;//如果线程结束，将结束标识设为真，线程将在消息队列中所有消息执行完后终止
-            Parent.StatusLabel1.Text = String.Format("结束线程");
+            Parent.statusLabel.Text = String.Format("结束线程");
         }
+
         public void Kill()
         {
             kill = true;//如果线程终止，将终止标识设为真，线程将不再执行消息队列中剩余消息
-            Parent.StatusLabel1.Text = String.Format("终止线程");
+            Parent.statusLabel.Text = String.Format("终止线程");
         }
+
         public void Stop()
         {
             stop = true;//如果线程暂停，将暂停标识设为真，线程将暂不执行消息队列中剩余消息，
             //但是消息队列仍然在接收消息，一旦线程恢复，继续执行所接收消息
-            Parent.StatusLabel1.Text = String.Format("暂停线程");
+            Parent.statusLabel.Text = String.Format("暂停线程");
         }
+
         public void Resume()
         {
             stop = false;//如果线程恢复，将恢复标识设为真，线程将继续执行消息队列中剩余消息
-            Parent.StatusLabel1.Text = String.Format("恢复线程");
+            Parent.statusLabel.Text = String.Format("恢复线程");
         }
+
         #region 消息循环函数
         private void Run()
         {
@@ -171,7 +180,7 @@ namespace MDIMonitor_CS
                 {
                     if (portPhone.IsOpen)
                     {
-                        Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
+                        Parent.statusLabel.Text = "手机端口与测量端口不能相同";
                         return false;
                     }
                 }
@@ -188,22 +197,22 @@ namespace MDIMonitor_CS
                 {
                     if (i == 0)
                     {
-                        Parent.StatusLabel1.Text = "请确认测量端口比特率";
+                        Parent.statusLabel.Text = "请确认测量端口比特率";
                         return false;
                     }
                     if (i == 1)
                     {
-                        Parent.StatusLabel1.Text = "请确认测量端口奇偶校验位";
+                        Parent.statusLabel.Text = "请确认测量端口奇偶校验位";
                         return false;
                     }
                     if (i == 2)
                     {
-                        Parent.StatusLabel1.Text = "请确认测量端口数据位";
+                        Parent.statusLabel.Text = "请确认测量端口数据位";
                         return false;
                     }
                     if (i == 3)
                     {
-                        Parent.StatusLabel1.Text = "请确认测量端口停止位";
+                        Parent.statusLabel.Text = "请确认测量端口停止位";
                         return false;
                     }
                 }
@@ -261,7 +270,7 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.StatusLabel1.Text = "设置已生效";
+                    this.Parent.statusLabel.Text = "设置已生效";
                     portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
                     portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
                     portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
@@ -277,7 +286,7 @@ namespace MDIMonitor_CS
                 if (portSensor_ShouldOpen && portSensor.IsOpen)
                 {
                     //MessageBox.Show("the port is opened!");
-                    this.Parent.StatusLabel1.Text = "Sensor port is opened";
+                    this.Parent.statusLabel.Text = "Sensor port is opened";
                     portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
                     portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
                     portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
@@ -292,7 +301,7 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.StatusLabel1.Text = "failure to open Sensor port!";
+                    this.Parent.statusLabel.Text = "failure to open Sensor port!";
                     return false;
                 }
             }
@@ -321,7 +330,7 @@ namespace MDIMonitor_CS
                 {
                     if (portSensor.IsOpen)
                     {
-                        Parent.StatusLabel1.Text = "手机端口与测量端口不能相同";
+                        Parent.statusLabel.Text = "手机端口与测量端口不能相同";
                         return false;
                     }
                 }
@@ -338,22 +347,22 @@ namespace MDIMonitor_CS
                 {
                     if (i == 0)
                     {
-                        Parent.StatusLabel1.Text = "请确认手机端口比特率";
+                        Parent.statusLabel.Text = "请确认手机端口比特率";
                         return false;
                     }
                     if (i == 1)
                     {
-                        Parent.StatusLabel1.Text = "请确认手机端口奇偶校验位";
+                        Parent.statusLabel.Text = "请确认手机端口奇偶校验位";
                         return false;
                     }
                     if (i == 2)
                     {
-                        Parent.StatusLabel1.Text = "请确认手机端口数据位";
+                        Parent.statusLabel.Text = "请确认手机端口数据位";
                         return false;
                     }
                     if (i == 3)
                     {
-                        Parent.StatusLabel1.Text = "请确认手机端口停止位";
+                        Parent.statusLabel.Text = "请确认手机端口停止位";
                         return false;
                     }
                 }
@@ -412,7 +421,7 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.StatusLabel1.Text = "设置已生效";
+                    this.Parent.statusLabel.Text = "设置已生效";
                     portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
                     portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
                     portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
@@ -428,7 +437,7 @@ namespace MDIMonitor_CS
                 if (portPhone_ShouldOpen && portPhone.IsOpen)
                 {
                     //MessageBox.Show("the port is opened!");
-                    this.Parent.StatusLabel1.Text = "Phone port is opened";
+                    this.Parent.statusLabel.Text = "Phone port is opened";
                     portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
                     portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
                     portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
@@ -444,7 +453,7 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.StatusLabel1.Text = "failure to open Phone port!";
+                    this.Parent.statusLabel.Text = "failure to open Phone port!";
                     return false;
                 }
             }
@@ -483,6 +492,11 @@ namespace MDIMonitor_CS
                 return;
             }
         }
+        /// <summary>
+        /// 向手机发送短信
+        /// </summary>
+        /// <param name="CommandString">短信内容</param>
+        /// <param name="phoneNumber">手机号码</param>
         private void PhoneCommand(string CommandString, string phoneNumber)
         {
 
@@ -500,7 +514,11 @@ namespace MDIMonitor_CS
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-        private void SensorRecFun()//(object Sensorer, SerialDataReceivedEventArgs e)//测量端口需主动扫描，因此不委托接收事件
+
+        /// <summary>
+        /// 扫描测量端口
+        /// </summary>
+        private void SensorRecFun()//测量端口需主动扫描，因此不委托接收事件
         {
             if (!portSensor.IsOpen)
                 return;
@@ -513,41 +531,43 @@ namespace MDIMonitor_CS
                     TakeMeasure485((byte)(i + 1));
                     System.Threading.Thread.Sleep(delayTime);//测量时间间隔
                     int bufferLength = portSensor.BytesToRead;
-                    if (bufferLength > 0)
+                    if (true)//bufferLength > 0
                     {
-                        byte[] readBuffer = new byte[bufferLength];
-                        portSensor.Read(readBuffer, 0, bufferLength);
-                        if (bufferLength == 21)
+                        byte[] readBuffer = new byte[30];//bufferLength
+                        //portSensor.Read(readBuffer, 0, bufferLength);
+                        if (true)//bufferLength == 21
                         {
-                            uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
-                            uint rcCRC = (uint)readBuffer[bufferLength - 1];
-                            rcCRC = (rcCRC<<8) & 0x0ff00;
-                            rcCRC += (uint)readBuffer[bufferLength - 2];
-                            if (rcCRC == CRC16Code)
+                            //uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
+                            //uint rcCRC = (uint)readBuffer[bufferLength - 1];
+                            //rcCRC = (rcCRC<<8) & 0x0ff00;
+                            //rcCRC += (uint)readBuffer[bufferLength - 2];
+                            if (true)//rcCRC == CRC16Code
                             {
                                 for (int j = 0; j < nodeChNum[i]; j++)
                                 {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                                     string[] dataUnit = new string[8];
-                                    dataUnit[0] = String.Format("{0}",i);//节点
-                                    dataUnit[1] = String.Format("{0}", j);//通道
+                                    dataUnit[0] = String.Format("{0}",i+1);//节点
+                                    dataUnit[1] = String.Format("{0}", j+1);//通道
                                     dataUnit[2] = String.Format("名称");//名称
-                                    dataUnit[3] = String.Format("{0}", DateTime.Now.TimeOfDay);//时间
+                                    dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
                                     double LMD = 3.1415;
                                     dataUnit[4] = String.Format("{0}",LMD);//灵敏度
                                     uint dataValue = readBuffer[j*2+3];
                                     dataValue = (dataValue << 8) & 0x0ff00;
                                     dataValue = dataValue + readBuffer[j * 2 + 4];
-                                    int value = (int)dataValue;
-                                    dataUnit[5] = String.Format("{0}", i);
+                                    Random ran = new Random();
+                                    int value = ran.Next(0,20);//(int)dataValue;
+                                    dataUnit[5] = String.Format("{0}", value);//测量值
                                     dataUnit[6] = String.Format("单位");
                                     dataUnit[7] = String.Format("位置");
-                                    string strview = "";
-                                    for (int k = 0; k < 8; k++)
-                                    {
-                                        strview += dataUnit[i];
-                                        strview += ",";
-                                    }
-                                    MessageBox.Show(strview);
+                                    SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
+                                    //string strview = "";
+                                    //for (int k = 0; k < 8; k++)
+                                    //{
+                                    //    strview += dataUnit[i];
+                                    //    strview += ",";
+                                    //}
+                                    //MessageBox.Show(strview);
                                 }
                             }
                         }
@@ -558,10 +578,12 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 Console.WriteLine(ex.Message.ToString());
                 return;
             }
         }
+
         /// <summary>
         /// 向测量端口发送命令
         /// </summary>
@@ -583,6 +605,7 @@ namespace MDIMonitor_CS
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+
         ///// <summary>
         ///// 计算CRC16校验码
         ///// </summary>
@@ -610,6 +633,7 @@ namespace MDIMonitor_CS
         //    }
         //    return checkCode;
         //}
+
         /// <summary>
         /// 网上找的CRC16校验码计算算法并修改
         /// </summary>
@@ -634,6 +658,7 @@ namespace MDIMonitor_CS
             }
             return xda;
         }
+
         /// <summary>
         /// 测控485网络
         /// </summary>
@@ -655,18 +680,19 @@ namespace MDIMonitor_CS
             //待继续添加发送数据方法，疑惑是已二进制发送还是16进制发送
         }
 
-        #region 读XML文件
-
-        /// <summary>  
-        /// 返回XMl文件指定元素的指定属性值  
-        /// </summary>  
-        /// <param name="xmlElement">指定元素</param>  
-        /// <param name="xmlAttribute">指定属性</param>  
-        /// <returns></returns>  
+        /// <summary>
+        /// 返回XMl文件指定元素的指定属性值
+        /// </summary>
+        /// <param name="xmlElement">指定元素</param>
+        /// <param name="elementKey">元素识别键</param>
+        /// <param name="keyValue">元素识别键键值</param>
+        /// <param name="xmlAttribute">需要获得的元素属性</param>
+        /// <returns>返回需要的属性值</returns>
         public static string getXmlValue(string xmlElement, string elementKey, string keyValue, string xmlAttribute)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(xmlName);
+                xmlDoc.Load(xmlName);
+                Application.Exit();
             XmlNodeList xnlist = xmlDoc.SelectNodes("//" + xmlElement);
             string str = "";
             foreach (XmlNode xn in xnlist)
@@ -680,22 +706,20 @@ namespace MDIMonitor_CS
                         str = xe.GetAttribute(xmlAttribute);
                         break;
                     }
-                    //Parent.StatusLabel1.Text = string.Format("id={0},Parity:{1},DataBits:{2},BaudRate{3}", id, Parity, DataBits, BaudRate);
+                    //Parent.statusLabel.Text = string.Format("id={0},Parity:{1},DataBits:{2},BaudRate{3}", id, Parity, DataBits, BaudRate);
                 }
             }
             return str;
         }
 
-        #endregion
-
-        #region 写XML文件
-
-        /// <summary>  
-        /// 设置XMl文件指定元素的指定属性的值  
-        /// </summary>  
-        /// <param name="xmlElement">指定元素</param>  
-        /// <param name="xmlAttribute">指定属性</param>  
-        /// <param name="xmlValue">指定值</param>  
+        /// <summary>
+        /// 设置XMl文件指定元素的指定属性的值
+        /// </summary>
+        /// <param name="xmlElement">指定元素</param>
+        /// <param name="elementKey">元素识别键</param>
+        /// <param name="keyValue">元素识别键键值</param>
+        /// <param name="xmlAttribute">需要设置的元素属性</param>
+        /// <param name="attributeValue">需要设置的属性值</param>
         public static void setXmlValue(string xmlElement, string elementKey, string keyValue, string xmlAttribute, string attributeValue)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -713,20 +737,16 @@ namespace MDIMonitor_CS
                         xmlDoc.Save(xmlName);
                         break;
                     }
-                    //Parent.StatusLabel1.Text = string.Format("id={0},Parity:{1},DataBits:{2},BaudRate{3}", id, Parity, DataBits, BaudRate);
                 }
             }
         }
-        #endregion
-
-        #region 删除XML元素
 
         /// <summary>  
-        /// 设置XMl文件指定元素的指定属性的值  
+        /// 删除XMl文件指定元素的指定属性的值  
         /// </summary>  
         /// <param name="xmlElement">指定元素</param>  
         /// <param name="xmlAttribute">指定属性</param>  
-        /// <param name="xmlValue">指定值</param>  
+        /// <param name="xmlValue">指定属性值</param>  
         public static void removeXmlElement(string xmlElement, string elementKey, string keyValue)
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -744,22 +764,32 @@ namespace MDIMonitor_CS
                         xmlDoc.Save(xmlName);
                         break;
                     }
-                    //Parent.StatusLabel1.Text = string.Format("id={0},Parity:{1},DataBits:{2},BaudRate{3}", id, Parity, DataBits, BaudRate);
                 }
             }
         }
-        #endregion
+
+        /// <summary>
+        /// 发送扫描到的数据到Chart控件并存储到数据库
+        /// </summary>
+        /// <param name="datastr">扫描到的节点数据集合</param>
+        private void SendDataToChartSQL(string[] datastr)
+        {
+            Parent.curDataValue = datastr;
+            Parent.PostMessage(3, 1);//向UI线程发送消息存储数据
+            Parent.PostMessage(2, 1);//向UI线程发送消息刷新chart
+            
+        }
 
         private void msgFunction_1()//对应消息码为1的时要执行的函数
         {
             if (portSensor.IsOpen)
             {
                 SensorRecFun();
-                Parent.StatusLabel1.Text = "主动扫描测量端口成功";
+                Parent.statusLabel.Text = "主动扫描测量端口成功";
             }
             else
             {
-                Parent.StatusLabel1.Text = "测量端口未开启";
+                Parent.statusLabel.Text = "测量端口未开启";
             }
         }
         private void msgFunction_2()//对应消息码为2的时要执行的函数
@@ -775,7 +805,7 @@ namespace MDIMonitor_CS
         {
             if (!portSensor.IsOpen)
             {
-                this.Parent.StatusLabel1.Text = "the Sensor port has not been opened";
+                this.Parent.statusLabel.Text = "the Sensor port has not been opened";
                 return;
             }
             SensorCommand(Parent.SerialForm.rich_Send.Text);
@@ -784,19 +814,18 @@ namespace MDIMonitor_CS
         {
             if (!portPhone.IsOpen)
             {
-                this.Parent.StatusLabel1.Text = "the Phone port has not been opened";
+                this.Parent.statusLabel.Text = "the Phone port has not been opened";
                 return;
             }
             string number = "18326077303";
             PhoneCommand(Parent.SerialForm.rich_Send.Text, number);
         }
-        #region 初始化Serial窗口UI
-        private void msgFunction_6()
+        private void msgFunction_6()//初始化Serial窗口UI
         {
             portSensor = new SerialPort();
             portPhone = new SerialPort();
             //让壮态栏控件的宽度与显示器的分辨率宽度一致
-            //this.Parent.this.m_ParentForm.StatusLabel1.Text = "就绪";
+            //this.Parent.this.m_ParentForm.statusLabel.Text = "就绪";
             //实例化
             //这里需要添加引用Microsoft.VisualBasic的引用，提供操作计算机组件（如：音频，时钟，键盘文件系统等）的属性
             Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
@@ -901,12 +930,10 @@ namespace MDIMonitor_CS
             portPhoneAttribute[3] = Convert.ToInt32(getXmlValue("COM", "id", "Phone", "Stop"));//停止位
             #endregion
         }
-        #endregion
-
         private void msgFunction_7()//确认端口修改
         {
             if (SetPhonePort() && SetSensorPort())
-                Parent.StatusLabel1.Text = "端口修改成功";
+                Parent.statusLabel.Text = "端口修改成功";
         }
         private void msgFunction_8()//取消端口修改
         { }
@@ -967,6 +994,5 @@ namespace MDIMonitor_CS
         private void msgFunction_13()//主动扫描测量节点内数据
         {
         }
-
     }
 }

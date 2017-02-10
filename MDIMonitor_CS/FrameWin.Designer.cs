@@ -28,124 +28,161 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.StatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.button1 = new System.Windows.Forms.Button();
-            this.btn_CurDataView = new System.Windows.Forms.Button();
-            this.main_btn_1 = new System.Windows.Forms.Button();
-            this.btn_TestCurData = new System.Windows.Forms.Button();
-            this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.SuspendLayout();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.串口设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_SerialForm = new System.Windows.Forms.ToolStripMenuItem();
+            this.数据浏览ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_CurForm = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_HisForm = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_ScanPort = new System.Windows.Forms.ToolStripMenuItem();
+            this.StripContainer = new System.Windows.Forms.ToolStripContainer();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuStrip.SuspendLayout();
+            this.StripContainer.BottomToolStripPanel.SuspendLayout();
+            this.StripContainer.TopToolStripPanel.SuspendLayout();
+            this.StripContainer.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // statusStrip1
+            // menuStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 456);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(959, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.menuStrip.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.串口设置ToolStripMenuItem,
+            this.数据浏览ToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.menuStrip.Size = new System.Drawing.Size(959, 25);
+            this.menuStrip.TabIndex = 1;
+            this.menuStrip.Text = "menuStrip1";
             // 
-            // StatusLabel1
+            // 串口设置ToolStripMenuItem
             // 
-            this.StatusLabel1.Name = "StatusLabel1";
-            this.StatusLabel1.Size = new System.Drawing.Size(131, 17);
-            this.StatusLabel1.Text = "toolStripStatusLabel1";
+            this.串口设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_SerialForm});
+            this.串口设置ToolStripMenuItem.Name = "串口设置ToolStripMenuItem";
+            this.串口设置ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.串口设置ToolStripMenuItem.Text = "串口设置";
             // 
-            // splitContainer
+            // menu_SerialForm
             // 
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.IsSplitterFixed = true;
-            this.splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer.Name = "splitContainer";
+            this.menu_SerialForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_SerialForm.Name = "menu_SerialForm";
+            this.menu_SerialForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_SerialForm.Text = "串口参数";
+            this.menu_SerialForm.Click += new System.EventHandler(this.menu_SerialForm_Click);
             // 
-            // splitContainer.Panel1
+            // 数据浏览ToolStripMenuItem
             // 
-            this.splitContainer.Panel1.Controls.Add(this.btn_TestCurData);
-            this.splitContainer.Panel1.Controls.Add(this.button1);
-            this.splitContainer.Panel1.Controls.Add(this.btn_CurDataView);
-            this.splitContainer.Panel1.Controls.Add(this.main_btn_1);
-            this.splitContainer.Size = new System.Drawing.Size(959, 456);
-            this.splitContainer.SplitterDistance = 230;
-            this.splitContainer.TabIndex = 8;
+            this.数据浏览ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_CurForm,
+            this.menu_HisForm,
+            this.menu_ScanPort});
+            this.数据浏览ToolStripMenuItem.Name = "数据浏览ToolStripMenuItem";
+            this.数据浏览ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.数据浏览ToolStripMenuItem.Text = "数据浏览";
             // 
-            // button1
+            // menu_CurForm
             // 
-            this.button1.Location = new System.Drawing.Point(138, 85);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "主动扫描";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.menu_CurForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_CurForm.Name = "menu_CurForm";
+            this.menu_CurForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_CurForm.Text = "实时监控";
+            this.menu_CurForm.Click += new System.EventHandler(this.menu_CurForm_Click);
             // 
-            // btn_CurDataView
+            // menu_HisForm
             // 
-            this.btn_CurDataView.Location = new System.Drawing.Point(48, 85);
-            this.btn_CurDataView.Name = "btn_CurDataView";
-            this.btn_CurDataView.Size = new System.Drawing.Size(75, 23);
-            this.btn_CurDataView.TabIndex = 1;
-            this.btn_CurDataView.Text = "实时数据";
-            this.btn_CurDataView.UseVisualStyleBackColor = true;
-            this.btn_CurDataView.Click += new System.EventHandler(this.btn_CurDataView_Click);
+            this.menu_HisForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_HisForm.Name = "menu_HisForm";
+            this.menu_HisForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_HisForm.Text = "历史数据";
             // 
-            // main_btn_1
+            // menu_ScanPort
             // 
-            this.main_btn_1.Location = new System.Drawing.Point(48, 24);
-            this.main_btn_1.Name = "main_btn_1";
-            this.main_btn_1.Size = new System.Drawing.Size(111, 28);
-            this.main_btn_1.TabIndex = 0;
-            this.main_btn_1.Text = "串口设置";
-            this.main_btn_1.UseVisualStyleBackColor = true;
-            this.main_btn_1.Click += new System.EventHandler(this.main_btn_1_Click);
+            this.menu_ScanPort.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_ScanPort.Name = "menu_ScanPort";
+            this.menu_ScanPort.Size = new System.Drawing.Size(124, 22);
+            this.menu_ScanPort.Text = "主动扫描";
+            this.menu_ScanPort.Click += new System.EventHandler(this.menu_ScanPort_Click);
             // 
-            // btn_TestCurData
+            // StripContainer
             // 
-            this.btn_TestCurData.Location = new System.Drawing.Point(48, 131);
-            this.btn_TestCurData.Name = "btn_TestCurData";
-            this.btn_TestCurData.Size = new System.Drawing.Size(122, 23);
-            this.btn_TestCurData.TabIndex = 3;
-            this.btn_TestCurData.Text = "测试CurData";
-            this.btn_TestCurData.UseVisualStyleBackColor = true;
-            this.btn_TestCurData.Click += new System.EventHandler(this.btn_TestCurData_Click);
+            // 
+            // StripContainer.BottomToolStripPanel
+            // 
+            this.StripContainer.BottomToolStripPanel.Controls.Add(this.statusStrip);
+            // 
+            // StripContainer.ContentPanel
+            // 
+            this.StripContainer.ContentPanel.Size = new System.Drawing.Size(959, 431);
+            this.StripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.StripContainer.Location = new System.Drawing.Point(0, 0);
+            this.StripContainer.Name = "StripContainer";
+            this.StripContainer.Size = new System.Drawing.Size(959, 478);
+            this.StripContainer.TabIndex = 5;
+            this.StripContainer.Text = "toolStripContainer2";
+            // 
+            // StripContainer.TopToolStripPanel
+            // 
+            this.StripContainer.TopToolStripPanel.Controls.Add(this.menuStrip);
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 0);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(959, 22);
+            this.statusStrip.TabIndex = 0;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(56, 17);
+            this.statusLabel.Text = "启动完成";
             // 
             // FrameWin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 478);
-            this.Controls.Add(this.splitContainer);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.StripContainer);
             this.IsMdiContainer = true;
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "FrameWin";
             this.Text = "Form1";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.splitContainer.Panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
+            this.StripContainer.BottomToolStripPanel.ResumeLayout(false);
+            this.StripContainer.BottomToolStripPanel.PerformLayout();
+            this.StripContainer.TopToolStripPanel.ResumeLayout(false);
+            this.StripContainer.TopToolStripPanel.PerformLayout();
+            this.StripContainer.ResumeLayout(false);
+            this.StripContainer.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        public System.Windows.Forms.ToolStripStatusLabel StatusLabel1;
-        private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.Button main_btn_1;
-        private System.Windows.Forms.Button btn_CurDataView;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button btn_TestCurData;
-
-
+        private System.Windows.Forms.MenuStrip menuStrip;
+        private System.Windows.Forms.ToolStripMenuItem 串口设置ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_SerialForm;
+        private System.Windows.Forms.ToolStripMenuItem 数据浏览ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_CurForm;
+        private System.Windows.Forms.ToolStripMenuItem menu_HisForm;
+        private System.Windows.Forms.ToolStripMenuItem menu_ScanPort;
+        private System.Windows.Forms.ToolStripContainer StripContainer;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        public System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        //private System.Windows.Forms.Panel panel_Frame;
     }
 }
 

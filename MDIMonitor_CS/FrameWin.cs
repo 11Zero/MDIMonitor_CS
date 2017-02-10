@@ -16,6 +16,7 @@ namespace MDIMonitor_CS
         public  CurDataForm CurForm = null;
         private UserThread thread = null;
         private UIThread UIthread = null;
+        public string[] curDataValue = new string[8];
         public FrameWin()
         {
             InitializeComponent();
@@ -30,13 +31,13 @@ namespace MDIMonitor_CS
             CurForm.MdiParent = this;
             CurForm.Location = new Point(0, 0);
 
-            this.splitContainer.Panel2.Controls.Clear();
-            SerialForm.Size = this.splitContainer.Panel2.Size;
-            SerialForm.Parent = this.splitContainer.Panel2;
+            this.StripContainer.ContentPanel.Controls.Clear();
+            SerialForm.Size = this.StripContainer.ContentPanel.Size;
+            SerialForm.Parent = this.StripContainer.ContentPanel;
             SerialForm.Show();
 
-            CurForm.Size = this.splitContainer.Panel2.Size;
-            CurForm.Parent = this.splitContainer.Panel2;
+            CurForm.Size = this.StripContainer.ContentPanel.Size;
+            CurForm.Parent = this.StripContainer.ContentPanel;
         }
         ~FrameWin()
         {
@@ -74,32 +75,35 @@ namespace MDIMonitor_CS
             }
         }
 
-        private void main_btn_1_Click(object sender, EventArgs e)
-        {
-            this.splitContainer.Panel2.Controls.Clear();
-            SerialForm.Size = this.splitContainer.Panel2.Size;
-            SerialForm.Parent = this.splitContainer.Panel2;
-            this.thread.PostMessage(12);//发送消息设置SerialForm窗口控件状态
-            SerialForm.Show();
-        }
 
-        private void btn_CurDataView_Click(object sender, EventArgs e)
-        {
-            this.splitContainer.Panel2.Controls.Clear();
-            CurForm.Size = this.splitContainer.Panel2.Size;
-            CurForm.Parent = this.splitContainer.Panel2;
-            //this.thread.PostMessage(13);//发送消息设置SerialForm窗口控件状态
-            CurForm.Show();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
-        }
 
         private void btn_TestCurData_Click(object sender, EventArgs e)
         {
             this.PostMessage(1,1);
+        }
+
+        private void menu_SerialForm_Click(object sender, EventArgs e)
+        {
+            this.StripContainer.ContentPanel.Controls.Clear();
+            SerialForm.Size = this.StripContainer.ContentPanel.Size;
+            SerialForm.Parent = this.StripContainer.ContentPanel;
+            this.thread.PostMessage(12);//发送消息设置SerialForm窗口控件状态
+            SerialForm.Show();
+        }
+
+        private void menu_CurForm_Click(object sender, EventArgs e)
+        {
+            this.StripContainer.ContentPanel.Controls.Clear();
+            CurForm.Size = this.StripContainer.ContentPanel.Size;
+            CurForm.Parent = this.StripContainer.ContentPanel;
+            CurForm.Show();
+
+        }
+
+        private void menu_ScanPort_Click(object sender, EventArgs e)
+        {
+            this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
+
         }
     }
 }

@@ -21,6 +21,9 @@ namespace MDIMonitor_CS
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
+        public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
+        private object[] invokeChartData = new object[2];
+
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
         public UIThread(Form parent)
         {
@@ -90,6 +93,10 @@ namespace MDIMonitor_CS
                             {
                                 msgFunction_2();//例如消息码为2是，执行msgFunction_2()函数
                             } break;
+                        case 3:
+                            {
+                                msgFunction_3();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
                 }
@@ -112,9 +119,9 @@ namespace MDIMonitor_CS
         {
             string fileName = String.Format("NODE{0}CH{1}", node, ch);
             string path = "Database";
-           if (Directory.Exists(path) == false)
+            if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
-           path = path+"\\"+DateTime.Now.Date.ToString("yyyy-MM-dd");
+            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
             if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
             try
@@ -134,7 +141,7 @@ namespace MDIMonitor_CS
                 sqlCommand.Connection = dataBase;
                 for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
                 {
-                    string tableName = String.Format("_{0}_00_00",(i*2).ToString().PadLeft(2,'0'));
+                    string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
                     string sqlcmd = "create table if not exists " + tableName +
                         "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
                     sqlCommand.CommandText = sqlcmd;
@@ -155,34 +162,77 @@ namespace MDIMonitor_CS
         /// <returns>是否写入成功</returns>
         public bool WriteDataToSQL(string[] datastr)//
         {
+            string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
+            string path = "Database";
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            if (!File.Exists(path + "\\" + fileName))
+            {
+                if (!CreateDataSQL(Convert.ToInt16(datastr[0]), Convert.ToInt16(datastr[1])))
+                    return false;
+            }
+            dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+            dataBase.Open();
+            sqlCommand.Connection = dataBase;
+            string tableName = String.Format("_{00}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2)))%2).ToString().PadLeft(2,'0'));
+            string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
+            sqlCommand.CommandText = sqlcmd;
+            sqlCommand.ExecuteNonQuery();
+            dataBase.Close();
             return true;
         }
 
-        private void msgFunction_1()//对应消息码为1的时要执行的函数
+        /// <summary>
+        /// 执行委托
+        /// </summary>
+        private void UpdateChart()
+        {
+            invokeChartData[0] = Parent.CurForm.CurChart;
+            invokeChartData[1] = Parent.CurForm.dataTable;
+            Parent.CurForm.CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
+        }
+
+        /// <summary>
+        /// 委托方法
+        /// </summary>
+        /// <param name="_Chart">要更新的Chart控件</param>
+        /// <param name="_dataTable">要写入的数据</param>
+        public void ChartDelegateMethod(Chart _Chart, DataTable _dataTable)
+        {
+            _Chart.Series[0].Points.DataBind(Parent.CurForm.dataTable.AsEnumerable(), "时间", "数据", "");
+        }
+
+        private void msgFunction_1()//创建数据库文件
         {
             if (true == CreateDataSQL(1, 2))//创建节点1通道2的数据库
-                Parent.StatusLabel1.Text = String.Format("数据库文件NODE{0}CH{1}生成成功", 1, 2);
+                Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成成功", 1, 2);
             else
-                Parent.StatusLabel1.Text = String.Format("数据库文件NODE{0}CH{1}生成失败", 1, 2);
+                Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成失败", 1, 2);
         }
         private void msgFunction_2()//更新CurForm中的chart控件
         {
-            DateTime stime = new DateTime(2014, 1, 1, 0, 0, 0);
-            DateTime etime = new DateTime(2014, 1, 1, 0, 0, 1);
-            TimeSpan step = new TimeSpan();//
-            Random ran = new Random();
-
-            step = etime - stime;
-            for (int i = 0; i < 100; i++)
-            {
-                nowtime = nowtime + step;
-            }
-            nowtime = nowtime + step;
+            //DateTime stime = new DateTime(2014, 1, 1, 0, 0, 0);
+            //DateTime etime = new DateTime(2014, 1, 1, 0, 0, 1);
+            //TimeSpan step = new TimeSpan();//
+            //Random ran = new Random();
+            //step = etime - stime;
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    nowtime = nowtime + step;
+            //}
+            //nowtime = nowtime + step;
+            string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
             if (Parent.CurForm.dataTable.Rows.Count > 0)
                 Parent.CurForm.dataTable.Rows.RemoveAt(0);
-            Parent.CurForm.dataTable.Rows.Add(nowtime.ToString("HH:mm:ss"), ran.Next(0, 20));
-            //Parent.CurForm.CurChart.Series[0].Points.DataBind(Parent.CurForm.dataTable.AsEnumerable(), "日期", "数据", "");
-            Parent.CurForm.UpdateChart();
+            Parent.CurForm.dataTable.Rows.Add(data[3], Convert.ToDouble(data[5]));
+            this.UpdateChart();
+        }
+        private void msgFunction_3()//写入Data到SQLite
+        {
+            WriteDataToSQL(Parent.curDataValue);
         }
     }
 }
