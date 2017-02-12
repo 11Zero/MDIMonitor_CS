@@ -1,0 +1,8 @@
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\bin\Debug\frmClient.exe
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\bin\Debug\frmClient.pdb
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.Form1.resources
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.Properties.Resources.resources
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.csproj.GenerateResource.Cache
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.exe
+c:\users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.pdb
+C:\Users\lenovo\documents\visual studio 2010\Projects\frmClient\frmClient\obj\x86\Debug\frmClient.csprojResolveAssemblyReference.cache

@@ -22,8 +22,14 @@ namespace MDIMonitor_CS
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
         public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
+        public delegate void DataGridViewDelegate(DataGridView _datagrid, DataTable _dataTable);
+        //public delegate void PanelDelegate(Panel _panel, int _grid_id);
         private object[] invokeChartData = new object[2];
-
+        private object[] invokeDataGridViewData = new object[2];
+        //private object[] invokePanelData = new object[2];
+        private int totalNode = 4;
+        private int[] CH_Node = new int[4];
+        private List<DataTable> userDataTable = new List<DataTable>();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
         public UIThread(Form parent)
         {
@@ -31,6 +37,15 @@ namespace MDIMonitor_CS
             msgQueue = new Queue<int>();
             sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            for (int i = 0; i < 4; i++)
+            {
+                CH_Node[i] = 4;
+            }
+            DataTable dt = new DataTable();
+            for (int i = 0; i < 4; i++)
+            {
+                userDataTable.Add(dt); 
+            }
         }
         ~UIThread()
         {
@@ -96,6 +111,10 @@ namespace MDIMonitor_CS
                         case 3:
                             {
                                 msgFunction_3();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
+                        case 4:
+                            {
+                                msgFunction_4();//例如消息码为3是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -177,16 +196,130 @@ namespace MDIMonitor_CS
             dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
             dataBase.Open();
             sqlCommand.Connection = dataBase;
-            string tableName = String.Format("_{00}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2)))%2).ToString().PadLeft(2,'0'));
+            string tableName = String.Format("_{00}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
             string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
             sqlCommand.CommandText = sqlcmd;
             sqlCommand.ExecuteNonQuery();
             dataBase.Close();
             return true;
         }
+        private DataTable ReadUserSQL(string fileName, string tableName)
+        {
+            //string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
+            if (!File.Exists(fileName))
+            {
+                Parent.statusLabel.Text = String.Format("fileName文件未发现");
+            }
+            DataTable schemaTable = null;
+            //using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + fileName))
+            //{
+            //    connection.Open();
+            //    DataTable table = connection.GetSchema("TABLES");
+            //    if (table != null && table.Rows.Count > 0)
+            //    {
+            //        //string tableName = table.Rows[0]["TABLE_NAME"].ToString();
+
+            //        //SQLiteConnection connection = new SQLiteConnection("Data Source=" + fileName);
+            //        IDbCommand cmd = new SQLiteCommand();
+            //        cmd.CommandText = string.Format("select * from [{0}]", tableName);
+            //        cmd.Connection = connection;
+            //        using (IDataReader reader = cmd.ExecuteReader(CommandBehavior.KeyInfo | CommandBehavior.SchemaOnly))
+            //        {
+            //            schemaTable = reader.GetSchemaTable();
+            //        }
+            //        //DataTable schemaTable = GetReaderSchema(tableName, conn);
+            //        //this.dataGridView1.DataSource = schemaTable;
+            //    }
+            //}
+
+            //return schemaTable;
+            //SQLiteConnection connection = new SQLiteConnection("Data Source="+fileName);
+            //connection.Open();
+            ////SQLiteCommand command = new SQLiteCommand(String.Format("select * from {0})", tableName),connection);
+            ////SQLiteDataReader Reader = command.ExecuteReader();
+            ////DataTable dt = Reader.GetSchemaTable();
+            //DataTable dt = connection.GetSchema();
+            SQLiteDBHelper SQLHelper = new SQLiteDBHelper(fileName);
+            DataTable dt = new DataTable();
+            for (int i = 0; i < totalNode; i++)
+            {
+                string sqlcmd = String.Format("select * from {0} where NUM='{1}';)", tableName, i + 1);
+                dt.Merge(SQLHelper.ExecuteDataTable(sqlcmd, null));
+            }
+            //invokeDataGridViewData[0] = this.Parent.UserForm.grid_Userdat;
+            //invokeDataGridViewData[1] = dt;
+            //invokePanelData[0] = null;
+            //invokePanelData[1] = 1;
+            //UpdateDataGridView();
+            //dataBase = new SQLiteConnection();//
+            //dataBase.Open();
+            //sqlCommand.Connection = dataBase;
+            //string tableName = String.Format("_{00}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
+            //string sqlcmd = String.Format("insert into {0} (Name,Phone) values ('黄德洲','18956155198')", tableName);
+            //string sqlcmd = "create table if not exists " + tableName +
+            //"(NUM integer primary key autoincrement, Name varchar(20),Phone varchar(20))";
+            //string sqlcmd = "create table if not exists " + tableName +
+            //"(NUM integer primary key autoincrement,CH1 varchar(20),CH2 varchar(20),CH3 varchar(20),CH4 varchar(20),CH5 varchar(20),CH6 varchar(20))";
+            //string sqlcmd = String.Format("insert into {0} (CH1,CH2,CH3,CH4,CH5,CH6) values " +
+            //    "('102.5','102.5','102.5','102.5','102.5','102.5')", tableName);
+            //string sqlcmd = String.Format("insert into {0} (CH1,CH2,CH3,CH4,CH5,CH6) values " +
+            //    "('mm1','mm2','mm3','mm4','mm5','mm6')", tableName);
+            //string sqlcmd = "create table if not exists " + tableName +
+            //"(NUM integer primary key autoincrement,CH1 varchar(20),Unit1 varchar(20),CH2 varchar(20),Unit2 varchar(20)," +
+            //"CH3 varchar(20),Unit3 varchar(20),CH4 varchar(20),Unit4 varchar(20),CH5 varchar(20),Unit5 varchar(20),CH6 varchar(20),Unit6 varchar(20))";
+            //string sqlcmd = "";
+            //sqlCommand.CommandText = sqlcmd;
+            //sqlCommand.ExecuteNonQuery();
+            //dataBase.Close();
+            return dt;
+        }
+        /// <summary>
+        /// 执行DataGridView委托
+        /// </summary>
+        private void UpdateDataGridView()
+        {
+            this.Parent.UserForm.grid_Userdat.BeginInvoke(new DataGridViewDelegate(DataGridViewDelegateMethod), invokeDataGridViewData);
+        }
+
+        ///// <summary>
+        ///// Panel委托方法
+        ///// </summary>
+        ///// <param name="_Chart">要更新的Panel控件</param>
+        ///// <param name="_dataTable">要写入的数据</param>
+        //public void PanelDelegateMethod(Panel _panel, int _grid_id)
+        //{
+        //    if (_grid_id > 3)
+        //        return;
+        //    this.Parent.UserForm.cur_dataGrid_id = _grid_id;
+        //    this.Parent.UserForm.dataGridView[_grid_id].DataSource = userDataTable[_grid_id];
+        //     this.Parent.UserForm.dataGridView[_grid_id].Show();
+        //   //this.Parent.UserForm.dataGridView[_grid_id].Size = _panel.Size;
+        //    //this.Parent.UserForm.dataGridView[_grid_id].Parent = _panel;
+        //    //this.Parent.UserForm.dataGridView[_grid_id].CellBorderStyle = DataGridViewCellBorderStyle.Single;
+        //    //this.Parent.UserForm.dataGridView[_grid_id].AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+        //}
+
+        ///// <summary>
+        ///// 执行Panel委托
+        ///// </summary>
+        //private void UpdatePanel()
+        //{
+        //    this.Parent.UserForm.panel_DataGrid.BeginInvoke(new PanelDelegate(PanelDelegateMethod), invokeDataGridViewData);
+        //}
 
         /// <summary>
-        /// 执行委托
+        /// DataGridView委托方法
+        /// </summary>
+        /// <param name="_Chart">要更新的DataGridView控件</param>
+        /// <param name="_dataTable">要写入的数据</param>
+        public void DataGridViewDelegateMethod(DataGridView _datagrid, DataTable _dataTable)
+        {
+            this.Parent.UserForm.grid_Userdat.DataSource = _dataTable;
+        }
+
+
+        /// <summary>
+        /// 执行Chart委托
         /// </summary>
         private void UpdateChart()
         {
@@ -196,7 +329,7 @@ namespace MDIMonitor_CS
         }
 
         /// <summary>
-        /// 委托方法
+        /// Chart委托方法
         /// </summary>
         /// <param name="_Chart">要更新的Chart控件</param>
         /// <param name="_dataTable">要写入的数据</param>
@@ -207,10 +340,11 @@ namespace MDIMonitor_CS
 
         private void msgFunction_1()//创建数据库文件
         {
-            if (true == CreateDataSQL(1, 2))//创建节点1通道2的数据库
-                Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成成功", 1, 2);
-            else
-                Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成失败", 1, 2);
+            //this.Parent.UserForm.InitialGrid();
+            //if (true == CreateDataSQL(1, 2))//创建节点1通道2的数据库
+            //    Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成成功", 1, 2);
+            //else
+            //Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成失败", 1, 2);
         }
         private void msgFunction_2()//更新CurForm中的chart控件
         {
@@ -233,6 +367,23 @@ namespace MDIMonitor_CS
         private void msgFunction_3()//写入Data到SQLite
         {
             WriteDataToSQL(Parent.curDataValue);
+        }
+
+        private void msgFunction_4()//读测量参数
+        {
+            
+            Parent.statusLabel.Text = String.Format("载入数据库中");
+            int stage = 1;
+            //int grid_id = this.Parent.UserForm.cur_dataGrid_id;
+            //if (grid_id > 3)
+            //    return;
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal" };
+            for (int i = 0; i < 4; i++)
+            {
+                userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
+                this.Parent.UserForm.data_dataGridView[i] = userDataTable[i];
+            }
+            Parent.statusLabel.Text = String.Format("载入完成");
         }
     }
 }

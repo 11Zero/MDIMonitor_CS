@@ -14,6 +14,7 @@ namespace MDIMonitor_CS
     {
         public SerialPortForm SerialForm = null;
         public  CurDataForm CurForm = null;
+        public UserDatForm UserForm = null;
         private UserThread thread = null;
         private UIThread UIthread = null;
         public string[] curDataValue = new string[8];
@@ -31,6 +32,10 @@ namespace MDIMonitor_CS
             CurForm.MdiParent = this;
             CurForm.Location = new Point(0, 0);
 
+            UserForm = new UserDatForm(this);
+            UserForm.MdiParent = this;
+            UserForm.Location = new Point(0, 0);
+
             this.StripContainer.ContentPanel.Controls.Clear();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
@@ -38,6 +43,9 @@ namespace MDIMonitor_CS
 
             CurForm.Size = this.StripContainer.ContentPanel.Size;
             CurForm.Parent = this.StripContainer.ContentPanel;
+
+            UserForm.Size = this.StripContainer.ContentPanel.Size;
+            UserForm.Parent = this.StripContainer.ContentPanel;
         }
         ~FrameWin()
         {
@@ -102,8 +110,19 @@ namespace MDIMonitor_CS
 
         private void menu_ScanPort_Click(object sender, EventArgs e)
         {
-            this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
+            //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
+            //this.thread.PostMessage(2);//发送消息测试短信发送功能
+            this.PostMessage(1,1);
+        }
 
+        private void menu_Userdat_Click(object sender, EventArgs e)
+        {
+           this.PostMessage(4, 1);
+           this.StripContainer.ContentPanel.Controls.Clear();
+            UserForm.Size = this.StripContainer.ContentPanel.Size;
+            UserForm.Parent = this.StripContainer.ContentPanel;
+            UserForm.Show();
+            UserForm.InitialGrid();
         }
     }
 }

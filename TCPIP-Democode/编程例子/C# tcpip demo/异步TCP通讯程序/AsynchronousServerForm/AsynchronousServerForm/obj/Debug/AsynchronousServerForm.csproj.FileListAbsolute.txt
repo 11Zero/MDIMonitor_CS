@@ -1,0 +1,9 @@
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\bin\Debug\AsynchronousServerForm.exe.config
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\bin\Debug\AsynchronousServerForm.exe
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\bin\Debug\AsynchronousServerForm.pdb
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.Form1.resources
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.Properties.Resources.resources
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.csproj.GenerateResource.Cache
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.exe
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.pdb
+E:\异步\AsynchronousServerForm\AsynchronousServerForm\obj\Debug\AsynchronousServerForm.csprojResolveAssemblyReference.cache

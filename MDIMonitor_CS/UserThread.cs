@@ -31,7 +31,7 @@ namespace MDIMonitor_CS
         private Thread thread = null;//恢复线程标志
         private Queue<int> msgQueue = null;//存储消息队列
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
-        
+
         public UserThread(Form parent)
         {
             Parent = (FrameWin)parent;//强制转换
@@ -155,7 +155,7 @@ namespace MDIMonitor_CS
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
-               }
+                }
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束
                     break;
@@ -250,7 +250,9 @@ namespace MDIMonitor_CS
                         portSensor.StopBits = StopBits.Two;
                 }
             }
-            portSensor.ReadBufferSize = 40;
+            portSensor.ReceivedBytesThreshold = 1;
+            portSensor.ReadBufferSize = 2048;
+            portSensor.WriteBufferSize = 2048;
 
             //根据选择的数据，设置奇偶校验位
 
@@ -326,7 +328,7 @@ namespace MDIMonitor_CS
             else
             {
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName);
-                 if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
                 {
                     if (portSensor.IsOpen)
                     {
@@ -334,7 +336,7 @@ namespace MDIMonitor_CS
                         return false;
                     }
                 }
-           }
+            }
 
             int[] tempPortPhoneAttribute = new int[4];//临时存储属性
             tempPortPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
@@ -400,6 +402,9 @@ namespace MDIMonitor_CS
                         portPhone.StopBits = StopBits.Two;
                 }
             }
+            portPhone.ReceivedBytesThreshold = 1;
+            portPhone.ReadBufferSize = 2048;
+            portPhone.WriteBufferSize = 2048;
 
 
             //根据选择的数据，设置奇偶校验位
@@ -477,8 +482,12 @@ namespace MDIMonitor_CS
                     char ch = (char)portPhone.ReadByte();
                     currentline += ch.ToString();
                 }
+                char[] trimChars = new char[] { '\r', '\n' };
+                currentline = currentline.Trim(trimChars).ToString();
+                Parent.statusLabel.Text = currentline;
+                //MessageBox.Show(currentline);
                 //+CISMS:+8613866120701,15-12-29-19:35,Cb15_1Ce
-                //接收到的信息模板
+                //接收到的信息模板13855170145
                 //portPhone.DiscardInBuffer();
                 //MessageBox.Show(currentline);
                 //在这里对接收到的数据进行显示
@@ -500,19 +509,50 @@ namespace MDIMonitor_CS
         private void PhoneCommand(string CommandString, string phoneNumber)
         {
 
-            //转换
-            //串口只能读取ASCII码或者进制数（1，2，3.....的进制，一般是16进制）
-            try
-            {
-                byte[] WriteBuffer = new byte[2048];
-                WriteBuffer = Encoding.Default.GetBytes("AT+CISMSSEND=" + phoneNumber + ",3," + CommandString + "<CR>");
-                //将数据缓冲区的数据写入到串口端口
-                portPhone.Write(WriteBuffer, 0, WriteBuffer.Length);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-            }
+            ////转换
+            ////串口只能读取ASCII码或者进制数（1，2，3.....的进制，一般是16进制）
+            //try
+            //{
+            //byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("AT+CMGC={0},3,{1}\r\n", phoneNumber, CommandString));//
+            byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("ATD{0}\r\n", phoneNumber));
+            portPhone.Write(WriteBuffer, 0, WriteBuffer.Length);//("AT+CISMSSEND=18326077303,3,你好\r\n"); //AT+CSCA?     //获取短信中心号
+            Thread.Sleep(500);             //延迟1000毫秒 
+            //string response = portPhone.ReadExisting(); //读取串口中返回的数据 
+            //string smsCenterNum = null;
+            //if (response.Length > 0)
+            //{//判断是否有数据返回
+            //    smsCenterNum = response.Substring(21, 13);  //对数据进行截取
+            //}
+
+            //PDUdecoding sms = new PDUdecoding();
+            //string decodedSMS = sms.smsDecodedsms(smsCenterNum, phoneNumber, CommandString);
+            //portPhone.Write("AT+CMGS=" + sms.nLength.ToString() + "\r\n");  //发送短信
+            //Thread.Sleep(1000);
+            //response = portPhone.ReadExisting();
+            //string SendState = "";
+            //if (response.Length > 0 && response.EndsWith("> "))
+            //{
+            //    byte[] buf = (Encoding.ASCII.GetBytes(String.Format("{0}\x01a", decodedSMS)));
+            //    portPhone.Write(buf, 0, buf.Length);
+            //    Thread.Sleep(1000);
+            //    response = portPhone.ReadExisting();
+            //    if (!response.EndsWith("ERROR\r\n") || !response.EndsWith(""))
+            //    {
+            //        SendState = "发送成功！";
+            //    }
+            //    else
+            //    {
+            //        SendState = "发送失败！";
+            //    }
+            //}
+            //else
+            //{
+            //    SendState = "对方不在服务区！";
+            //}
+            //string Result = String.Format("{0},{1},{2}\n\r", phoneNumber, smsCenterNum, SendState);
+            //this.Parent.statusLabel.Text = SendState;
+
+
         }
 
         /// <summary>
@@ -525,54 +565,57 @@ namespace MDIMonitor_CS
             try
             {
                 int totalNodeCount = 1;
-                int[] nodeChNum = {1};
+                int[] nodeChNum = { 4 };
                 for (int i = 0; i < totalNodeCount; i++)
                 {
                     TakeMeasure485((byte)(i + 1));
                     System.Threading.Thread.Sleep(delayTime);//测量时间间隔
-                    int bufferLength = portSensor.BytesToRead;
-                    if (true)//bufferLength > 0
+
+                    int bufferSize = portSensor.ReadBufferSize;
+                    byte[] readBuffer = new byte[bufferSize];
+                    int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
+                    if (bufferLength == 21)//
                     {
-                        byte[] readBuffer = new byte[30];//bufferLength
-                        //portSensor.Read(readBuffer, 0, bufferLength);
-                        if (true)//bufferLength == 21
+                        //MessageBox.Show("ok");
+                        uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
+                        uint rcCRC = (uint)readBuffer[bufferLength - 1];
+                        rcCRC = (rcCRC << 8) & 0x0ff00;
+                        rcCRC += (uint)readBuffer[bufferLength - 2];
+                        if (rcCRC == CRC16Code)
                         {
-                            //uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
-                            //uint rcCRC = (uint)readBuffer[bufferLength - 1];
-                            //rcCRC = (rcCRC<<8) & 0x0ff00;
-                            //rcCRC += (uint)readBuffer[bufferLength - 2];
-                            if (true)//rcCRC == CRC16Code
-                            {
-                                for (int j = 0; j < nodeChNum[i]; j++)
-                                {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
-                                    string[] dataUnit = new string[8];
-                                    dataUnit[0] = String.Format("{0}",i+1);//节点
-                                    dataUnit[1] = String.Format("{0}", j+1);//通道
-                                    dataUnit[2] = String.Format("名称");//名称
-                                    dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
-                                    double LMD = 3.1415;
-                                    dataUnit[4] = String.Format("{0}",LMD);//灵敏度
-                                    uint dataValue = readBuffer[j*2+3];
-                                    dataValue = (dataValue << 8) & 0x0ff00;
-                                    dataValue = dataValue + readBuffer[j * 2 + 4];
-                                    Random ran = new Random();
-                                    int value = ran.Next(0,20);//(int)dataValue;
-                                    dataUnit[5] = String.Format("{0}", value);//测量值
-                                    dataUnit[6] = String.Format("单位");
-                                    dataUnit[7] = String.Format("位置");
-                                    SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
-                                    //string strview = "";
-                                    //for (int k = 0; k < 8; k++)
-                                    //{
-                                    //    strview += dataUnit[i];
-                                    //    strview += ",";
-                                    //}
-                                    //MessageBox.Show(strview);
+                            for (int j = 0; j < nodeChNum[i]; j++)
+                            {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
+                                string[] dataUnit = new string[8];
+                                dataUnit[0] = String.Format("{0}", i + 1);//节点
+                                dataUnit[1] = String.Format("{0}", j + 1);//通道
+                                dataUnit[2] = String.Format("名称");//名称
+                                dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
+                                double LMD = 3.1415;
+                                dataUnit[4] = String.Format("{0}", LMD);//灵敏度
+                                uint dataValue = readBuffer[j * 2 + 3];
+                                dataValue = (dataValue << 8) & 0x0ff00;
+                                dataValue = dataValue + readBuffer[j * 2 + 4];
+                                //Random ran = new Random();
+                                int value = (int)dataValue;
+                                double dValue = value;
+                                if (LMD > 0)
+                                    dValue = value / LMD;
+                                else
+                                    dValue = 0.0;
+                                dataUnit[5] = String.Format("{0}", dValue);//测量值
+                                dataUnit[6] = String.Format("单位");
+                                dataUnit[7] = String.Format("位置");
+                                SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
+                                string strview = "";
+                                for (int k = 0; k < 8; k++)
+                                {
+                                    strview += dataUnit[k];
+                                    strview += ",";
                                 }
+                                MessageBox.Show(strview);
                             }
                         }
                     }
-
                 }
                 return;
             }
@@ -667,7 +710,7 @@ namespace MDIMonitor_CS
         {
             byte[] sendDataPack = new byte[2048];
             int packLength = 0;
-            sendDataPack[packLength++] = 1;
+            sendDataPack[packLength++] = addr_id;
             sendDataPack[packLength++] = 4;
             sendDataPack[packLength++] = 0;
             sendDataPack[packLength++] = 0;
@@ -691,8 +734,8 @@ namespace MDIMonitor_CS
         public static string getXmlValue(string xmlElement, string elementKey, string keyValue, string xmlAttribute)
         {
             XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(xmlName);
-                Application.Exit();
+            xmlDoc.Load(xmlName);
+            Application.Exit();
             XmlNodeList xnlist = xmlDoc.SelectNodes("//" + xmlElement);
             string str = "";
             foreach (XmlNode xn in xnlist)
@@ -777,7 +820,7 @@ namespace MDIMonitor_CS
             Parent.curDataValue = datastr;
             Parent.PostMessage(3, 1);//向UI线程发送消息存储数据
             Parent.PostMessage(2, 1);//向UI线程发送消息刷新chart
-            
+
         }
 
         private void msgFunction_1()//对应消息码为1的时要执行的函数
@@ -794,6 +837,11 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_2()//对应消息码为2的时要执行的函数
         {
+            for (int i = 0; i < 1; i++)
+            {
+                Random ran = new Random();
+                PhoneCommand(String.Format("测试代码"), "18326077303");//,ran.Next(100000,999999)),//13100716778
+            }
         }
         private void msgFunction_3()//对应消息码为3的时要执行的函数
         {

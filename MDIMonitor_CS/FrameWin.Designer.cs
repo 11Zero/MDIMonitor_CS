@@ -38,6 +38,8 @@
             this.StripContainer = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.传感参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Userdat = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.StripContainer.BottomToolStripPanel.SuspendLayout();
             this.StripContainer.TopToolStripPanel.SuspendLayout();
@@ -51,7 +53,8 @@
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.串口设置ToolStripMenuItem,
-            this.数据浏览ToolStripMenuItem});
+            this.数据浏览ToolStripMenuItem,
+            this.传感参数ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -71,7 +74,7 @@
             // 
             this.menu_SerialForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_SerialForm.Name = "menu_SerialForm";
-            this.menu_SerialForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_SerialForm.Size = new System.Drawing.Size(152, 22);
             this.menu_SerialForm.Text = "串口参数";
             this.menu_SerialForm.Click += new System.EventHandler(this.menu_SerialForm_Click);
             // 
@@ -89,7 +92,7 @@
             // 
             this.menu_CurForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_CurForm.Name = "menu_CurForm";
-            this.menu_CurForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_CurForm.Size = new System.Drawing.Size(152, 22);
             this.menu_CurForm.Text = "实时监控";
             this.menu_CurForm.Click += new System.EventHandler(this.menu_CurForm_Click);
             // 
@@ -97,15 +100,15 @@
             // 
             this.menu_HisForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_HisForm.Name = "menu_HisForm";
-            this.menu_HisForm.Size = new System.Drawing.Size(124, 22);
+            this.menu_HisForm.Size = new System.Drawing.Size(152, 22);
             this.menu_HisForm.Text = "历史数据";
             // 
             // menu_ScanPort
             // 
             this.menu_ScanPort.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_ScanPort.Name = "menu_ScanPort";
-            this.menu_ScanPort.Size = new System.Drawing.Size(124, 22);
-            this.menu_ScanPort.Text = "主动扫描";
+            this.menu_ScanPort.Size = new System.Drawing.Size(152, 22);
+            this.menu_ScanPort.Text = "测试按钮";
             this.menu_ScanPort.Click += new System.EventHandler(this.menu_ScanPort_Click);
             // 
             // StripContainer
@@ -144,6 +147,22 @@
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(56, 17);
             this.statusLabel.Text = "启动完成";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            // 
+            // 传感参数ToolStripMenuItem
+            // 
+            this.传感参数ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_Userdat});
+            this.传感参数ToolStripMenuItem.Name = "传感参数ToolStripMenuItem";
+            this.传感参数ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.传感参数ToolStripMenuItem.Text = "测量设置";
+            // 
+            // menu_Userdat
+            // 
+            this.menu_Userdat.Name = "menu_Userdat";
+            this.menu_Userdat.Size = new System.Drawing.Size(152, 22);
+            this.menu_Userdat.Text = "测量数值";
+            this.menu_Userdat.Click += new System.EventHandler(this.menu_Userdat_Click);
             // 
             // FrameWin
             // 
@@ -182,6 +201,8 @@
         private System.Windows.Forms.ToolStripContainer StripContainer;
         private System.Windows.Forms.StatusStrip statusStrip;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        private System.Windows.Forms.ToolStripMenuItem 传感参数ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_Userdat;
         //private System.Windows.Forms.Panel panel_Frame;
     }
 }
