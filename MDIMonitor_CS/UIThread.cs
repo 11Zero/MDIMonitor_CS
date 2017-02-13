@@ -19,6 +19,7 @@ namespace MDIMonitor_CS
         private Thread thread = null;//恢复线程标志
         private Queue<int> msgQueue = null;//存储消息队列
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
+        private bool userStopFlag = false;
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
         public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
@@ -29,7 +30,7 @@ namespace MDIMonitor_CS
         //private object[] invokePanelData = new object[2];
         private int totalNode = 4;
         private int[] CH_Node = new int[4];
-        private List<DataTable> userDataTable = new List<DataTable>();
+        public List<DataTable> userDataTable = new List<DataTable>();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
         public UIThread(Form parent)
         {
@@ -98,6 +99,18 @@ namespace MDIMonitor_CS
                     break;
                 if (!stop && msgQueue.Count != 0)//如果线程未被暂停且消息队列中有剩余消息，将顺序执行剩余消息
                 {
+                    if (msgQueue.Count > 200 && userStopFlag == false)
+                    {
+                        this.Parent.thread.Stop();
+                        userStopFlag =true;
+                        Parent.statusLabel.Text = String.Format("当前数据采集频率过高，暂缓采集");
+                    }
+                    if (msgQueue.Count <= 200 && userStopFlag == true)
+                    {
+                        this.Parent.thread.Resume();
+                        userStopFlag = false;
+                        Parent.statusLabel.Text = String.Format("数据采集已恢复");
+                    }
                     switch (msgQueue.Peek())//获取当前消息队列中消息，并一一比对执行相应的动作
                     {
                         case 1:
@@ -115,6 +128,10 @@ namespace MDIMonitor_CS
                         case 4:
                             {
                                 msgFunction_4();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
+                        case 5:
+                            {
+                                msgFunction_5();//例如消息码为3是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -210,7 +227,7 @@ namespace MDIMonitor_CS
             {
                 Parent.statusLabel.Text = String.Format("fileName文件未发现");
             }
-            DataTable schemaTable = null;
+            //DataTable schemaTable = null;
             //using (SQLiteConnection connection = new SQLiteConnection("Data Source=" + fileName))
             //{
             //    connection.Open();
@@ -273,13 +290,47 @@ namespace MDIMonitor_CS
             //dataBase.Close();
             return dt;
         }
-        /// <summary>
-        /// 执行DataGridView委托
-        /// </summary>
-        private void UpdateDataGridView()
+        private void WriteUserSQL(string fileName)
         {
-            this.Parent.UserForm.grid_Userdat.BeginInvoke(new DataGridViewDelegate(DataGridViewDelegateMethod), invokeDataGridViewData);
+            Parent.statusLabel.Text = String.Format("user数据库存储中");
+            int stage = 1;
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal" };
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
+            //    while (userDataTable[i].Rows.Count > totalNode)
+            //        userDataTable[i].Columns.RemoveAt(userDataTable[i].Rows.Count - 1);
+            //    this.Parent.UserForm.data_dataGridView[i] = userDataTable[i];
+            //    this.Parent.UserForm.databack_dataGridView[i] = userDataTable[i].Copy();
+            //}
+            SQLiteDBHelper SQLHelper = new SQLiteDBHelper(fileName);
+            string sqlcmd = "";
+            for (int i = 0; i < userDataTable.Count; i++)
+            {
+                for (int j = 0; j < userDataTable[i].Rows.Count; j++)
+                {
+                    sqlcmd = String.Format("update {0}_{8} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}' where NUM={7}",
+                        tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                    if (j+1 > totalNode)
+                    {
+                        sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
+                        tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                    }
+                    SQLHelper.ExecuteDataTable(sqlcmd, null);
+                }
+            }
+            Parent.statusLabel.Text = String.Format("user数据库存储完成");
+            return;
         }
+        ///// <summary>
+        ///// 执行DataGridView委托
+        ///// </summary>
+        //private void UpdateDataGridView()
+        //{
+        //    this.Parent.UserForm.grid_Userdat.BeginInvoke(new DataGridViewDelegate(DataGridViewDelegateMethod), invokeDataGridViewData);
+        //}
 
         ///// <summary>
         ///// Panel委托方法
@@ -312,10 +363,10 @@ namespace MDIMonitor_CS
         /// </summary>
         /// <param name="_Chart">要更新的DataGridView控件</param>
         /// <param name="_dataTable">要写入的数据</param>
-        public void DataGridViewDelegateMethod(DataGridView _datagrid, DataTable _dataTable)
-        {
-            this.Parent.UserForm.grid_Userdat.DataSource = _dataTable;
-        }
+        //public void DataGridViewDelegateMethod(DataGridView _datagrid, DataTable _dataTable)
+        //{
+        //    this.Parent.UserForm.grid_Userdat.DataSource = _dataTable;
+        //}
 
 
         /// <summary>
@@ -381,9 +432,26 @@ namespace MDIMonitor_CS
             for (int i = 0; i < 4; i++)
             {
                 userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
-                this.Parent.UserForm.data_dataGridView[i] = userDataTable[i];
+                while (userDataTable[i].Rows.Count>totalNode)
+                    userDataTable[i].Columns.RemoveAt(userDataTable[i].Rows.Count-1);
+                this.Parent.UserForm.data_dataGridView[i] = userDataTable[i].Copy();
+                this.Parent.UserForm.databack_dataGridView[i] = userDataTable[i].Copy();
             }
             Parent.statusLabel.Text = String.Format("载入完成");
+            if (this.Parent.UserForm.data_dataGridView[0].Columns.Count == 0)
+            {
+                Parent.statusLabel.Text = String.Format("载入未完成");
+            }
+            //this.Parent.StripContainer.ContentPanel.Controls.Clear();
+            //this.Parent.UserForm.Size = this.Parent.StripContainer.ContentPanel.Size;
+            //this.Parent.UserForm.Parent = this.Parent.StripContainer.ContentPanel;
+            //this.Parent.UserForm.InitialGrid();
+            //this.Parent.UserForm.Show();
+
+        }
+        private void msgFunction_5()//修改测量参数数据库
+        {
+            WriteUserSQL("user.dat");
         }
     }
 }

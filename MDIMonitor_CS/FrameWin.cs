@@ -13,10 +13,10 @@ namespace MDIMonitor_CS
     public partial class FrameWin : Form
     {
         public SerialPortForm SerialForm = null;
-        public  CurDataForm CurForm = null;
+        public CurDataForm CurForm = null;
         public UserDatForm UserForm = null;
-        private UserThread thread = null;
-        private UIThread UIthread = null;
+        public UserThread thread = null;
+        public UIThread UIthread = null;
         public string[] curDataValue = new string[8];
         public FrameWin()
         {
@@ -27,7 +27,7 @@ namespace MDIMonitor_CS
             SerialForm = new SerialPortForm(this);
             SerialForm.MdiParent = this;
             SerialForm.Location = new Point(0, 0);
-          
+
             CurForm = new CurDataForm(this);
             CurForm.MdiParent = this;
             CurForm.Location = new Point(0, 0);
@@ -46,13 +46,16 @@ namespace MDIMonitor_CS
 
             UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
+            this.PostMessage(4, 1);
+
+
         }
         ~FrameWin()
         {
             this.thread.End();
             this.UIthread.End();
         }
-        public void PostMessage(int msgid,int thread_id)
+        public void PostMessage(int msgid, int thread_id)
         {
             if (thread_id == 0)
             {
@@ -79,7 +82,7 @@ namespace MDIMonitor_CS
                     this.UIthread.Kill();
                 else if (msgid == -4)
                     this.UIthread.End();
-                
+
             }
         }
 
@@ -87,7 +90,7 @@ namespace MDIMonitor_CS
 
         private void btn_TestCurData_Click(object sender, EventArgs e)
         {
-            this.PostMessage(1,1);
+            this.PostMessage(1, 1);
         }
 
         private void menu_SerialForm_Click(object sender, EventArgs e)
@@ -112,17 +115,24 @@ namespace MDIMonitor_CS
         {
             //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
             //this.thread.PostMessage(2);//发送消息测试短信发送功能
-            this.PostMessage(1,1);
+            this.PostMessage(1, 1);
         }
 
         private void menu_Userdat_Click(object sender, EventArgs e)
         {
-           this.PostMessage(4, 1);
-           this.StripContainer.ContentPanel.Controls.Clear();
-            UserForm.Size = this.StripContainer.ContentPanel.Size;
+            this.PostMessage(4, 1);
+            //while (UserForm.data_dataGridView[0].Columns.Count ==0)
+            //{
+            //    statusLabel.Text = String.Format("载入中...");
+            //    Thread.Sleep(5);
+            //}
+            //statusLabel.Text = String.Format("载入完成");
+
+            this.StripContainer.ContentPanel.Controls.Clear();
+            //UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
-            UserForm.Show();
             UserForm.InitialGrid();
+            UserForm.Show();
         }
     }
 }
