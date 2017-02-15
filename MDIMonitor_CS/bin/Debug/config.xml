@@ -1,7 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Soft>
-  <COM id="Sensor" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
+  <COM id="Sensor" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM3">
   </COM>
-  <COM id="Phone" Baud="11" Parity="2" Bits="2" Stop="0" Last_id="COM1">
+  <COM id="Phone" Baud="11" Parity="2" Bits="2" Stop="0" Last_id="COM3">
   </COM>
+  <NODE id="0" Count="1">
+  </NODE>
+  <NODE id="1" Count="4">
+  </NODE>
+  <NODE id="2" Count="2">
+  </NODE>
+  <NODE id="3" Count="2">
+  </NODE>
+  <NODE id="4" Count="2">
+  </NODE>
 </Soft>

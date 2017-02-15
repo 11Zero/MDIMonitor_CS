@@ -45,7 +45,7 @@
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(650, 206);
+            this.btn_OK.Location = new System.Drawing.Point(719, 170);
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(75, 23);
             this.btn_OK.TabIndex = 1;
@@ -70,14 +70,14 @@
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.dataGrid_InitialVal.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGrid_InitialVal.RowTemplate.Height = 23;
-            this.dataGrid_InitialVal.Size = new System.Drawing.Size(595, 305);
+            this.dataGrid_InitialVal.Size = new System.Drawing.Size(663, 238);
             this.dataGrid_InitialVal.TabIndex = 0;
             // 
             // radio_InitialVal
             // 
             this.radio_InitialVal.AutoSize = true;
             this.radio_InitialVal.Checked = true;
-            this.radio_InitialVal.Location = new System.Drawing.Point(15, 31);
+            this.radio_InitialVal.Location = new System.Drawing.Point(21, 13);
             this.radio_InitialVal.Name = "radio_InitialVal";
             this.radio_InitialVal.Size = new System.Drawing.Size(59, 16);
             this.radio_InitialVal.TabIndex = 3;
@@ -89,7 +89,7 @@
             // radio_Senitivity
             // 
             this.radio_Senitivity.AutoSize = true;
-            this.radio_Senitivity.Location = new System.Drawing.Point(15, 53);
+            this.radio_Senitivity.Location = new System.Drawing.Point(21, 35);
             this.radio_Senitivity.Name = "radio_Senitivity";
             this.radio_Senitivity.Size = new System.Drawing.Size(59, 16);
             this.radio_Senitivity.TabIndex = 3;
@@ -100,7 +100,7 @@
             // radio_Unit
             // 
             this.radio_Unit.AutoSize = true;
-            this.radio_Unit.Location = new System.Drawing.Point(15, 75);
+            this.radio_Unit.Location = new System.Drawing.Point(21, 57);
             this.radio_Unit.Name = "radio_Unit";
             this.radio_Unit.Size = new System.Drawing.Size(59, 16);
             this.radio_Unit.TabIndex = 3;
@@ -111,7 +111,7 @@
             // radio_WarningVal
             // 
             this.radio_WarningVal.AutoSize = true;
-            this.radio_WarningVal.Location = new System.Drawing.Point(15, 97);
+            this.radio_WarningVal.Location = new System.Drawing.Point(21, 79);
             this.radio_WarningVal.Name = "radio_WarningVal";
             this.radio_WarningVal.Size = new System.Drawing.Size(59, 16);
             this.radio_WarningVal.TabIndex = 3;
@@ -126,15 +126,15 @@
             this.panel1.Controls.Add(this.radio_WarningVal);
             this.panel1.Controls.Add(this.radio_Senitivity);
             this.panel1.Controls.Add(this.radio_Unit);
-            this.panel1.Location = new System.Drawing.Point(635, 23);
+            this.panel1.Location = new System.Drawing.Point(703, 8);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(98, 159);
+            this.panel1.Size = new System.Drawing.Size(98, 140);
             this.panel1.TabIndex = 4;
             // 
             // radio_Mark
             // 
             this.radio_Mark.AutoSize = true;
-            this.radio_Mark.Location = new System.Drawing.Point(15, 120);
+            this.radio_Mark.Location = new System.Drawing.Point(21, 102);
             this.radio_Mark.Name = "radio_Mark";
             this.radio_Mark.Size = new System.Drawing.Size(59, 16);
             this.radio_Mark.TabIndex = 4;
@@ -145,7 +145,7 @@
             // 
             // btn_NO
             // 
-            this.btn_NO.Location = new System.Drawing.Point(650, 246);
+            this.btn_NO.Location = new System.Drawing.Point(719, 210);
             this.btn_NO.Name = "btn_NO";
             this.btn_NO.Size = new System.Drawing.Size(75, 23);
             this.btn_NO.TabIndex = 1;
@@ -157,7 +157,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 337);
+            this.ClientSize = new System.Drawing.Size(1033, 486);
             this.Controls.Add(this.dataGrid_InitialVal);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_NO);

@@ -170,6 +170,7 @@
             this.btn_Open.TabIndex = 2;
             this.btn_Open.Text = "打开串口";
             this.btn_Open.UseVisualStyleBackColor = true;
+            this.btn_Open.Visible = false;
             // 
             // btn_Close
             // 
@@ -179,6 +180,7 @@
             this.btn_Close.TabIndex = 2;
             this.btn_Close.Text = "关闭串口";
             this.btn_Close.UseVisualStyleBackColor = true;
+            this.btn_Close.Visible = false;
             // 
             // btn_SensorSendData
             // 
@@ -188,6 +190,7 @@
             this.btn_SensorSendData.TabIndex = 2;
             this.btn_SensorSendData.Text = "发送测量数据";
             this.btn_SensorSendData.UseVisualStyleBackColor = true;
+            this.btn_SensorSendData.Visible = false;
             this.btn_SensorSendData.Click += new System.EventHandler(this.btn_SensorSendData_Click);
             // 
             // rich_Send
@@ -197,6 +200,7 @@
             this.rich_Send.Size = new System.Drawing.Size(189, 40);
             this.rich_Send.TabIndex = 3;
             this.rich_Send.Text = "";
+            this.rich_Send.Visible = false;
             // 
             // rich_Receive
             // 
@@ -205,6 +209,7 @@
             this.rich_Receive.Size = new System.Drawing.Size(189, 40);
             this.rich_Receive.TabIndex = 3;
             this.rich_Receive.Text = "";
+            this.rich_Receive.Visible = false;
             // 
             // label6
             // 
@@ -214,6 +219,7 @@
             this.label6.Size = new System.Drawing.Size(41, 12);
             this.label6.TabIndex = 1;
             this.label6.Text = "发送窗";
+            this.label6.Visible = false;
             // 
             // label7
             // 
@@ -223,6 +229,7 @@
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 1;
             this.label7.Text = "接收窗";
+            this.label7.Visible = false;
             // 
             // btn_test1
             // 
@@ -232,6 +239,7 @@
             this.btn_test1.TabIndex = 4;
             this.btn_test1.Text = "写入xml";
             this.btn_test1.UseVisualStyleBackColor = true;
+            this.btn_test1.Visible = false;
             this.btn_test1.Click += new System.EventHandler(this.btn_test1_Click);
             // 
             // btn_test2
@@ -242,6 +250,7 @@
             this.btn_test2.TabIndex = 4;
             this.btn_test2.Text = "读取xml";
             this.btn_test2.UseVisualStyleBackColor = true;
+            this.btn_test2.Visible = false;
             this.btn_test2.Click += new System.EventHandler(this.btn_test2_Click);
             // 
             // btn_endthread
@@ -252,6 +261,7 @@
             this.btn_endthread.TabIndex = 2;
             this.btn_endthread.Text = "结束线程";
             this.btn_endthread.UseVisualStyleBackColor = true;
+            this.btn_endthread.Visible = false;
             this.btn_endthread.Click += new System.EventHandler(this.btn_endthread_Click);
             // 
             // btn_stopthread
@@ -262,6 +272,7 @@
             this.btn_stopthread.TabIndex = 5;
             this.btn_stopthread.Text = "暂停线程";
             this.btn_stopthread.UseVisualStyleBackColor = true;
+            this.btn_stopthread.Visible = false;
             this.btn_stopthread.Click += new System.EventHandler(this.btn_stopthread_Click);
             // 
             // btn_resumethread
@@ -272,6 +283,7 @@
             this.btn_resumethread.TabIndex = 6;
             this.btn_resumethread.Text = "恢复线程";
             this.btn_resumethread.UseVisualStyleBackColor = true;
+            this.btn_resumethread.Visible = false;
             this.btn_resumethread.Click += new System.EventHandler(this.btn_resumethread_Click);
             // 
             // btn_killthread
@@ -282,6 +294,7 @@
             this.btn_killthread.TabIndex = 7;
             this.btn_killthread.Text = "终止线程";
             this.btn_killthread.UseVisualStyleBackColor = true;
+            this.btn_killthread.Visible = false;
             this.btn_killthread.Click += new System.EventHandler(this.btn_killthread_Click);
             // 
             // groupBox1
@@ -464,13 +477,14 @@
             this.btn_PhoneSendData.TabIndex = 2;
             this.btn_PhoneSendData.Text = "发送手机数据";
             this.btn_PhoneSendData.UseVisualStyleBackColor = true;
+            this.btn_PhoneSendData.Visible = false;
             this.btn_PhoneSendData.Click += new System.EventHandler(this.btn_PhoneSendData_Click);
             // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 458);
+            this.ClientSize = new System.Drawing.Size(1033, 486);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_ok);
             this.Controls.Add(this.groupBox2);

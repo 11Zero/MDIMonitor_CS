@@ -13,24 +13,40 @@ namespace MDIMonitor_CS
     public partial class FrameWin : Form
     {
         public SerialPortForm SerialForm = null;
-        public CurDataForm CurForm = null;
+        public CurDataForm[] CurForm = new CurDataForm[4];
         public UserDatForm UserForm = null;
+        public HisDataForm HisForm = null;
         public UserThread thread = null;
         public UIThread UIthread = null;
+        public MeasureTimer MeasureThread = null;
         public string[] curDataValue = new string[8];
+        public int CurFormCount = 0;
         public FrameWin()
         {
             InitializeComponent();
             thread = new UserThread(this);
             UIthread = new UIThread(this);
+            MeasureThread = new MeasureTimer(this);
 
+            menu_auto.Enabled = false;
+            menu_auto.Checked = false;
             SerialForm = new SerialPortForm(this);
             SerialForm.MdiParent = this;
             SerialForm.Location = new Point(0, 0);
 
-            CurForm = new CurDataForm(this);
-            CurForm.MdiParent = this;
-            CurForm.Location = new Point(0, 0);
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    if (CurForm[i] != null)
+            //        continue;
+            //    CurForm[i].MdiParent = this;
+            //    CurForm[i].Location = new Point(0, 0);
+            //    CurForm[i].Size = this.StripContainer.ContentPanel.Size;
+            //    CurForm[i].Parent = this.StripContainer.ContentPanel;
+            //}
+
+            HisForm = new HisDataForm(this);
+            HisForm.MdiParent = this;
+            HisForm.Location = new Point(0, 0);
 
             UserForm = new UserDatForm(this);
             UserForm.MdiParent = this;
@@ -41,19 +57,23 @@ namespace MDIMonitor_CS
             SerialForm.Parent = this.StripContainer.ContentPanel;
             SerialForm.Show();
 
-            CurForm.Size = this.StripContainer.ContentPanel.Size;
-            CurForm.Parent = this.StripContainer.ContentPanel;
+
+            HisForm.Size = this.StripContainer.ContentPanel.Size;
+            HisForm.Parent = this.StripContainer.ContentPanel;
 
             UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
             this.PostMessage(4, 1);
 
+            MeasureThread.PostMessage(1);
+
 
         }
         ~FrameWin()
         {
-            this.thread.End();
-            this.UIthread.End();
+            this.thread.Kill();
+            this.UIthread.Kill();
+            this.MeasureThread.Kill();
         }
         public void PostMessage(int msgid, int thread_id)
         {
@@ -86,36 +106,54 @@ namespace MDIMonitor_CS
             }
         }
 
-
+        
 
         private void btn_TestCurData_Click(object sender, EventArgs e)
         {
-            this.PostMessage(1, 1);
+            //this.PostMessage(1, 1);
         }
 
         private void menu_SerialForm_Click(object sender, EventArgs e)
         {
-            this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.SendToBack();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
             this.thread.PostMessage(12);//发送消息设置SerialForm窗口控件状态
             SerialForm.Show();
+            SerialForm.BringToFront();
+            //SerialForm.TopMost = true;
         }
 
         private void menu_CurForm_Click(object sender, EventArgs e)
         {
-            this.StripContainer.ContentPanel.Controls.Clear();
-            CurForm.Size = this.StripContainer.ContentPanel.Size;
-            CurForm.Parent = this.StripContainer.ContentPanel;
-            CurForm.Show();
 
+            //this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.SendToBack();
+            if (CurFormCount > 3)
+                CurFormCount = 0;
+                if (CurForm[CurFormCount] == null || CurForm[CurFormCount].IsDisposed)
+                {
+                    CurForm[CurFormCount] = new CurDataForm(this);
+                    CurForm[CurFormCount].MdiParent = this;
+                    CurForm[CurFormCount].Location = new Point(0, 0);
+                    CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
+                    CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
+                }
+            //CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
+            //CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
+                CurForm[CurFormCount].Text = String.Format("监测窗口{0}", CurFormCount+1);
+            CurForm[CurFormCount].Show();
+            CurForm[CurFormCount].BringToFront();
+            CurFormCount++;
+            //CurForm[CurFormCount].TopMost = true;
         }
 
         private void menu_ScanPort_Click(object sender, EventArgs e)
         {
             //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
             //this.thread.PostMessage(2);//发送消息测试短信发送功能
-            this.PostMessage(1, 1);
+            this.PostMessage(1, 0);
         }
 
         private void menu_Userdat_Click(object sender, EventArgs e)
@@ -128,11 +166,62 @@ namespace MDIMonitor_CS
             //}
             //statusLabel.Text = String.Format("载入完成");
 
-            this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.SendToBack();
             //UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
             UserForm.InitialGrid();
             UserForm.Show();
+            UserForm.BringToFront();
+            //UserForm.TopMost = true;
         }
+
+        private void menu_HisForm_Click(object sender, EventArgs e)
+        {
+            //this.StripContainer.ContentPanel.Controls.Clear();
+            //this.StripContainer.ContentPanel.SendToBack();
+            //CurForm.Size = this.StripContainer.ContentPanel.Size;
+            HisForm.Parent = this.StripContainer.ContentPanel;
+            HisForm.Show();
+            HisForm.BringToFront();
+            //HisForm.TopMost = true;
+            
+        }
+
+        private void FrameWin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            thread.Kill();
+            UIthread.Kill();
+            MeasureThread.Kill();
+        }
+
+        private void menu_auto_Click(object sender, EventArgs e)
+        {
+            //this.PostMessage(9, 0);
+            menu_auto.Checked = !menu_auto.Checked;
+            if(this.thread.auto_measure != menu_auto.Checked)
+                this.thread.auto_measure = menu_auto.Checked;
+            if (menu_auto.Checked == false)
+            {
+                this.statusLabel.Text = "自动测量已关闭";
+            }
+            else
+            {
+                MeasureThread.Start();
+                this.statusLabel.Text = "自动测量已开启";
+            }
+
+        }
+
+        private void menu_measure_step_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menu_single_measure_Click(object sender, EventArgs e)
+        {
+            this.PostMessage(1, 0);
+        }
+
     }
 }

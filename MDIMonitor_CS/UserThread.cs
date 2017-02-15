@@ -23,13 +23,19 @@ namespace MDIMonitor_CS
         private bool SensorDataRecFuncSetted = false;
         private int[] portPhoneAttribute = new int[4];
         private int[] portSensorAttribute = new int[4];
+        private SQLiteConnection dataBase = null;
+        private SQLiteCommand sqlCommand = null; 
         private static string xmlName;
-        public int delayTime = 500;//默认延时0.5s扫描节点
+        public int totalNodeCount = 0;
+        public int[] nodeChNum = null;
+        public int ScanTimeStep = 2000;//默认延时2s间隔遍历节点一次
+        public int delayTime = 500;//默认延时0.5s间隔扫描每个节点
         private bool end = false;//结束线程标志
         private bool kill = false;//终结线程标志
         private bool stop = false;//暂停线程标志
-        private Thread thread = null;//恢复线程标志
+        private Thread thread = null;
         private Queue<int> msgQueue = null;//存储消息队列
+        public bool auto_measure = false;
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
 
         public UserThread(Form parent)
@@ -37,7 +43,10 @@ namespace MDIMonitor_CS
             Parent = (FrameWin)parent;//强制转换
             xmlName = "config.xml";
             msgQueue = new Queue<int>();
+            dataBase = new SQLiteConnection();
+            sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            UpdateXml();
         }
 
         ~UserThread()
@@ -159,6 +168,13 @@ namespace MDIMonitor_CS
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束
                     break;
+                //if (auto_measure == true)
+                //{
+                //    SensorRecFun();
+                //    System.Threading.Thread.Sleep(ScanTimeStep);
+                //    //Parent.statusLabel.Text = String.Format("自动测量未选中");
+                //    //return;
+                //}
                 System.Threading.Thread.Sleep(1);//每次循环间隔1ms，我还不知道到底有没有必要
             }
         }
@@ -288,7 +304,7 @@ namespace MDIMonitor_CS
                 if (portSensor_ShouldOpen && portSensor.IsOpen)
                 {
                     //MessageBox.Show("the port is opened!");
-                    this.Parent.statusLabel.Text = "Sensor port is opened";
+                    this.Parent.statusLabel.Text = "测量端口已开启";
                     portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
                     portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
                     portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
@@ -303,13 +319,13 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.statusLabel.Text = "failure to open Sensor port!";
+                    this.Parent.statusLabel.Text = "测量端口开启失败";
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("failure to open Sensor port!" + ex.ToString());
+                MessageBox.Show("测量端口开启失败：" + ex.ToString());
                 return false;
             }
 
@@ -442,7 +458,7 @@ namespace MDIMonitor_CS
                 if (portPhone_ShouldOpen && portPhone.IsOpen)
                 {
                     //MessageBox.Show("the port is opened!");
-                    this.Parent.statusLabel.Text = "Phone port is opened";
+                    this.Parent.statusLabel.Text = "通讯端口已开启";
                     portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
                     portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
                     portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
@@ -458,13 +474,13 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    this.Parent.statusLabel.Text = "failure to open Phone port!";
+                    this.Parent.statusLabel.Text = "通讯端口开启失败";
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("failure to open Phone port!" + ex.ToString());
+                MessageBox.Show("通讯端口开启失败：" + ex.ToString());
                 return false;
             }
 
@@ -560,12 +576,18 @@ namespace MDIMonitor_CS
         /// </summary>
         private void SensorRecFun()//测量端口需主动扫描，因此不委托接收事件
         {
+            //if (auto_measure == false)
+            //{
+            //    Parent.statusLabel.Text = String.Format("自动测量未选中");
+            //    return;
+            //}
             if (!portSensor.IsOpen)
+            {
+                Parent.statusLabel.Text = String.Format("测量端口未开启");
                 return;
+            }
             try
             {
-                int totalNodeCount = 1;
-                int[] nodeChNum = { 4 };
                 for (int i = 0; i < totalNodeCount; i++)
                 {
                     TakeMeasure485((byte)(i + 1));
@@ -585,6 +607,8 @@ namespace MDIMonitor_CS
                         {
                             for (int j = 0; j < nodeChNum[i]; j++)
                             {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
+                                //System.Threading.Thread.Sleep(2000);//测量时间间隔
+                                Parent.statusLabel.Text = String.Format("测量{0}",j);
                                 string[] dataUnit = new string[8];
                                 dataUnit[0] = String.Format("{0}", i + 1);//节点
                                 dataUnit[1] = String.Format("{0}", j + 1);//通道
@@ -606,13 +630,13 @@ namespace MDIMonitor_CS
                                 dataUnit[6] = String.Format("单位");
                                 dataUnit[7] = String.Format("位置");
                                 SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
-                                string strview = "";
-                                for (int k = 0; k < 8; k++)
-                                {
-                                    strview += dataUnit[k];
-                                    strview += ",";
-                                }
-                                MessageBox.Show(strview);
+                                //string strview = "";
+                                //for (int k = 0; k < 8; k++)
+                                //{
+                                //    strview += dataUnit[k];
+                                //    strview += ",";
+                                //}
+                                //MessageBox.Show(strview);
                             }
                         }
                     }
@@ -811,6 +835,18 @@ namespace MDIMonitor_CS
             }
         }
 
+        private void UpdateXml()
+        {
+            totalNodeCount = Convert.ToInt16(getXmlValue("NODE", "id", "0", "Count"));
+            if (totalNodeCount > 0)
+            {
+                nodeChNum = new int[totalNodeCount];
+                for (int i = 0; i < totalNodeCount; i++)
+                {
+                    nodeChNum[i] = Convert.ToInt16(getXmlValue("NODE", "id", String.Format("{0}", i + 1), "Count"));
+                }
+            }
+        }
         /// <summary>
         /// 发送扫描到的数据到Chart控件并存储到数据库
         /// </summary>
@@ -818,17 +854,135 @@ namespace MDIMonitor_CS
         private void SendDataToChartSQL(string[] datastr)
         {
             Parent.curDataValue = datastr;
-            Parent.PostMessage(3, 1);//向UI线程发送消息存储数据
+            WriteDataToSQL(datastr);
+            //
+            //Parent.PostMessage(3, 1);//向UI线程发送消息存储数据
             Parent.PostMessage(2, 1);//向UI线程发送消息刷新chart
 
         }
+
+        /// <summary>
+        /// 创建并以以节点号_通道号命名数据库，所有数据库存放在以日期命名的数据文件夹下
+        /// 每个数据库内部按时间段将该节点该通道的数据存放在不同的表中，表名称以时间段命名
+        /// </summary>
+        /// <param name="node">节点号</param>
+        /// <param name="ch">通道号</param>
+        /// <returns></returns>
+
+        private bool CreateDataSQL(int node, int ch)
+        {
+            string fileName = String.Format("NODE{0}CH{1}", node, ch);
+            string path = "Database";
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            try
+            {
+
+                FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
+                if (!DatabaseFile.Exists)
+                {
+                    //if (!DatabaseFile.Directory.Exists)
+                    //{
+                    //    DatabaseFile.Directory.Create();
+                    //}
+                    SQLiteConnection.CreateFile(DatabaseFile.FullName);
+                }
+                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+                dataBase.Open();
+                sqlCommand.Connection = dataBase;
+                string sqlcmd = null;
+                sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
+                sqlCommand.CommandText = sqlcmd;
+                sqlCommand.ExecuteNonQuery();
+                for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
+                {
+                    string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
+                    sqlcmd = "create table if not exists " + tableName +
+                        "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
+                    sqlCommand.CommandText = sqlcmd;
+                    sqlCommand.ExecuteNonQuery();
+                    sqlcmd = "insert into TableRows (Count) values (0)";
+                    sqlCommand.CommandText = sqlcmd;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                dataBase.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            return File.Exists(path + "\\" + fileName);
+        }
+
+
+        /// <summary>
+        /// 将扫描到的节点数据写入数据库
+        /// </summary>
+        /// <param name="datastr">8个字符串[节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置]</param>
+        /// <returns>是否写入成功</returns>
+        public bool WriteDataToSQL(string[] datastr)//
+        {
+            string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
+            string path = "Database";
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            if (!File.Exists(path + "\\" + fileName))
+            {
+                if (!CreateDataSQL(Convert.ToInt16(datastr[0]), Convert.ToInt16(datastr[1])))
+                    return false;
+            }
+            try
+            {
+                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+                dataBase.Open();
+                sqlCommand.Connection = dataBase;
+                string tableName = String.Format("_{0}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
+                string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
+                sqlCommand.CommandText = sqlcmd;
+                sqlCommand.ExecuteNonQuery();
+                sqlcmd = String.Format("select Count from TableRows where NUM={0}", ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2)+1));
+                sqlCommand.CommandText = sqlcmd;
+                SQLiteDataReader sqlReader = sqlCommand.ExecuteReader();
+                string count = null;
+                while (sqlReader.Read())
+                {
+                    count = String.Format("{0}", sqlReader[0]);
+                }
+                sqlReader.Close();
+                if (count != null)
+                {
+                    sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count) + 1, ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2)+1));
+                    sqlCommand.CommandText = sqlcmd;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                dataBase.Close();
+                Parent.statusLabel.Text = String.Format("数据已写入");
+                return true;
+
+            }
+            catch (Exception)
+            {
+                Parent.statusLabel.Text = String.Format("数据写入失败");
+                return false;
+            }
+        }
+
 
         private void msgFunction_1()//对应消息码为1的时要执行的函数
         {
             if (portSensor.IsOpen)
             {
                 SensorRecFun();
-                Parent.statusLabel.Text = "主动扫描测量端口成功";
+                if(!auto_measure)
+                    Parent.statusLabel.Text = "单次扫描测量端口成功";
+                else
+                    Parent.statusLabel.Text = "自动扫描测量端口中...";
             }
             else
             {
@@ -853,7 +1007,7 @@ namespace MDIMonitor_CS
         {
             if (!portSensor.IsOpen)
             {
-                this.Parent.statusLabel.Text = "the Sensor port has not been opened";
+                this.Parent.statusLabel.Text = "测量端口未开启";
                 return;
             }
             SensorCommand(Parent.SerialForm.rich_Send.Text);
@@ -862,7 +1016,7 @@ namespace MDIMonitor_CS
         {
             if (!portPhone.IsOpen)
             {
-                this.Parent.statusLabel.Text = "the Phone port has not been opened";
+                this.Parent.statusLabel.Text = "通讯端口未开启";
                 return;
             }
             string number = "18326077303";
@@ -987,29 +1141,58 @@ namespace MDIMonitor_CS
         { }
         private void msgFunction_9()//变更Sensor端口开关
         {
-            portSensor_ShouldOpen = !portSensor_ShouldOpen;
-            if (portSensor.IsOpen && !portSensor_ShouldOpen)
-                portSensor.Close();
-            if (!portSensor.IsOpen && portSensor_ShouldOpen)
+            try
             {
-                if (!SetSensorPort())
-                    portSensor_ShouldOpen = !portSensor_ShouldOpen;
+                portSensor_ShouldOpen = !portSensor_ShouldOpen;
+                if (portSensor.IsOpen && !portSensor_ShouldOpen)
+                    portSensor.Close();
+                if (!portSensor.IsOpen && portSensor_ShouldOpen)
+                {
+                    if (!SetSensorPort())
+                        portSensor_ShouldOpen = !portSensor_ShouldOpen;
+                }
+                this.Parent.SerialForm.check_SensorPort.Checked = portSensor_ShouldOpen;
+                Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor_ShouldOpen;
+                if (!portSensor.IsOpen)
+                {
+                    Parent.statusLabel.Text = String.Format("测量端口开关已关闭");
+                    this.Parent.menu_auto.Enabled = false;
+                    //this.Parent.menu_auto.Checked = false;
+                }
+                else
+                {
+                    Parent.statusLabel.Text = String.Format("测量端口开关已开启");
+                    this.Parent.menu_auto.Enabled = true;
+                }
+                return;
             }
-            this.Parent.SerialForm.check_SensorPort.Checked = portSensor_ShouldOpen;
-            Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor_ShouldOpen;
+            catch (Exception)
+            {
+                Parent.statusLabel.Text = String.Format("测量端口开关变更失败");
+                throw;
+            }
         }
         private void msgFunction_10()//变更Phone端口开关
         {
-            portPhone_ShouldOpen = !portPhone_ShouldOpen;
-            if (portPhone.IsOpen && !portPhone_ShouldOpen)
-                portPhone.Close();
-            if (!portPhone.IsOpen && portPhone_ShouldOpen)
+            try
             {
-                if (!SetPhonePort())
-                    portPhone_ShouldOpen = !portPhone_ShouldOpen;
+                portPhone_ShouldOpen = !portPhone_ShouldOpen;
+                if (portPhone.IsOpen && !portPhone_ShouldOpen)
+                    portPhone.Close();
+                if (!portPhone.IsOpen && portPhone_ShouldOpen)
+                {
+                    if (!SetPhonePort())
+                        portPhone_ShouldOpen = !portPhone_ShouldOpen;
+                }
+                this.Parent.SerialForm.check_PhonePort.Checked = portPhone_ShouldOpen;
+                Parent.SerialForm.cbox_Phone_PortName.Enabled = !portPhone_ShouldOpen;
+                Parent.statusLabel.Text = String.Format("通讯端口开关变更失败");
             }
-            this.Parent.SerialForm.check_PhonePort.Checked = portPhone_ShouldOpen;
-            Parent.SerialForm.cbox_Phone_PortName.Enabled = !portPhone_ShouldOpen;
+            catch (Exception)
+            {
+                Parent.statusLabel.Text = String.Format("通讯端口开关变更失败");
+                throw;
+            }
         }
         private void msgFunction_12()//设置SerialForm窗口控件状态
         {

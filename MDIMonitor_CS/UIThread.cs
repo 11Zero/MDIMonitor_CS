@@ -22,14 +22,15 @@ namespace MDIMonitor_CS
         private bool userStopFlag = false;
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
-        public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
-        public delegate void DataGridViewDelegate(DataGridView _datagrid, DataTable _dataTable);
+        public delegate void ChartDelegate(int _ch, DataTable _dataTable, int Form_id);
+        public delegate void HisChartDelegate(Chart _Chart, DataTable _dataTable);
         //public delegate void PanelDelegate(Panel _panel, int _grid_id);
-        private object[] invokeChartData = new object[2];
-        private object[] invokeDataGridViewData = new object[2];
+        private object[] invokeChartData = new object[3];
+        private object[] invokeHisChartData = new object[2];
         //private object[] invokePanelData = new object[2];
         private int totalNode = 4;
         private int[] CH_Node = new int[4];
+        private DataTable hisChartData = new DataTable();
         public List<DataTable> userDataTable = new List<DataTable>();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
         public UIThread(Form parent)
@@ -99,18 +100,18 @@ namespace MDIMonitor_CS
                     break;
                 if (!stop && msgQueue.Count != 0)//如果线程未被暂停且消息队列中有剩余消息，将顺序执行剩余消息
                 {
-                    if (msgQueue.Count > 200 && userStopFlag == false)
-                    {
-                        this.Parent.thread.Stop();
-                        userStopFlag =true;
-                        Parent.statusLabel.Text = String.Format("当前数据采集频率过高，暂缓采集");
-                    }
-                    if (msgQueue.Count <= 200 && userStopFlag == true)
-                    {
-                        this.Parent.thread.Resume();
-                        userStopFlag = false;
-                        Parent.statusLabel.Text = String.Format("数据采集已恢复");
-                    }
+                    //if (msgQueue.Count > 200 && userStopFlag == false)
+                    //{
+                    //    this.Parent.thread.Stop();
+                    //    userStopFlag =true;
+                    //    Parent.statusLabel.Text = String.Format("当前数据采集频率过高，暂缓采集");
+                    //}
+                    //if (msgQueue.Count <= 200 && userStopFlag == true)
+                    //{
+                    //    this.Parent.thread.Resume();
+                    //    userStopFlag = false;
+                    //    Parent.statusLabel.Text = String.Format("数据采集已恢复");
+                    //}
                     switch (msgQueue.Peek())//获取当前消息队列中消息，并一一比对执行相应的动作
                     {
                         case 1:
@@ -153,43 +154,51 @@ namespace MDIMonitor_CS
 
         private bool CreateDataSQL(int node, int ch)
         {
-            string fileName = String.Format("NODE{0}CH{1}", node, ch);
-            string path = "Database";
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
-            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
-            try
-            {
+            return true;
+            //string fileName = String.Format("NODE{0}CH{1}", node, ch);
+            //string path = "Database";
+            //if (Directory.Exists(path) == false)
+            //    Directory.CreateDirectory(path);
+            //path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            //if (Directory.Exists(path) == false)
+            //    Directory.CreateDirectory(path);
+            //try
+            //{
 
-                FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
-                if (!DatabaseFile.Exists)
-                {
-                    //if (!DatabaseFile.Directory.Exists)
-                    //{
-                    //    DatabaseFile.Directory.Create();
-                    //}
-                    SQLiteConnection.CreateFile(DatabaseFile.FullName);
-                }
-                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
-                dataBase.Open();
-                sqlCommand.Connection = dataBase;
-                for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
-                {
-                    string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
-                    string sqlcmd = "create table if not exists " + tableName +
-                        "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
-                    sqlCommand.CommandText = sqlcmd;
-                    sqlCommand.ExecuteNonQuery();
-                }
-                dataBase.Close();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-            return File.Exists(path + "\\" + fileName);
+            //    FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
+            //    if (!DatabaseFile.Exists)
+            //    {
+            //        //if (!DatabaseFile.Directory.Exists)
+            //        //{
+            //        //    DatabaseFile.Directory.Create();
+            //        //}
+            //        SQLiteConnection.CreateFile(DatabaseFile.FullName);
+            //    }
+            //    dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+            //    dataBase.Open();
+            //    sqlCommand.Connection = dataBase;
+            //    string sqlcmd = null;
+            //    sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
+            //    sqlCommand.CommandText = sqlcmd;
+            //    sqlCommand.ExecuteNonQuery();
+            //    for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
+            //    {
+            //        string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
+            //        sqlcmd = "create table if not exists " + tableName +
+            //            "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
+            //        sqlCommand.CommandText = sqlcmd;
+            //        sqlCommand.ExecuteNonQuery();
+            //        sqlcmd = "insert into TableRows (Count) values (0)";
+            //        sqlCommand.CommandText = sqlcmd;
+            //        sqlCommand.ExecuteNonQuery();
+            //    }
+            //    dataBase.Close();
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show(e.ToString());
+            //}
+            //return File.Exists(path + "\\" + fileName);
         }
         /// <summary>
         /// 将扫描到的节点数据写入数据库
@@ -198,27 +207,68 @@ namespace MDIMonitor_CS
         /// <returns>是否写入成功</returns>
         public bool WriteDataToSQL(string[] datastr)//
         {
-            string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
-            string path = "Database";
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
-            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
-            if (Directory.Exists(path) == false)
-                Directory.CreateDirectory(path);
-            if (!File.Exists(path + "\\" + fileName))
-            {
-                if (!CreateDataSQL(Convert.ToInt16(datastr[0]), Convert.ToInt16(datastr[1])))
-                    return false;
-            }
-            dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
-            dataBase.Open();
-            sqlCommand.Connection = dataBase;
-            string tableName = String.Format("_{00}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
-            string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
-            sqlCommand.CommandText = sqlcmd;
-            sqlCommand.ExecuteNonQuery();
-            dataBase.Close();
-            return true;
+            //string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
+            //string path = "Database";
+            //if (Directory.Exists(path) == false)
+            //    Directory.CreateDirectory(path);
+            //path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            //if (Directory.Exists(path) == false)
+            //    Directory.CreateDirectory(path);
+            //if (!File.Exists(path + "\\" + fileName))
+            //{
+            //    if (!CreateDataSQL(Convert.ToInt16(datastr[0]), Convert.ToInt16(datastr[1])))
+            //        return false;
+            //}
+            //try
+            //{
+            //    dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+            //    dataBase.Open();
+            //    sqlCommand.Connection = dataBase;
+            //    string tableName = String.Format("_{0}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
+            //    string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
+            //    sqlCommand.CommandText = sqlcmd;
+            //    sqlCommand.ExecuteNonQuery();
+            //    sqlcmd = String.Format("select Count from TableRows where NUM={0}", (Convert.ToInt16(datastr[3].Substring(0, 2))/2));
+            //    sqlCommand.CommandText = sqlcmd;
+            //    SQLiteDataReader sqlReader = sqlCommand.ExecuteReader();
+            //    string count = null;
+            //    while (sqlReader.Read())
+            //    {
+            //        count = String.Format("{0}", sqlReader[0]);
+            //    }
+            //    sqlReader.Close();
+            //    if (count != null)
+            //    {
+            //        sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count)+1, (Convert.ToInt16(datastr[3].Substring(0, 2)) / 2));
+            //        sqlCommand.CommandText = sqlcmd;
+            //        sqlCommand.ExecuteNonQuery();
+            //    }
+            //    dataBase.Close();
+            //    Parent.statusLabel.Text = String.Format("数据已写入");
+            //    return true;
+
+            //}
+            //catch (Exception e)
+            //{
+            //    Parent.statusLabel.Text = String.Format("数据写入失败");
+            return false; ;
+            //}
+        }
+
+
+        public void ReadDataSQL()
+        {//需要添加判断，浏览当前正使用的数据库时需要暂停监控
+            //if (this.Parent.HisForm.openFile != null)
+            //{ 
+            //    SQLiteDBHelper SQLHelper = new SQLiteDBHelper(fileName);
+            //DataTable dt = new DataTable();
+            //for (int i = 0; i < totalNode; i++)
+            //{
+            //    string sqlcmd = String.Format("select * from {0} where NUM='{1}';)", tableName, i + 1);
+            //    dt.Merge(SQLHelper.ExecuteDataTable(sqlcmd, null));
+            //}
+            ////hisChartData
+            //}
         }
         private DataTable ReadUserSQL(string fileName, string tableName)
         {
@@ -318,7 +368,7 @@ namespace MDIMonitor_CS
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
                         userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
                     }
-                    SQLHelper.ExecuteDataTable(sqlcmd, null);
+                    SQLHelper.ExecuteNonQuery(sqlcmd, null);
                 }
             }
             Parent.statusLabel.Text = String.Format("user数据库存储完成");
@@ -372,11 +422,22 @@ namespace MDIMonitor_CS
         /// <summary>
         /// 执行Chart委托
         /// </summary>
-        private void UpdateChart()
+        private void UpdateChart(int Form_id,int node,int ch)
         {
-            invokeChartData[0] = Parent.CurForm.CurChart;
-            invokeChartData[1] = Parent.CurForm.dataTable;
-            Parent.CurForm.CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
+            //for (int i = 0; i < 4; i++)
+            //{
+            if (Parent.CurForm[Form_id].IsHandleCreated == true)
+                {
+                    if (Parent.CurForm[Form_id].cur_ch == ch && Parent.CurForm[Form_id].cur_node == node)
+                    {
+                        invokeChartData[0] = ch - 1;
+                        invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1];
+                        invokeChartData[2] = Form_id;
+                        Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
+                    }
+                }
+                
+            //}
         }
 
         /// <summary>
@@ -384,13 +445,52 @@ namespace MDIMonitor_CS
         /// </summary>
         /// <param name="_Chart">要更新的Chart控件</param>
         /// <param name="_dataTable">要写入的数据</param>
-        public void ChartDelegateMethod(Chart _Chart, DataTable _dataTable)
+        public void ChartDelegateMethod(int _ch, DataTable _dataTable,int Form_id)
         {
-            _Chart.Series[0].Points.DataBind(Parent.CurForm.dataTable.AsEnumerable(), "时间", "数据", "");
+            //for (int i = 0; i < 4; i++)
+            //{
+            Parent.CurForm[Form_id].CurChart.Series[_ch].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+                //series[i].Points.DataBind(dataTable.AsEnumerable(), "时间", series[i].Name, "");
+                //series[i].ChartType = SeriesChartType.Spline;
+                //this.CurChart.Series.Add(series[i]);
+            //}
         }
 
-        private void msgFunction_1()//创建数据库文件
+        /// <summary>
+        /// 执行HisChart委托
+        /// </summary>
+        private void UpdateHisChart()
         {
+            invokeHisChartData[0] = Parent.HisForm.HisChart;
+            invokeHisChartData[1] = Parent.HisForm.dataTable;
+            Parent.HisForm.HisChart.BeginInvoke(new HisChartDelegate(HisChartDelegateMethod), invokeHisChartData);
+        }
+
+        /// <summary>
+        /// HisChart委托方法
+        /// </summary>
+        /// <param name="_Chart">要更新的HisChart控件</param>
+        /// <param name="_dataTable">要写入的数据</param>
+        public void HisChartDelegateMethod(Chart _Chart, DataTable _dataTable)
+        {
+            _Chart.Series[0].Points.DataBind(_dataTable.AsEnumerable(), "时间", "数据", "");
+        }
+        //private void UpdateXml()
+        //{
+        //    totalNodeCount = Convert.ToInt16(getXmlValue("NODE", "id", "0", "Count"));
+        //    if (totalNodeCount > 0)
+        //    {
+        //        nodeChNum = new int[totalNodeCount];
+        //        for (int i = 0; i < totalNodeCount; i++)
+        //        {
+        //            nodeChNum[i] = Convert.ToInt16(getXmlValue("NODE", "id", String.Format("{0}", i + 1), "Count"));
+        //        }
+        //    }
+        //}
+
+        private void msgFunction_1()//更新历史chart
+        {
+            UpdateHisChart();
             //this.Parent.UserForm.InitialGrid();
             //if (true == CreateDataSQL(1, 2))//创建节点1通道2的数据库
             //    Parent.statusLabel.Text = String.Format("数据库文件NODE{0}CH{1}生成成功", 1, 2);
@@ -409,11 +509,31 @@ namespace MDIMonitor_CS
             //    nowtime = nowtime + step;
             //}
             //nowtime = nowtime + step;
-            string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
-            if (Parent.CurForm.dataTable.Rows.Count > 0)
-                Parent.CurForm.dataTable.Rows.RemoveAt(0);
-            Parent.CurForm.dataTable.Rows.Add(data[3], Convert.ToDouble(data[5]));
-            this.UpdateChart();
+             string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
+           int ch = Convert.ToInt16(data[1]);
+            int node = Convert.ToInt16(data[0]);
+            for (int i = 0; i < 4; i++)
+            {
+                if (Parent.CurForm[i] == null || Parent.CurForm[i].IsDisposed)
+                    continue;
+                if (Parent.CurForm[i].cur_node == node)
+                {
+                    if (Parent.CurForm[i].dataTable.Rows.Count > 0)
+                        Parent.CurForm[i].dataTable.Rows.RemoveAt(0);
+                    if (ch > 4 && ch < 1)
+                    {
+                        return;
+                    }
+                    //DateTime nowtime = DateTime.Now;
+
+                    //nowtime = DateTime.Parse(DateTime.Now.ToShortDateString() + " " + data[3]);
+                    //time = nowday.ToLongDateString();
+                    //time = nowday.ToLongTimeString();
+                    Parent.CurForm[i].dataSet.Tables[ch - 1].Rows.Add(data[3], data[5]);
+                    this.UpdateChart(i,node, ch);
+                }
+                
+            }
         }
         private void msgFunction_3()//写入Data到SQLite
         {
