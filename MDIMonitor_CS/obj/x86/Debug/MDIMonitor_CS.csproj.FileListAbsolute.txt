@@ -15,6 +15,5 @@ D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Deb
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.exe
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.pdb
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.CurDataForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csprojResolveAssemblyReference.cache
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.UserDatForm.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.HisDataForm.resources

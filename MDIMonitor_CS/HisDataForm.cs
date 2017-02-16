@@ -339,7 +339,7 @@ namespace MDIMonitor_CS
             if (sqlDataTable.Rows.Count > 0)
             {
                 dataTable.Rows.Clear();
-                dataTable.Columns[1].DataType = typeof(double);
+                //dataTable.Columns[1].DataType = typeof(double);
                 //Random ran = new Random();
                 for (int i = 0; i < sqlDataTable.Rows.Count; i++)
                 {

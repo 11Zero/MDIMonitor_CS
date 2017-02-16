@@ -88,6 +88,52 @@ namespace MDIMonitor_CS
                     item.SortMode = DataGridViewColumnSortMode.NotSortable;
                 }
             }
+
+            InitXmlValue();
+            //numeric_measure_step.Increment = 500;
+            //numeric_node_num.Increment = 1;
+            //numeric_cur_node.Increment = 1;
+            //numeric_ch_of_curnode.Increment = 1;
+
+            //numeric_measure_step.Minimum = 500;
+            //numeric_measure_step.Maximum = 20000;
+            //if (this.m_ParentForm.MeasureThread.ScanTimeStep <= numeric_measure_step.Maximum)
+            //    numeric_measure_step.Value = this.m_ParentForm.MeasureThread.ScanTimeStep;
+            //else
+            //    numeric_measure_step.Value = numeric_measure_step.Minimum;
+            
+            //numeric_node_num.Minimum = 0;
+            //numeric_node_num.Maximum = 4;
+            //if (this.m_ParentForm.thread.totalNodeCount <= numeric_node_num.Maximum)
+            //    numeric_node_num.Value = this.m_ParentForm.thread.totalNodeCount;
+            //else
+            //{
+            //    numeric_node_num.Value = 0;
+            //    this.m_ParentForm.statusLabel.Text = String.Format("节点数目超过4,请检查config文件");
+            //    numeric_cur_node.Value = 0;
+            //    numeric_ch_of_curnode.Value = 0;
+            //    numeric_cur_node.Enabled = false;
+            //    numeric_ch_of_curnode.Enabled = false;
+            //    return;
+            //}
+
+            //numeric_cur_node.Minimum = 0;
+            //numeric_cur_node.Maximum = numeric_node_num.Value;
+            //numeric_cur_node.Value = 1;
+            //numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[0];
+
+
+            //numeric_ch_of_curnode.Minimum = 0;
+            //numeric_ch_of_curnode.Maximum = 8;
+
+            //if (numeric_node_num.Value == 0)
+            //{
+            //    numeric_cur_node.Value = 0;
+            //    numeric_cur_node.Enabled = false;
+            //}
+            //else
+            //{
+            //}
             //SaveDataGridView(0, ref dataGrid_InitialVal);
             //SaveDataGridView(1, ref dataGrid_Sensitivity);
             //SaveDataGridView(2, ref dataGrid_Unit);
@@ -136,6 +182,41 @@ namespace MDIMonitor_CS
             //}
         }
 
+        private void InitXmlValue()
+        {
+            numeric_measure_step.Increment = 500;
+            numeric_node_num.Increment = 1;
+            numeric_cur_node.Increment = 1;
+            numeric_ch_of_curnode.Increment = 1;
+
+            numeric_measure_step.Minimum = 500;
+            numeric_measure_step.Maximum = 20000;
+            if (this.m_ParentForm.MeasureThread.ScanTimeStep <= numeric_measure_step.Maximum)
+                numeric_measure_step.Value = this.m_ParentForm.MeasureThread.ScanTimeStep;
+            else
+                numeric_measure_step.Value = numeric_measure_step.Minimum;
+
+            numeric_node_num.Minimum = 0;
+            numeric_node_num.Maximum = 4;
+            if (this.m_ParentForm.thread.totalNodeCount <= numeric_node_num.Maximum)
+                numeric_node_num.Value = this.m_ParentForm.thread.totalNodeCount;
+            else
+            {
+                numeric_node_num.Value = 0;
+                this.m_ParentForm.statusLabel.Text = String.Format("节点数目超过4,请检查config文件");
+                numeric_cur_node.Value = 0;
+                numeric_ch_of_curnode.Value = 0;
+                numeric_cur_node.Enabled = false;
+                numeric_ch_of_curnode.Enabled = false;
+                return;
+            }
+
+            numeric_cur_node.Minimum = 0;
+            numeric_cur_node.Maximum = numeric_node_num.Value;
+            numeric_cur_node.Value = 1;
+            numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[0];
+        }
+
         private void LoadDataGridView()
         {
             if (dataGrid_InitialVal.Columns.Count > 0)
@@ -147,6 +228,14 @@ namespace MDIMonitor_CS
                 foreach (DataGridViewColumn item in dataGrid_InitialVal.Columns)
                 {
                     item.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+            }
+            for (int i = 0; i < dataGrid_InitialVal.Rows.Count; i++)
+            {
+                if (i+1 > this.m_ParentForm.thread.totalNodeCount)
+                {
+                    dataGrid_InitialVal.Rows[i].ReadOnly = true;
+                    dataGrid_InitialVal.Rows[i].DefaultCellStyle.BackColor = Color.BurlyWood;
                 }
             }
 
@@ -280,8 +369,34 @@ namespace MDIMonitor_CS
                 this.m_ParentForm.UIthread.userDataTable[i] = data_dataGridView[i].Copy();
                 //databack_dataGridView[i] = data_dataGridView[i].Copy();
             }
-            this.m_ParentForm.PostMessage(5, 1);//发送消息修改数据库
-            //data_dataGridView[i]
+            //numeric_measure_step.Increment = 500;
+            //numeric_node_num.Increment = 1;
+            //numeric_cur_node.Increment = 1;
+            //numeric_ch_of_curnode.Increment = 1;
+            if (Convert.ToInt16(numeric_measure_step.Value) < 20000)
+                this.m_ParentForm.MeasureThread.ScanTimeStep = Convert.ToInt16(numeric_measure_step.Value);
+            else
+                this.m_ParentForm.statusLabel.Text = String.Format("配置时距超过20s，配置无效");
+            try
+            {
+                if (numeric_cur_node.Value > 0)
+                {
+                    this.m_ParentForm.thread.nodeChNum[(int)(numeric_cur_node.Value) - 1] = (int)(numeric_ch_of_curnode.Value);
+                    this.m_ParentForm.thread.totalNodeCount = (int)(numeric_node_num.Value);
+                    UserThread.setXmlValue("NODE", "id", "0", "Count", String.Format("{0}", (int)(numeric_node_num.Value)));
+                    UserThread.setXmlValue("NODE", "id", String.Format("{0}", (int)(numeric_cur_node.Value)), "Count", String.Format("{0}", (int)(numeric_ch_of_curnode.Value)));
+                    this.m_ParentForm.statusLabel.Text = String.Format("节点{0}通道数已更改", (int)(numeric_cur_node.Value));
+                     //this.m_ParentForm.thread.UpdateXml();
+               }
+                this.m_ParentForm.PostMessage(5, 1);//发送消息修改数据库
+                //data_dataGridView[i]
+
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show(ex.Message);
+            }
         }
         private void btn_NO_Click(object sender, EventArgs e)
         {
@@ -290,6 +405,15 @@ namespace MDIMonitor_CS
                 data_dataGridView[i] = databack_dataGridView[i];
             }
             dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            for (int i = 0; i < dataGrid_InitialVal.Rows.Count; i++)
+            {
+                if (i + 1 > this.m_ParentForm.thread.totalNodeCount)
+                {
+                    dataGrid_InitialVal.Rows[i].ReadOnly = true;
+                    dataGrid_InitialVal.Rows[i].DefaultCellStyle.BackColor = Color.BurlyWood;
+                }
+            }
+            InitXmlValue();
             //this.m_ParentForm.PostMessage(4, 1);//发送消息重新读取数据库
             //InitFlag = true;
             //cur_dataGrid_id = 0;
@@ -349,6 +473,33 @@ namespace MDIMonitor_CS
             dt.Rows.Add("-","-");
             dataGrid_InitialVal.DataSource = dt;
             LoadDataGridView();
+        }
+
+        private void numeric_cur_node_ValueChanged(object sender, EventArgs e)
+        {
+            if (numeric_cur_node.Value > 0)
+            {
+                numeric_ch_of_curnode.Maximum = 8;
+                numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[(int)(numeric_cur_node.Value) - 1];
+            }
+            else
+            {
+                numeric_ch_of_curnode.Maximum = 0;
+                numeric_ch_of_curnode.Value = 0;
+            }
+        }
+
+        private void numeric_node_num_ValueChanged(object sender, EventArgs e)
+        {
+            //if (numeric_node_num.Value > 0)
+            //{
+                numeric_cur_node.Maximum = numeric_node_num.Value;
+            //}
+        }
+
+        private void numeric_ch_of_curnode_ValueChanged(object sender, EventArgs e)
+        {
+
         }
 
     }

@@ -24,7 +24,7 @@ namespace MDIMonitor_CS
         private int[] portPhoneAttribute = new int[4];
         private int[] portSensorAttribute = new int[4];
         private SQLiteConnection dataBase = null;
-        private SQLiteCommand sqlCommand = null; 
+        private SQLiteCommand sqlCommand = null;
         private static string xmlName;
         public int totalNodeCount = 0;
         public int[] nodeChNum = null;
@@ -46,6 +46,7 @@ namespace MDIMonitor_CS
             dataBase = new SQLiteConnection();
             sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            nodeChNum = new int[4];
             UpdateXml();
         }
 
@@ -421,7 +422,7 @@ namespace MDIMonitor_CS
             portPhone.ReceivedBytesThreshold = 1;
             portPhone.ReadBufferSize = 2048;
             portPhone.WriteBufferSize = 2048;
-
+            portPhone.Encoding = System.Text.Encoding.ASCII;
 
             //根据选择的数据，设置奇偶校验位
 
@@ -493,15 +494,74 @@ namespace MDIMonitor_CS
             {
                 string currentline = "";
                 //循环接收串口中的数据
+                byte[] getbuffer = new byte[200];
+                int i = 0;
                 while (portPhone.BytesToRead > 0)
                 {
-                    char ch = (char)portPhone.ReadByte();
-                    currentline += ch.ToString();
+                    getbuffer[i++] = (byte)portPhone.ReadByte();
                 }
-                char[] trimChars = new char[] { '\r', '\n' };
-                currentline = currentline.Trim(trimChars).ToString();
-                Parent.statusLabel.Text = currentline;
-                //MessageBox.Show(currentline);
+                //getbuffer.
+                //getbuffer[i]=0;
+                //byte[] getbuffer = Encoding.UTF8.GetBytes(currentline);
+                currentline = Encoding.Default.GetString((getbuffer));
+                currentline.Replace("\n", "");
+                currentline.Replace(" ", "");
+                currentline.Replace("\r", "");
+                currentline.Replace("\0", "");
+                if (currentline == "" || currentline.IndexOf("OK") != -1)
+                    return;
+                if (currentline.IndexOf("+EAIC") >= 0 || currentline.IndexOf("RING") >= 0 || currentline.IndexOf("+CLIP") >= 0)
+                {
+                    this.Parent.statusLabel_phone.Text = "手机收到来电";
+                    return;
+                }
+                if (currentline.IndexOf("CARRIER") >= 0)
+                {
+                    this.Parent.statusLabel_phone.Text = "手机来电已挂断";
+                    return;
+                }
+                if (currentline.Substring(0, 6) != "+CISMS")
+                {
+                    this.Parent.statusLabel_phone.Text = "手机收到非短信指令";
+                    return;
+                }
+                string number = currentline.Substring(10, 11);
+                string time = currentline.Substring(22, 16);
+                string cmd = currentline.Substring(39);
+                this.Parent.statusLabel_phone.Text = string.Format("[{0}]{1}>>{2}",time,number,cmd);
+                //PhoneCommand(currentline, "18326077303");
+                //ASCIIEncoding AE2 = new ASCIIEncoding();
+                //char[] CharArray = AE2.GetChars(getbuffer);
+                //foreach (var item in CharArray)
+                //{
+                //    currentline = currentline + item;
+                //}
+                //"+CISMS:+8618326077303,17-2-16-20:57:16,ÌÚÑ¶QQ\r\n"腾讯QQ
+                //\ucc\uda\ud1\ub6//\u817e\u8baf
+                //currentline = Encoding.ASCII.GetString(getbuffer);
+                MessageBox.Show(number + "~" + time + "~" + cmd);
+                //char[] trimChars = new char[] { '\r', '\t', '\n' };
+                //currentline = currentline.Trim(trimChars).ToString();
+                //string unicode_sms = currentline.Substring(currentline.LastIndexOf(',') + 1);
+                //UnicodeEncoding.
+                //    Parent.statusLabel.Text = ;
+
+                //string sms = "";
+                //int length = 0;
+                //MessageBox.Show(sms);
+
+                //for (int i = 0; ; i++)
+                //{
+                //    if (length == -1)
+                //        break;
+                //    length = currentline.IndexOf(',');
+                //    sms = sms + currentline.Substring(0, length) + "_";
+                //    currentline.Remove(0, length + 1);
+                //}
+                //MessageBox.Show(sms);
+                //if (currentline.IndexOf("+CISMS") != -1)
+                //{
+                //}
                 //+CISMS:+8613866120701,15-12-29-19:35,Cb15_1Ce
                 //接收到的信息模板13855170145
                 //portPhone.DiscardInBuffer();
@@ -513,7 +573,7 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.ToString());
+                MessageBox.Show(ex.Message);
                 return;
             }
         }
@@ -528,10 +588,15 @@ namespace MDIMonitor_CS
             ////转换
             ////串口只能读取ASCII码或者进制数（1，2，3.....的进制，一般是16进制）
             //try
-            //{
+            //{, DateTime.Now.ToLongTimeString,phoneNumber, CommandString
+            //string str = DateTime.Now.ToLongTimeString;
             //byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("AT+CMGC={0},3,{1}\r\n", phoneNumber, CommandString));//
-            byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("ATD{0}\r\n", phoneNumber));
+            //byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("ATD{0}\r\n", phoneNumber));
+            byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("AT+CISMSSEND={0},3,{1}\r\n", phoneNumber, CommandString));
             portPhone.Write(WriteBuffer, 0, WriteBuffer.Length);//("AT+CISMSSEND=18326077303,3,你好\r\n"); //AT+CSCA?     //获取短信中心号
+            this.Parent.statusLabel_phone.Text = String.Format("[{0}]>>{1}>>【{2}】", DateTime.Now.ToLongTimeString(), phoneNumber, CommandString);
+            this.Parent.statusLabel_phone.ToolTipText = this.Parent.statusLabel_phone.Text;
+            //this.Parent.statusLabel.Text = "通讯端口未开启";
             Thread.Sleep(500);             //延迟1000毫秒 
             //string response = portPhone.ReadExisting(); //读取串口中返回的数据 
             //string smsCenterNum = null;
@@ -608,20 +673,36 @@ namespace MDIMonitor_CS
                             for (int j = 0; j < nodeChNum[i]; j++)
                             {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                                 //System.Threading.Thread.Sleep(2000);//测量时间间隔
-                                Parent.statusLabel.Text = String.Format("测量{0}",j);
+                                Parent.statusLabel.Text = String.Format("测量{0}", j);
                                 string[] dataUnit = new string[8];
                                 dataUnit[0] = String.Format("{0}", i + 1);//节点
                                 dataUnit[1] = String.Format("{0}", j + 1);//通道
                                 dataUnit[2] = String.Format("名称");//名称
                                 dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
-                                double LMD = 3.1415;
+
+                                double InitVal = 0.0;
+                                double LMD = 0.0;
+                                if (this.Parent.UIthread.userDataTable[0].Rows.Count > i && this.Parent.UIthread.userDataTable[0].Columns.Count > j + 1)
+                                {
+                                    InitVal = Convert.ToDouble(this.Parent.UIthread.userDataTable[0].Rows[i][j + 1]);
+                                    LMD = Convert.ToDouble(this.Parent.UIthread.userDataTable[1].Rows[i][j + 1]);
+                                }
+                                else
+                                    this.Parent.statusLabel.Text = "测量配置文件数据不足，按默认值0.0计算，请及时检查";
+                                //if(LMD<=0.0)
                                 dataUnit[4] = String.Format("{0}", LMD);//灵敏度
+                                if (j * 2 + 3 >= bufferSize)
+                                {
+                                    Parent.statusLabel.Text = String.Format("配置文件通道数多于总线通道数，请更正配置文件");
+                                    break;
+                                }
+
                                 uint dataValue = readBuffer[j * 2 + 3];
                                 dataValue = (dataValue << 8) & 0x0ff00;
                                 dataValue = dataValue + readBuffer[j * 2 + 4];
                                 //Random ran = new Random();
                                 int value = (int)dataValue;
-                                double dValue = value;
+                                double dValue = value - InitVal;
                                 if (LMD > 0)
                                     dValue = value / LMD;
                                 else
@@ -630,6 +711,7 @@ namespace MDIMonitor_CS
                                 dataUnit[6] = String.Format("单位");
                                 dataUnit[7] = String.Format("位置");
                                 SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
+                                WarningFunc(dataUnit);
                                 //string strview = "";
                                 //for (int k = 0; k < 8; k++)
                                 //{
@@ -650,6 +732,26 @@ namespace MDIMonitor_CS
                 return;
             }
         }
+
+        private bool WarningFunc(string[] dataUnit)
+        {
+            int node = Convert.ToInt16(dataUnit[0]);
+            int ch = Convert.ToInt16(dataUnit[1]);
+            double value = Convert.ToDouble(dataUnit[5]);
+            double WarningVal = Convert.ToDouble(this.Parent.UIthread.userDataTable[3].Rows[node - 1][ch]);
+            if (value < WarningVal)
+            {
+                //this.Parent.statusLabel_warning.Text = "无报警信息";
+                return false;
+            }
+            else
+            {
+                this.Parent.statusLabel_warning.Text = String.Format("节点{0}通道{1}感应器报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal, dataUnit[6], value, dataUnit[7], dataUnit[3]);
+                return true;
+            }
+            //return false;
+        }
+
 
         /// <summary>
         /// 向测量端口发送命令
@@ -835,17 +937,15 @@ namespace MDIMonitor_CS
             }
         }
 
-        private void UpdateXml()
+        public void UpdateXml()
         {
             totalNodeCount = Convert.ToInt16(getXmlValue("NODE", "id", "0", "Count"));
-            if (totalNodeCount > 0)
+
+            for (int i = 0; i < 4; i++)
             {
-                nodeChNum = new int[totalNodeCount];
-                for (int i = 0; i < totalNodeCount; i++)
-                {
-                    nodeChNum[i] = Convert.ToInt16(getXmlValue("NODE", "id", String.Format("{0}", i + 1), "Count"));
-                }
+                nodeChNum[i] = Convert.ToInt16(getXmlValue("NODE", "id", String.Format("{0}", i + 1), "Count"));
             }
+
         }
         /// <summary>
         /// 发送扫描到的数据到Chart控件并存储到数据库
@@ -946,7 +1046,7 @@ namespace MDIMonitor_CS
                 string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
                 sqlCommand.CommandText = sqlcmd;
                 sqlCommand.ExecuteNonQuery();
-                sqlcmd = String.Format("select Count from TableRows where NUM={0}", ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2)+1));
+                sqlcmd = String.Format("select Count from TableRows where NUM={0}", ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
                 sqlCommand.CommandText = sqlcmd;
                 SQLiteDataReader sqlReader = sqlCommand.ExecuteReader();
                 string count = null;
@@ -957,7 +1057,7 @@ namespace MDIMonitor_CS
                 sqlReader.Close();
                 if (count != null)
                 {
-                    sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count) + 1, ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2)+1));
+                    sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count) + 1, ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
                     sqlCommand.CommandText = sqlcmd;
                     sqlCommand.ExecuteNonQuery();
                 }
@@ -979,7 +1079,7 @@ namespace MDIMonitor_CS
             if (portSensor.IsOpen)
             {
                 SensorRecFun();
-                if(!auto_measure)
+                if (!auto_measure)
                     Parent.statusLabel.Text = "单次扫描测量端口成功";
                 else
                     Parent.statusLabel.Text = "自动扫描测量端口中...";
@@ -994,7 +1094,7 @@ namespace MDIMonitor_CS
             for (int i = 0; i < 1; i++)
             {
                 Random ran = new Random();
-                PhoneCommand(String.Format("测试代码"), "18326077303");//,ran.Next(100000,999999)),//13100716778
+                PhoneCommand(String.Format("你好世界"), "18326077303");//,ran.Next(100000,999999)),//13100716778
             }
         }
         private void msgFunction_3()//对应消息码为3的时要执行的函数
@@ -1186,7 +1286,10 @@ namespace MDIMonitor_CS
                 }
                 this.Parent.SerialForm.check_PhonePort.Checked = portPhone_ShouldOpen;
                 Parent.SerialForm.cbox_Phone_PortName.Enabled = !portPhone_ShouldOpen;
-                Parent.statusLabel.Text = String.Format("通讯端口开关变更失败");
+                if (portPhone.IsOpen)
+                    Parent.statusLabel.Text = String.Format("通讯端口开关已开启");
+                else
+                    Parent.statusLabel.Text = String.Format("通讯端口开关已关闭");
             }
             catch (Exception)
             {

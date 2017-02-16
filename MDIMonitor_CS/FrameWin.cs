@@ -28,6 +28,9 @@ namespace MDIMonitor_CS
             UIthread = new UIThread(this);
             MeasureThread = new MeasureTimer(this);
 
+            thread.Start();
+            UIthread.Start();
+
             menu_auto.Enabled = false;
             menu_auto.Checked = false;
             SerialForm = new SerialPortForm(this);
@@ -66,6 +69,7 @@ namespace MDIMonitor_CS
             this.PostMessage(4, 1);
 
             MeasureThread.PostMessage(1);
+            this.statusLabel.Text = "启动完成";
 
 
         }
@@ -152,8 +156,8 @@ namespace MDIMonitor_CS
         private void menu_ScanPort_Click(object sender, EventArgs e)
         {
             //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
-            //this.thread.PostMessage(2);//发送消息测试短信发送功能
-            this.PostMessage(1, 0);
+            this.thread.PostMessage(2);//发送消息测试短信发送功能
+            //this.PostMessage(1, 0);
         }
 
         private void menu_Userdat_Click(object sender, EventArgs e)
@@ -221,6 +225,13 @@ namespace MDIMonitor_CS
         private void menu_single_measure_Click(object sender, EventArgs e)
         {
             this.PostMessage(1, 0);
+        }
+
+        private void FrameWin_MouseEnter(object sender, EventArgs e)
+        {
+            //ToolTip tip = new ToolTip();
+            //tip.ShowAlways = true;
+            //tip.SetToolTip(this.statusLabel, statusLabel.Text);
         }
 
     }
