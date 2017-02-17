@@ -23,6 +23,16 @@ namespace MDIMonitor_CS
         private void MainFrame_Load()
         {
             this.m_ParentForm.PostMessage(6, 0);
+            cbox_warnlist.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"});
         }
 
 
@@ -58,7 +68,7 @@ namespace MDIMonitor_CS
             this.m_ParentForm.PostMessage(11, 0);
         }
 
-       private void btn_ok_Click(object sender, EventArgs e)
+        private void btn_ok_Click(object sender, EventArgs e)
         {
             this.m_ParentForm.PostMessage(7, 0);//post确认端口修改消息
         }
@@ -76,6 +86,11 @@ namespace MDIMonitor_CS
         private void check_SensorPort_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ParentForm.PostMessage(9, 0);//变更Sensor端口开关
+        }
+
+        private void check_WarnPort_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(14, 0);//变更Warn端口开关
         }
 
         private void btn_stopthread_Click(object sender, EventArgs e)
@@ -103,6 +118,20 @@ namespace MDIMonitor_CS
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(2, 0);
+        }
+
+        private void btn_do_warn_Click(object sender, EventArgs e)
+        {
+            if(cbox_warnlist.SelectedIndex ==-1)
+                return;
+            this.m_ParentForm.thread.Warn_cmd_id = cbox_warnlist.SelectedIndex;
+            this.m_ParentForm.PostMessage(15, 0);
+        }
+
 
 
     }

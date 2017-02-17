@@ -389,6 +389,7 @@ namespace MDIMonitor_CS
                      //this.m_ParentForm.thread.UpdateXml();
                }
                 this.m_ParentForm.PostMessage(5, 1);//发送消息修改数据库
+                this.m_ParentForm.PostMessage(4, 1);//更新user数据库
                 //data_dataGridView[i]
 
             }
@@ -500,6 +501,36 @@ namespace MDIMonitor_CS
         private void numeric_ch_of_curnode_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void radio_stage1_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.UIthread.stage = 1;
+            this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+        }
+
+        private void radio_stage2_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.UIthread.stage = 2;
+            this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+        }
+
+        private void radio_stage3_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.UIthread.stage = 3;
+            this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+        }
+
+        private void radio_stage4_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.UIthread.stage = 4;
+            this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+        }
+
+        private void radio_stage5_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.UIthread.stage = 5;
+            this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
         }
 
     }

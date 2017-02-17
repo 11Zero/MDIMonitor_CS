@@ -30,6 +30,11 @@ namespace MDIMonitor_CS
         //private object[] invokePanelData = new object[2];
         private int totalNode = 4;
         private int[] CH_Node = new int[4];
+        public int stage = 1;
+        public string[] phone_cmd = new string[3];//存储接收到的用户短信号码,时间和指令
+        private string[,] data_of_all_node = new string[4,8];//临时存储当前扫描到的节点通道数据
+        public bool smssended = true;//判断需要的短信是否已发送
+        //private int data_node_count = 0;
         private DataTable hisChartData = new DataTable();
         public List<DataTable> userDataTable = new List<DataTable>();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
@@ -46,8 +51,10 @@ namespace MDIMonitor_CS
             DataTable dt = new DataTable();
             for (int i = 0; i < 4; i++)
             {
-                userDataTable.Add(dt); 
+                userDataTable.Add(dt);
             }
+            totalNode = this.Parent.thread.totalNodeCount;
+            CH_Node = this.Parent.thread.nodeChNum;
         }
         ~UIThread()
         {
@@ -133,6 +140,10 @@ namespace MDIMonitor_CS
                         case 5:
                             {
                                 msgFunction_5();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
+                        case 6:
+                            {
+                                msgFunction_6();//例如消息码为3是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -343,7 +354,7 @@ namespace MDIMonitor_CS
         private void WriteUserSQL(string fileName)
         {
             Parent.statusLabel.Text = String.Format("user数据库存储中");
-            int stage = 1;
+            //int stage = 1;
             string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal" };
             //for (int i = 0; i < 4; i++)
             //{
@@ -362,7 +373,7 @@ namespace MDIMonitor_CS
                     sqlcmd = String.Format("update {0}_{8} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}' where NUM={7}",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
                         userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
-                    if (j+1 > totalNode)
+                    if (j + 1 > totalNode)
                     {
                         sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
@@ -422,21 +433,21 @@ namespace MDIMonitor_CS
         /// <summary>
         /// 执行Chart委托
         /// </summary>
-        private void UpdateChart(int Form_id,int node,int ch)
+        private void UpdateChart(int Form_id, int node, int ch)
         {
             //for (int i = 0; i < 4; i++)
             //{
             if (Parent.CurForm[Form_id].IsHandleCreated == true)
+            {
+                if (Parent.CurForm[Form_id].cur_ch == ch && Parent.CurForm[Form_id].cur_node == node)
                 {
-                    if (Parent.CurForm[Form_id].cur_ch == ch && Parent.CurForm[Form_id].cur_node == node)
-                    {
-                        invokeChartData[0] = ch - 1;
-                        invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1];
-                        invokeChartData[2] = Form_id;
-                        Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
-                    }
+                    invokeChartData[0] = ch - 1;
+                    invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1];
+                    invokeChartData[2] = Form_id;
+                    Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
                 }
-                
+            }
+
             //}
         }
 
@@ -445,14 +456,14 @@ namespace MDIMonitor_CS
         /// </summary>
         /// <param name="_Chart">要更新的Chart控件</param>
         /// <param name="_dataTable">要写入的数据</param>
-        public void ChartDelegateMethod(int _ch, DataTable _dataTable,int Form_id)
+        public void ChartDelegateMethod(int _ch, DataTable _dataTable, int Form_id)
         {
             //for (int i = 0; i < 4; i++)
             //{
             Parent.CurForm[Form_id].CurChart.Series[_ch].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
-                //series[i].Points.DataBind(dataTable.AsEnumerable(), "时间", series[i].Name, "");
-                //series[i].ChartType = SeriesChartType.Spline;
-                //this.CurChart.Series.Add(series[i]);
+            //series[i].Points.DataBind(dataTable.AsEnumerable(), "时间", series[i].Name, "");
+            //series[i].ChartType = SeriesChartType.Spline;
+            //this.CurChart.Series.Add(series[i]);
             //}
         }
 
@@ -509,9 +520,18 @@ namespace MDIMonitor_CS
             //    nowtime = nowtime + step;
             //}
             //nowtime = nowtime + step;
-             string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
-           int ch = Convert.ToInt16(data[1]);
+            string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
+            int ch = Convert.ToInt16(data[1]);
             int node = Convert.ToInt16(data[0]);
+            //if(data_node_count==3)
+            //    data_node_count=0;
+
+            data_of_all_node[ch - 1, node - 1] = data[5]+data[6];
+            //if (smssended == false)
+            //{
+ 
+            //}
+            
             for (int i = 0; i < 4; i++)
             {
                 if (Parent.CurForm[i] == null || Parent.CurForm[i].IsDisposed)
@@ -530,9 +550,9 @@ namespace MDIMonitor_CS
                     //time = nowday.ToLongDateString();
                     //time = nowday.ToLongTimeString();
                     Parent.CurForm[i].dataSet.Tables[ch - 1].Rows.Add(data[3], data[5]);
-                    this.UpdateChart(i,node, ch);
+                    this.UpdateChart(i, node, ch);
                 }
-                
+
             }
         }
         private void msgFunction_3()//写入Data到SQLite
@@ -542,9 +562,9 @@ namespace MDIMonitor_CS
 
         private void msgFunction_4()//读测量参数
         {
-            
+
             Parent.statusLabel.Text = String.Format("载入数据库中");
-            int stage = 1;
+
             //int grid_id = this.Parent.UserForm.cur_dataGrid_id;
             //if (grid_id > 3)
             //    return;
@@ -552,15 +572,15 @@ namespace MDIMonitor_CS
             for (int i = 0; i < 4; i++)
             {
                 userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
-                while (userDataTable[i].Rows.Count>totalNode)
-                    userDataTable[i].Columns.RemoveAt(userDataTable[i].Rows.Count-1);
+                while (userDataTable[i].Rows.Count > totalNode)
+                    userDataTable[i].Columns.RemoveAt(userDataTable[i].Rows.Count - 1);
                 this.Parent.UserForm.data_dataGridView[i] = userDataTable[i].Copy();
                 this.Parent.UserForm.databack_dataGridView[i] = userDataTable[i].Copy();
             }
-            Parent.statusLabel.Text = String.Format("载入完成");
+            Parent.statusLabel.Text = String.Format("测量参数载入完成");
             if (this.Parent.UserForm.data_dataGridView[0].Columns.Count == 0)
             {
-                Parent.statusLabel.Text = String.Format("载入未完成");
+                Parent.statusLabel.Text = String.Format("测量参数载入失败");
             }
             //this.Parent.StripContainer.ContentPanel.Controls.Clear();
             //this.Parent.UserForm.Size = this.Parent.StripContainer.ContentPanel.Size;
@@ -572,6 +592,78 @@ namespace MDIMonitor_CS
         private void msgFunction_5()//修改测量参数数据库
         {
             WriteUserSQL("user.dat");
+        }
+        private void msgFunction_6()//处理接收到的短信指令
+        {
+            string smstext = "";
+            string number = "";
+            if (phone_cmd[2].IndexOf("查询所有节点") >= 0)//查询所有节点通道信息
+            {
+                 totalNode = this.Parent.thread.totalNodeCount;
+                 CH_Node = this.Parent.thread.nodeChNum;
+                 for (int i = 0; i < totalNode; i++)
+                 {
+                     for (int j = 0; j < CH_Node[i]; j++)
+                     {
+                         smstext+=String.Format("节点{0}通道{1}:{2};\n", i+1,j+1,data_of_all_node[i,j]);
+                     }
+                 }
+                 string tempsmstext = "";
+                 number = phone_cmd[0];
+                 for (int i = 0; i < Math.Ceiling((smstext.Length) / 119.0); i++)
+                 {
+                     tempsmstext = smstext.Substring(i * 119, 119);
+                     this.Parent.thread.phone_sms_send[0] = number;
+                     this.Parent.thread.phone_sms_send[1] = tempsmstext;
+                     this.Parent.PostMessage(3,0);//发送短信
+                 }
+                 //this.Parent.thread.PhoneCommand(tempsmstext, number);
+                
+            }
+            else if (phone_cmd[2].IndexOf("查询节点") >= 0)//短信指令【查询节点1】节点号需根据实际连接的节点数目确定
+            {
+                int curnode = Convert.ToInt16(phone_cmd[2].Replace("查询节点", ""));
+                if (curnode <= totalNode && curnode>0)
+                {
+                    for (int j = 0; j < CH_Node[curnode-1]; j++)
+                    {
+                        smstext += String.Format("节点{0}通道{1}:{2};\n", curnode, j + 1, data_of_all_node[curnode-1, j]);
+                    }
+                    string tempsmstext = "";
+                    number = phone_cmd[0];
+                    for (int i = 0; i < Math.Ceiling((smstext.Length) / 119.0); i++)
+                    {
+                        tempsmstext = smstext.Substring(i * 119, 119);
+                        this.Parent.thread.phone_sms_send[0] = number;
+                        this.Parent.thread.phone_sms_send[1] = tempsmstext;
+                        this.Parent.PostMessage(3, 0);
+                    }
+                }
+                else
+                    this.Parent.statusLabel_phone.Text = "设查询节点信息的短信指令有误，未执行";
+            }
+            else if (phone_cmd[2].IndexOf("设置施工阶段") >= 0)//短信指令【设置施工阶段1】1 2 3 4 5选其一
+            {
+                if (Convert.ToInt16(phone_cmd[2].Replace("设置施工阶段", "")) <= 5 && Convert.ToInt16(phone_cmd[2].Replace("设置施工阶段", "")) > 0)
+                {
+                    stage = Convert.ToInt16(phone_cmd[2].Replace("设置施工阶段", ""));
+                    this.Parent.PostMessage(4, 1);//更新现阶段数据库
+                }
+                else
+                    this.Parent.statusLabel_phone.Text = "设置施工阶段的短信指令有误，未执行";
+            }
+            else if (phone_cmd[2].IndexOf("获取施工状态") >= 0)//短信指令【获取施工状态】
+            {
+                smstext = String.Format("当前处于施工阶段{0}",stage);
+                number = phone_cmd[0];
+                this.Parent.thread.phone_sms_send[0] = number;
+                this.Parent.thread.phone_sms_send[1] = smstext;
+                this.Parent.PostMessage(3, 0);
+                //this.Parent.SerialForm.text_targetphone.Text = phone_cmd[0];
+                //this.Parent.SerialForm.rich_smstext.Text = smstext;
+                //this.Parent.PostMessage(2, 0);
+                //this.Parent.SerialForm.rich_smstext.Text = "";
+            }
         }
     }
 }

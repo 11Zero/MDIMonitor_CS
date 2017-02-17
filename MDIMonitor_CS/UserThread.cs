@@ -17,18 +17,23 @@ namespace MDIMonitor_CS
     {
         SerialPort portSensor = null;
         SerialPort portPhone = null;
+        SerialPort portWarn = null;
         private bool portSensor_ShouldOpen = false;
         private bool portPhone_ShouldOpen = false;
+        private bool portWarn_ShouldOpen = false;
         private bool PhoneDataRecFuncSetted = false;
-        private bool SensorDataRecFuncSetted = false;
+        private bool WarnDataRecFuncSetted = false;
         private int[] portPhoneAttribute = new int[4];
         private int[] portSensorAttribute = new int[4];
+        private int[] portWarnAttribute = new int[4];
+        public int Warn_cmd_id = -1;
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
         private static string xmlName;
         public int totalNodeCount = 0;
         public int[] nodeChNum = null;
         public int ScanTimeStep = 2000;//默认延时2s间隔遍历节点一次
+        public string[] phone_sms_send = new string[2];
         public int delayTime = 500;//默认延时0.5s间隔扫描每个节点
         private bool end = false;//结束线程标志
         private bool kill = false;//终结线程标志
@@ -162,6 +167,14 @@ namespace MDIMonitor_CS
                         case 13:
                             {
                                 msgFunction_13();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
+                        case 14:
+                            {
+                                msgFunction_14();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
+                        case 15:
+                            {
+                                msgFunction_15();//例如消息码为2是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -488,8 +501,196 @@ namespace MDIMonitor_CS
         }
         #endregion
 
+        #region 设置报警端口
+        private bool SetWarnPort()
+        {
+            if (!portWarn.IsOpen)
+            {
+                if (Parent.SerialForm.cbox_Warn_PortName.SelectedIndex == -1)
+                    return false;
+                portWarn.PortName = Parent.SerialForm.cbox_Warn_PortName.Text;
+            }
+            else
+            {
+                Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(portWarn.PortName);
+                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Warn_PortName.Text || Parent.SerialForm.cbox_Sensor_PortName.Text == Parent.SerialForm.cbox_Warn_PortName.Text)
+                {
+                    if (portPhone.IsOpen || portSensor.IsOpen)
+                    {
+                        Parent.statusLabel.Text = "警报端口不能与手机端口或测量端口相同";
+                        return false;
+                    }
+                }
+            }
+
+            int[] tempPortWarnAttribute = new int[4];
+            tempPortWarnAttribute[0] = Parent.SerialForm.cbox_Warn_Baud.SelectedIndex;//比特率
+            tempPortWarnAttribute[1] = Parent.SerialForm.cbox_Warn_Parity.SelectedIndex;//校验位
+            tempPortWarnAttribute[2] = Parent.SerialForm.cbox_Warn_Bits.SelectedIndex;//数据位
+            tempPortWarnAttribute[3] = Parent.SerialForm.cbox_Warn_Stop.SelectedIndex;//停止位
+            for (int i = 0; i < 4; i++)
+            {
+                if (tempPortWarnAttribute[i] == -1)
+                {
+                    if (i == 0)
+                    {
+                        Parent.statusLabel.Text = "请确认警报端口比特率";
+                        return false;
+                    }
+                    if (i == 1)
+                    {
+                        Parent.statusLabel.Text = "请确认警报端口奇偶校验位";
+                        return false;
+                    }
+                    if (i == 2)
+                    {
+                        Parent.statusLabel.Text = "请确认警报端口数据位";
+                        return false;
+                    }
+                    if (i == 3)
+                    {
+                        Parent.statusLabel.Text = "请确认警报端口停止位";
+                        return false;
+                    }
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                if (i == 0)
+                {
+                    portWarn.BaudRate = Convert.ToInt32(Parent.SerialForm.cbox_Warn_Baud.SelectedItem.ToString());
+                }
+                if (i == 1)
+                {
+                    if (tempPortWarnAttribute[i] == 0)
+                        portWarn.Parity = Parity.Even;
+                    if (tempPortWarnAttribute[i] == 1)
+                        portWarn.Parity = Parity.Mark;
+                    if (tempPortWarnAttribute[i] == 2)
+                        portWarn.Parity = Parity.None;
+                    if (tempPortWarnAttribute[i] == 3)
+                        portWarn.Parity = Parity.Odd;
+                    if (tempPortWarnAttribute[i] == 4)
+                        portWarn.Parity = Parity.Space;
+                }
+                if (i == 2)
+                {
+                    portWarn.DataBits = Convert.ToInt32(Parent.SerialForm.cbox_Warn_Bits.SelectedItem.ToString());
+                }
+                if (i == 3)
+                {
+                    if (tempPortWarnAttribute[i] == 0)
+                        portWarn.StopBits = StopBits.One;
+                    if (tempPortWarnAttribute[i] == 1)
+                        portWarn.StopBits = StopBits.OnePointFive;
+                    if (tempPortWarnAttribute[i] == 2)
+                        portWarn.StopBits = StopBits.Two;
+                }
+            }
+            portWarn.Handshake = Handshake.None;
+            //portWarn.ReceivedBytesThreshold = 1;
+            //portWarn.ReadBufferSize = 2048;
+            //portWarn.WriteBufferSize = 2048;
+
+            //根据选择的数据，设置奇偶校验位
+
+            //此委托应该是异步获取数据的触发事件，即是：当有串口有数据传过来时触发
+            if (!WarnDataRecFuncSetted)
+            {
+                portWarn.DataReceived += new SerialDataReceivedEventHandler(WarnRecFun);//DataPhoneeived事件委托
+                WarnDataRecFuncSetted = !WarnDataRecFuncSetted;
+            }
+            //打开串口的方法
+            try
+            {
+                if (portWarn_ShouldOpen)
+                {
+                    if (!portWarn.IsOpen)
+                        portWarn.Open();
+                }
+                else
+                {
+                    this.Parent.statusLabel.Text = "设置已生效";
+                    portWarnAttribute[0] = Parent.SerialForm.cbox_Warn_Baud.SelectedIndex;//比特率
+                    portWarnAttribute[1] = Parent.SerialForm.cbox_Warn_Parity.SelectedIndex;//校验位
+                    portWarnAttribute[2] = Parent.SerialForm.cbox_Warn_Bits.SelectedIndex;//数据位
+                    portWarnAttribute[3] = Parent.SerialForm.cbox_Warn_Stop.SelectedIndex;//停止位
+                    string COM_id = "Warn";
+                    setXmlValue("COM", "id", COM_id, "Last_id", portWarn.PortName);
+                    setXmlValue("COM", "id", COM_id, "Baud", tempPortWarnAttribute[0].ToString());
+                    setXmlValue("COM", "id", COM_id, "Parity", tempPortWarnAttribute[1].ToString());
+                    setXmlValue("COM", "id", COM_id, "Bits", tempPortWarnAttribute[2].ToString());
+                    setXmlValue("COM", "id", COM_id, "Stop", tempPortWarnAttribute[3].ToString());
+                    return true;
+                }
+                if (portWarn_ShouldOpen && portWarn.IsOpen)
+                {
+                    //MessageBox.Show("the port is opened!");
+                    this.Parent.statusLabel.Text = "警报端口已开启";
+                    portWarnAttribute[0] = Parent.SerialForm.cbox_Warn_Baud.SelectedIndex;//比特率
+                    portWarnAttribute[1] = Parent.SerialForm.cbox_Warn_Parity.SelectedIndex;//校验位
+                    portWarnAttribute[2] = Parent.SerialForm.cbox_Warn_Bits.SelectedIndex;//数据位
+                    portWarnAttribute[3] = Parent.SerialForm.cbox_Warn_Stop.SelectedIndex;//停止位
+                    string COM_id = "Warn";
+                    setXmlValue("COM", "id", COM_id, "Last_id", portWarn.PortName);
+                    setXmlValue("COM", "id", COM_id, "Baud", tempPortWarnAttribute[0].ToString());
+                    setXmlValue("COM", "id", COM_id, "Parity", tempPortWarnAttribute[1].ToString());
+                    setXmlValue("COM", "id", COM_id, "Bits", tempPortWarnAttribute[2].ToString());
+                    setXmlValue("COM", "id", COM_id, "Stop", tempPortWarnAttribute[3].ToString());
+                    return true;
+                }
+                else
+                {
+                    this.Parent.statusLabel.Text = "警报端口开启失败";
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("警报端口开启失败：" + ex.ToString());
+                return false;
+            }
+
+        }
+        #endregion
+
+        private void WarnRecFun(object Sensorer, SerialDataReceivedEventArgs e)
+        {
+            if (portWarn.IsOpen == false)
+            {
+                Parent.statusLabel.Text = "警报端口未开启";
+                return;
+            }
+            try
+            {
+                string currentline = "";
+                //循环接收串口中的数据
+                byte[] getbuffer = new byte[200];
+                int i = 0;
+                while (portWarn.BytesToRead > 0)
+                {
+                    getbuffer[i++] = (byte)portWarn.ReadByte();
+                }
+                currentline = Encoding.Default.GetString((getbuffer));
+                currentline.Replace("\n", "");
+                currentline.Replace(" ", "");
+                currentline.Replace("\r", "");
+                currentline.Replace("\t", "");
+                currentline.Replace("\0", "");
+                Parent.statusLabel.Text = String.Format("返回值:[{0}]",currentline);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         private void PhoneRecFun(object Sensorer, SerialDataReceivedEventArgs e)
         {
+            if (portPhone.IsOpen == false)
+            {
+                Parent.statusLabel.Text = "手机通讯端口未开启";
+                return;
+            }
             try
             {
                 string currentline = "";
@@ -507,6 +708,7 @@ namespace MDIMonitor_CS
                 currentline.Replace("\n", "");
                 currentline.Replace(" ", "");
                 currentline.Replace("\r", "");
+                currentline.Replace("\t", "");
                 currentline.Replace("\0", "");
                 if (currentline == "" || currentline.IndexOf("OK") != -1)
                     return;
@@ -526,9 +728,16 @@ namespace MDIMonitor_CS
                     return;
                 }
                 string number = currentline.Substring(10, 11);
-                string time = currentline.Substring(22, 16);
-                string cmd = currentline.Substring(39);
-                this.Parent.statusLabel_phone.Text = string.Format("[{0}]{1}>>{2}",time,number,cmd);
+                string time = currentline.Substring(currentline.IndexOf(",") + 1, currentline.LastIndexOf(",") - currentline.IndexOf(",") - 1);
+                string cmd = currentline.Substring(currentline.LastIndexOf(",") + 1, currentline.LastIndexOf("\0") - currentline.LastIndexOf(",") - 1);
+                this.Parent.UIthread.phone_cmd[0] = number;
+                this.Parent.UIthread.phone_cmd[1] = time;
+                this.Parent.UIthread.phone_cmd[2] = cmd;
+                this.Parent.statusLabel_phone.Text = string.Format("[{0}]{1}>>{2}", time, number, cmd);
+                this.Parent.PostMessage(6, 1);//能进行到这一行证明街道短信指令，若能解析，将执行解析并返回信息
+                return;
+
+
                 //PhoneCommand(currentline, "18326077303");
                 //ASCIIEncoding AE2 = new ASCIIEncoding();
                 //char[] CharArray = AE2.GetChars(getbuffer);
@@ -539,7 +748,7 @@ namespace MDIMonitor_CS
                 //"+CISMS:+8618326077303,17-2-16-20:57:16,ÌÚÑ¶QQ\r\n"腾讯QQ
                 //\ucc\uda\ud1\ub6//\u817e\u8baf
                 //currentline = Encoding.ASCII.GetString(getbuffer);
-                MessageBox.Show(number + "~" + time + "~" + cmd);
+                //MessageBox.Show(number + "~" + time + "~" + cmd);
                 //char[] trimChars = new char[] { '\r', '\t', '\n' };
                 //currentline = currentline.Trim(trimChars).ToString();
                 //string unicode_sms = currentline.Substring(currentline.LastIndexOf(',') + 1);
@@ -569,11 +778,10 @@ namespace MDIMonitor_CS
                 //在这里对接收到的数据进行显示
                 //如果不在窗体加载的事件里写上：Form.CheckForIllegalCrossThreadCalls = false; 就会报错）
                 //Parent.CurForm.richText_DataRec.AppendText("[" + DateTime.Now.TimeOfDay.ToString() + "]:" + currentline + "\n");
-                return;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                this.Parent.statusLabel.Text = ex.Message;
                 return;
             }
         }
@@ -582,7 +790,7 @@ namespace MDIMonitor_CS
         /// </summary>
         /// <param name="CommandString">短信内容</param>
         /// <param name="phoneNumber">手机号码</param>
-        private void PhoneCommand(string CommandString, string phoneNumber)
+        public void PhoneCommand(string CommandString, string phoneNumber)
         {
 
             ////转换
@@ -592,12 +800,17 @@ namespace MDIMonitor_CS
             //string str = DateTime.Now.ToLongTimeString;
             //byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("AT+CMGC={0},3,{1}\r\n", phoneNumber, CommandString));//
             //byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("ATD{0}\r\n", phoneNumber));
+            if (portPhone.IsOpen == false)
+            {
+                Parent.statusLabel.Text = "手机通讯端口未开启";
+                return;
+            }
             byte[] WriteBuffer = Encoding.Default.GetBytes(String.Format("AT+CISMSSEND={0},3,{1}\r\n", phoneNumber, CommandString));
             portPhone.Write(WriteBuffer, 0, WriteBuffer.Length);//("AT+CISMSSEND=18326077303,3,你好\r\n"); //AT+CSCA?     //获取短信中心号
             this.Parent.statusLabel_phone.Text = String.Format("[{0}]>>{1}>>【{2}】", DateTime.Now.ToLongTimeString(), phoneNumber, CommandString);
             this.Parent.statusLabel_phone.ToolTipText = this.Parent.statusLabel_phone.Text;
             //this.Parent.statusLabel.Text = "通讯端口未开启";
-            Thread.Sleep(500);             //延迟1000毫秒 
+            Thread.Sleep(20);             //延迟1000毫秒 
             //string response = portPhone.ReadExisting(); //读取串口中返回的数据 
             //string smsCenterNum = null;
             //if (response.Length > 0)
@@ -1074,7 +1287,7 @@ namespace MDIMonitor_CS
         }
 
 
-        private void msgFunction_1()//对应消息码为1的时要执行的函数
+        private void msgFunction_1()//单次扫描端口数据
         {
             if (portSensor.IsOpen)
             {
@@ -1089,16 +1302,24 @@ namespace MDIMonitor_CS
                 Parent.statusLabel.Text = "测量端口未开启";
             }
         }
-        private void msgFunction_2()//对应消息码为2的时要执行的函数
+        private void msgFunction_2()//人工发送短信
         {
-            for (int i = 0; i < 1; i++)
+            if (portPhone.IsOpen == false)
             {
-                Random ran = new Random();
-                PhoneCommand(String.Format("你好世界"), "18326077303");//,ran.Next(100000,999999)),//13100716778
+                Parent.statusLabel.Text = "手机通讯端口未开启";
+                return;
             }
+            //string number = ;
+            //string smstext = 
+            this.Parent.thread.phone_sms_send[0] = this.Parent.SerialForm.text_targetphone.Text;
+            this.Parent.thread.phone_sms_send[1] = this.Parent.SerialForm.rich_smstext.Text;
+            this.Parent.PostMessage(3, 0);//发送短信
         }
-        private void msgFunction_3()//对应消息码为3的时要执行的函数
+
+        private void msgFunction_3()//自动回复短信
         {
+            if (phone_sms_send[0].Length == 11 && phone_sms_send[1].Replace(" ", "") != "")
+                this.PhoneCommand(phone_sms_send[1], phone_sms_send[0]);
         }
         private void msgFunction_4()//对应消息码为3的时要执行的函数
         {
@@ -1126,6 +1347,7 @@ namespace MDIMonitor_CS
         {
             portSensor = new SerialPort();
             portPhone = new SerialPort();
+            portWarn = new SerialPort();
             //让壮态栏控件的宽度与显示器的分辨率宽度一致
             //this.Parent.this.m_ParentForm.statusLabel.Text = "就绪";
             //实例化
@@ -1231,10 +1453,62 @@ namespace MDIMonitor_CS
             portPhoneAttribute[2] = Convert.ToInt32(getXmlValue("COM", "id", "Phone", "Bits"));//数据位
             portPhoneAttribute[3] = Convert.ToInt32(getXmlValue("COM", "id", "Phone", "Stop"));//停止位
             #endregion
+
+            #region Warn控件初始化
+            this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
+            //Parent.SerialForm.cbox_Warn_PortName.Enabled = false;
+            foreach (string s in pc.Ports.SerialPortNames)
+            {
+                Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
+            }
+            if (pc.Ports.SerialPortNames.Contains(getXmlValue("COM", "id", "Warn", "Last_id")))
+            {
+                Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(getXmlValue("COM", "id", "Warn", "Last_id"));
+            }
+            //Parent.SerialForm.cbox_Warn_Bits.Items.Add("1");
+            Parent.SerialForm.cbox_Warn_Bits.Items.Add("5");
+            Parent.SerialForm.cbox_Warn_Bits.Items.Add("6");
+            Parent.SerialForm.cbox_Warn_Bits.Items.Add("7");
+            Parent.SerialForm.cbox_Warn_Bits.Items.Add("8");
+            Parent.SerialForm.cbox_Warn_Bits.SelectedIndex = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Bits"));//读取xml参数
+
+            Parent.SerialForm.cbox_Warn_Baud.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "43000",
+            "56000",
+            "57600",
+            "115200"});
+            Parent.SerialForm.cbox_Warn_Baud.SelectedIndex = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Baud"));//读取xml参数
+
+            Parent.SerialForm.cbox_Warn_Parity.Items.AddRange(new object[] {
+            "Even",
+            "Mark",
+            "None",
+            "Odd",
+            "Space"});
+            Parent.SerialForm.cbox_Warn_Parity.SelectedIndex = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Parity"));//读取xml参数
+
+            Parent.SerialForm.cbox_Warn_Stop.Items.Add("1");
+            Parent.SerialForm.cbox_Warn_Stop.Items.Add("1.5");
+            Parent.SerialForm.cbox_Warn_Stop.Items.Add("2");
+            Parent.SerialForm.cbox_Warn_Stop.SelectedIndex = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Stop"));//读取xml参数
+
+            portWarnAttribute[0] = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Baud"));//比特率
+            portWarnAttribute[1] = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Parity"));//校验位
+            portWarnAttribute[2] = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Bits"));//数据位
+            portWarnAttribute[3] = Convert.ToInt32(getXmlValue("COM", "id", "Warn", "Stop"));//停止位
+            #endregion
         }
         private void msgFunction_7()//确认端口修改
         {
-            if (SetPhonePort() && SetSensorPort())
+            if (SetPhonePort() && SetSensorPort() && SetWarnPort())
                 Parent.statusLabel.Text = "端口修改成功";
         }
         private void msgFunction_8()//取消端口修改
@@ -1297,6 +1571,39 @@ namespace MDIMonitor_CS
                 throw;
             }
         }
+        private void msgFunction_14()//变更Warn端口开关
+        {
+            try
+            {
+                portWarn_ShouldOpen = !portWarn_ShouldOpen;
+                if (portWarn.IsOpen && !portWarn_ShouldOpen)
+                    portWarn.Close();
+                if (!portWarn.IsOpen && portWarn_ShouldOpen)
+                {
+                    if (!SetWarnPort())
+                        portWarn_ShouldOpen = !portWarn_ShouldOpen;
+                }
+                this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
+                Parent.SerialForm.cbox_Warn_PortName.Enabled = !portWarn_ShouldOpen;
+                if (!portWarn.IsOpen)
+                {
+                    Parent.statusLabel.Text = String.Format("警报端口开关已关闭");
+                    this.Parent.menu_auto.Enabled = false;
+                    //this.Parent.menu_auto.Checked = false;
+                }
+                else
+                {
+                    Parent.statusLabel.Text = String.Format("警报端口开关已开启");
+                    this.Parent.menu_auto.Enabled = true;
+                }
+                return;
+            }
+            catch (Exception e)
+            {
+                Parent.statusLabel.Text = String.Format("警报端口开关变更失败");
+                MessageBox.Show(e.Message);
+            }
+        }
         private void msgFunction_12()//设置SerialForm窗口控件状态
         {
             Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
@@ -1327,6 +1634,76 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_13()//主动扫描测量节点内数据
         {
+        }
+        private void msgFunction_15()//向Warn端口发送数据
+        {
+            if (Warn_cmd_id == -1)
+            {
+                Parent.statusLabel.Text = "警报端口未收到命令";
+                return;
+            }
+            if (portWarn.IsOpen)
+            {
+                byte[] Warn_cmd_buffer = { 0x7E, 0xFF, 0x06, 0x3A, 0x00, 0x01, 0x01, 0x00, 0x00, 0xEF };
+                switch (Warn_cmd_id)
+                {
+                    case 0:
+                        {
+                            Warn_cmd_buffer[5] = 0x01;
+                            Warn_cmd_buffer[6] = 0x00;
+                        } break;
+                    case 1:
+                        {
+                            Warn_cmd_buffer[5] = 0x01;
+                            Warn_cmd_buffer[6] = 0x01;
+                        } break;
+                    case 2:
+                        {
+                            Warn_cmd_buffer[5] = 0x81;
+                            Warn_cmd_buffer[6] = 0x00;
+                        } break;
+                    case 3:
+                        {
+                            Warn_cmd_buffer[5] = 0x81;
+                            Warn_cmd_buffer[6] = 0x01;
+                        } break;
+                    case 4:
+                        {
+                            Warn_cmd_buffer[5] = 0x02;
+                            Warn_cmd_buffer[6] = 0x00;
+                        } break;
+                    case 5:
+                        {
+                            Warn_cmd_buffer[5] = 0x02;
+                            Warn_cmd_buffer[6] = 0x01;
+                        } break;
+                    case 6:
+                        {
+                            Warn_cmd_buffer[5] = 0x82;
+                            Warn_cmd_buffer[6] = 0x00;
+                        } break;
+                    case 7:
+                        {
+                            Warn_cmd_buffer[5] = 0x82;
+                            Warn_cmd_buffer[6] = 0x01;
+                        } break;
+                    case 8:
+                        {
+                            Warn_cmd_buffer[5] = 0x00;
+                            Warn_cmd_buffer[6] = 0x1E;
+                        } break;
+                    default:
+                        break;
+                }
+                byte[] tempbuffer = { 0x7E, 0xFF, 0x06, 0x3A, 0x00, 0x01, 0x00, 0xEF };
+                portWarn.Write(tempbuffer, 0, tempbuffer.Length);
+                //portWarn.Write(Warn_cmd_buffer, 0, Warn_cmd_buffer.Length);
+                Parent.statusLabel.Text = "警报命令已发送";
+            }
+            else
+            {
+                Parent.statusLabel.Text = "警报端口未开启";
+            }
         }
     }
 }

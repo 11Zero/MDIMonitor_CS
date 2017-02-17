@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_OK = new System.Windows.Forms.Button();
             this.dataGrid_InitialVal = new System.Windows.Forms.DataGridView();
             this.radio_InitialVal = new System.Windows.Forms.RadioButton();
@@ -48,6 +48,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.numeric_ch_of_curnode = new System.Windows.Forms.NumericUpDown();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.radio_stage5 = new System.Windows.Forms.RadioButton();
+            this.radio_stage1 = new System.Windows.Forms.RadioButton();
+            this.radio_stage4 = new System.Windows.Forms.RadioButton();
+            this.radio_stage2 = new System.Windows.Forms.RadioButton();
+            this.radio_stage3 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid_InitialVal)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_measure_step)).BeginInit();
@@ -55,11 +61,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.numeric_cur_node)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_ch_of_curnode)).BeginInit();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(735, 44);
+            this.btn_OK.Location = new System.Drawing.Point(790, 40);
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(75, 23);
             this.btn_OK.TabIndex = 1;
@@ -70,19 +77,19 @@
             // dataGrid_InitialVal
             // 
             this.dataGrid_InitialVal.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGrid_InitialVal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGrid_InitialVal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGrid_InitialVal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid_InitialVal.Location = new System.Drawing.Point(12, 8);
             this.dataGrid_InitialVal.Name = "dataGrid_InitialVal";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGrid_InitialVal.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGrid_InitialVal.RowsDefaultCellStyle = dataGridViewCellStyle10;
             this.dataGrid_InitialVal.RowTemplate.Height = 23;
             this.dataGrid_InitialVal.Size = new System.Drawing.Size(531, 265);
             this.dataGrid_InitialVal.TabIndex = 0;
@@ -140,7 +147,7 @@
             this.panel1.Controls.Add(this.radio_WarningVal);
             this.panel1.Controls.Add(this.radio_Senitivity);
             this.panel1.Controls.Add(this.radio_Unit);
-            this.panel1.Location = new System.Drawing.Point(570, 12);
+            this.panel1.Location = new System.Drawing.Point(549, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(98, 140);
             this.panel1.TabIndex = 4;
@@ -159,7 +166,7 @@
             // 
             // btn_NO
             // 
-            this.btn_NO.Location = new System.Drawing.Point(735, 84);
+            this.btn_NO.Location = new System.Drawing.Point(790, 107);
             this.btn_NO.Name = "btn_NO";
             this.btn_NO.Size = new System.Drawing.Size(75, 23);
             this.btn_NO.TabIndex = 1;
@@ -249,6 +256,76 @@
             this.panel2.Size = new System.Drawing.Size(316, 115);
             this.panel2.TabIndex = 7;
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.radio_stage5);
+            this.panel3.Controls.Add(this.radio_stage1);
+            this.panel3.Controls.Add(this.radio_stage4);
+            this.panel3.Controls.Add(this.radio_stage2);
+            this.panel3.Controls.Add(this.radio_stage3);
+            this.panel3.Location = new System.Drawing.Point(676, 12);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(98, 140);
+            this.panel3.TabIndex = 4;
+            // 
+            // radio_stage5
+            // 
+            this.radio_stage5.AutoSize = true;
+            this.radio_stage5.Location = new System.Drawing.Point(21, 102);
+            this.radio_stage5.Name = "radio_stage5";
+            this.radio_stage5.Size = new System.Drawing.Size(53, 16);
+            this.radio_stage5.TabIndex = 4;
+            this.radio_stage5.TabStop = true;
+            this.radio_stage5.Text = "阶段5";
+            this.radio_stage5.UseVisualStyleBackColor = true;
+            this.radio_stage5.CheckedChanged += new System.EventHandler(this.radio_stage5_CheckedChanged);
+            // 
+            // radio_stage1
+            // 
+            this.radio_stage1.AutoSize = true;
+            this.radio_stage1.Checked = true;
+            this.radio_stage1.Location = new System.Drawing.Point(21, 13);
+            this.radio_stage1.Name = "radio_stage1";
+            this.radio_stage1.Size = new System.Drawing.Size(53, 16);
+            this.radio_stage1.TabIndex = 3;
+            this.radio_stage1.TabStop = true;
+            this.radio_stage1.Text = "阶段1";
+            this.radio_stage1.UseVisualStyleBackColor = true;
+            this.radio_stage1.CheckedChanged += new System.EventHandler(this.radio_stage1_CheckedChanged);
+            // 
+            // radio_stage4
+            // 
+            this.radio_stage4.AutoSize = true;
+            this.radio_stage4.Location = new System.Drawing.Point(21, 79);
+            this.radio_stage4.Name = "radio_stage4";
+            this.radio_stage4.Size = new System.Drawing.Size(53, 16);
+            this.radio_stage4.TabIndex = 3;
+            this.radio_stage4.Text = "阶段4";
+            this.radio_stage4.UseVisualStyleBackColor = true;
+            this.radio_stage4.CheckedChanged += new System.EventHandler(this.radio_stage4_CheckedChanged);
+            // 
+            // radio_stage2
+            // 
+            this.radio_stage2.AutoSize = true;
+            this.radio_stage2.Location = new System.Drawing.Point(21, 35);
+            this.radio_stage2.Name = "radio_stage2";
+            this.radio_stage2.Size = new System.Drawing.Size(53, 16);
+            this.radio_stage2.TabIndex = 3;
+            this.radio_stage2.Text = "阶段2";
+            this.radio_stage2.UseVisualStyleBackColor = true;
+            this.radio_stage2.CheckedChanged += new System.EventHandler(this.radio_stage2_CheckedChanged);
+            // 
+            // radio_stage3
+            // 
+            this.radio_stage3.AutoSize = true;
+            this.radio_stage3.Location = new System.Drawing.Point(21, 57);
+            this.radio_stage3.Name = "radio_stage3";
+            this.radio_stage3.Size = new System.Drawing.Size(53, 16);
+            this.radio_stage3.TabIndex = 3;
+            this.radio_stage3.Text = "阶段3";
+            this.radio_stage3.UseVisualStyleBackColor = true;
+            this.radio_stage3.CheckedChanged += new System.EventHandler(this.radio_stage3_CheckedChanged);
+            // 
             // UserDatForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -256,6 +333,7 @@
             this.ClientSize = new System.Drawing.Size(1033, 486);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.dataGrid_InitialVal);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_NO);
             this.Controls.Add(this.btn_OK);
@@ -271,6 +349,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numeric_ch_of_curnode)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -295,6 +375,12 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown numeric_ch_of_curnode;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RadioButton radio_stage5;
+        public System.Windows.Forms.RadioButton radio_stage1;
+        public System.Windows.Forms.RadioButton radio_stage4;
+        public System.Windows.Forms.RadioButton radio_stage2;
+        public System.Windows.Forms.RadioButton radio_stage3;
 
     }
 }
