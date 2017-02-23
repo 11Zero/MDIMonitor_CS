@@ -40,6 +40,7 @@ namespace MDIMonitor_CS
         }
         private void MainFrame_Load()
         {
+            this.Size = new Size(1033, 486);
             hScroll_His.Minimum = 0;
             hScroll_His.Maximum = 100;
             hScroll_His.LargeChange = 35;
@@ -91,8 +92,8 @@ namespace MDIMonitor_CS
             //HisChart.AxisScrollBarClicked += new delegateChartScroll(ChartScroll),null);
             //HisChart.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.Size = 11;
-            //HisChart.ChartAreas[0].AxisX.ScaleView.Size = 35;//可视区域数据点数 
-            //HisChart.ChartAreas[0].AxisX.ScaleView.MinSize = 4;
+            HisChart.ChartAreas[0].AxisX.ScaleView.Size = 35;//可视区域数据点数 
+            HisChart.ChartAreas[0].AxisX.ScaleView.MinSize = 4;
             //HisChart.ChartAreas[0].AxisX.ScaleView.Position = HisChart.Series[0].Points.Count - HisChart.ChartAreas[0].AxisX.ScaleView.Size;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.LineColor = System.Drawing.Color.Black;
@@ -125,6 +126,7 @@ namespace MDIMonitor_CS
 
         private void btn_Brower_Click(object sender, EventArgs e)
         {
+            
             folderBrowser.RootFolder = Environment.SpecialFolder.Desktop;
             if (Directory.Exists(Application.StartupPath + "\\Database"))
             {
@@ -135,6 +137,7 @@ namespace MDIMonitor_CS
 
             if (folderBrowser.ShowDialog() == DialogResult.OK && folderBrowser.SelectedPath != "")
             {
+                listView_File.Items.Clear();
                 text_path.Text = folderBrowser.SelectedPath;
                 this.listView_File.BeginUpdate();   //数据更新，UI暂时挂起，直到EndUpdate绘制控件，可以有效避免闪烁并大大提高加载速度 
                 DirectoryInfo theFolder = new DirectoryInfo(folderBrowser.SelectedPath);

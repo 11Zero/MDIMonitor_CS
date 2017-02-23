@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace MDIMonitor_CS
 {
@@ -27,7 +28,7 @@ namespace MDIMonitor_CS
             data_dataGridView = new List<DataTable>();
             databack_dataGridView = new List<DataTable>();
             DataTable dt = new DataTable();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 data_dataGridView.Add(dt);
                 databack_dataGridView.Add(dt);
@@ -61,16 +62,18 @@ namespace MDIMonitor_CS
         {
             try
             {
-                cur_dataGrid_id = 4;
+                cur_dataGrid_id = 0;
+                radio_InitialVal.Checked = true;
+                this.m_ParentForm.PostMessage(7, 1);//更新user界面
                 //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
                 //LoadDataGridView(cur_dataGrid_id, ref dataGrid_InitialVal);
-                DataTable dt = new DataTable();
-                dt.Columns.Add("预留1");
-                dt.Columns.Add("预留2");
-                dt.Rows.Add("-","-");
-                dataGrid_InitialVal.DataSource = dt;
-                //dataGrid_InitialVal.Visible = true;
-                radio_Mark.Checked = true;
+                //DataTable dt = new DataTable();
+                //dt.Columns.Add("预留1");
+                //dt.Columns.Add("预留2");
+                //dt.Rows.Add("-","-");
+                //dataGrid_InitialVal.DataSource = dt;
+                ////dataGrid_InitialVal.Visible = true;
+                //radio_Mark.Checked = true;
 
             }
             catch (Exception e)
@@ -219,6 +222,8 @@ namespace MDIMonitor_CS
 
         private void LoadDataGridView()
         {
+            this.m_ParentForm.PostMessage(7, 1);//更新user界面
+            Thread.Sleep(20);
             if (dataGrid_InitialVal.Columns.Count > 0)
             {
                 dataGrid_InitialVal.Columns[0].Width = 50;
@@ -338,10 +343,10 @@ namespace MDIMonitor_CS
             //refDataGridView.
             //refDataGridView.DataSource = data_dataGridView[dataGrid_id];
             //refDataGridView.DataSource = data_dataGridView[dataGrid_id];
-            string str = databack_dataGridView[dataGrid_id].Rows[0][1].ToString();
-            str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
+            //string str = databack_dataGridView[dataGrid_id].Rows[0][1].ToString();
+            //str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
             databack_dataGridView[dataGrid_id] = data_dataGridView[dataGrid_id].Copy();
-            str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
+            //str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
             this.m_ParentForm.UIthread.userDataTable[dataGrid_id] = databack_dataGridView[dataGrid_id].Copy();//更新UI线程中已修改的数据
         }
         private void btn_OK_Click(object sender, EventArgs e)//整条逻辑线上的Datatable都是引用类型赋值的，因此datagridview改变时Datatable自动改变数值
@@ -363,6 +368,7 @@ namespace MDIMonitor_CS
             SaveDataGridView(1);
             SaveDataGridView(2);
             SaveDataGridView(3);
+            SaveDataGridView(4);
             for (int i = 0; i < this.m_ParentForm.UIthread.userDataTable.Count; i++)
             {
                 //string str = data_dataGridView[i].Rows[0][1].ToString();
@@ -390,6 +396,7 @@ namespace MDIMonitor_CS
                }
                 this.m_ParentForm.PostMessage(5, 1);//发送消息修改数据库
                 this.m_ParentForm.PostMessage(4, 1);//更新user数据库
+                this.m_ParentForm.PostMessage(7, 1);//更新user界面
                 //data_dataGridView[i]
 
             }
@@ -401,7 +408,7 @@ namespace MDIMonitor_CS
         }
         private void btn_NO_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 data_dataGridView[i] = databack_dataGridView[i];
             }
@@ -432,7 +439,7 @@ namespace MDIMonitor_CS
         private void radio_InitialVal_CheckedChanged(object sender, EventArgs e)
         {
             cur_dataGrid_id = 0;
-            dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
             //LoadDataGridView(cur_dataGrid_id, ref dataGrid_InitialVal);
         }
@@ -440,7 +447,7 @@ namespace MDIMonitor_CS
         private void radio_Senitivity_CheckedChanged(object sender, EventArgs e)
         {
             cur_dataGrid_id = 1;
-            dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
             //dataGrid_Sensitivity.DataSource = data_dataGridView[cur_dataGrid_id];
             //LoadDataGridView(cur_dataGrid_id, ref dataGrid_Sensitivity);
@@ -450,16 +457,25 @@ namespace MDIMonitor_CS
         private void radio_Unit_CheckedChanged(object sender, EventArgs e)
         {
             cur_dataGrid_id = 2;
-            dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
             //dataGrid_Unit.DataSource = data_dataGridView[cur_dataGrid_id];
             //LoadDataGridView(cur_dataGrid_id, ref dataGrid_Unit);
         }
 
-        private void radio_WarningVal_CheckedChanged(object sender, EventArgs e)
+        private void radio_WarningVal1_CheckedChanged(object sender, EventArgs e)
         {
             cur_dataGrid_id = 3;
-            dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
+            //dataGrid_WarningVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            //LoadDataGridView(cur_dataGrid_id, ref dataGrid_WarningVal);
+        }
+
+        private void radio_WarningVal2_CheckedChanged(object sender, EventArgs e)
+        {
+            cur_dataGrid_id = 4;
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
             //dataGrid_WarningVal.DataSource = data_dataGridView[cur_dataGrid_id];
             //LoadDataGridView(cur_dataGrid_id, ref dataGrid_WarningVal);
@@ -467,7 +483,7 @@ namespace MDIMonitor_CS
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            cur_dataGrid_id = 4;
+            cur_dataGrid_id = 5;
             DataTable dt = new DataTable();
             dt.Columns.Add("预留1");
             dt.Columns.Add("预留2");
@@ -507,30 +523,45 @@ namespace MDIMonitor_CS
         {
             this.m_ParentForm.UIthread.stage = 1;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+            //Thread.Sleep(10);
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
         }
 
         private void radio_stage2_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ParentForm.UIthread.stage = 2;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+            //Thread.Sleep(10);
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
         }
 
         private void radio_stage3_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ParentForm.UIthread.stage = 3;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+            //Thread.Sleep(10);
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
         }
 
         private void radio_stage4_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ParentForm.UIthread.stage = 4;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+            //Thread.Sleep(10);
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
         }
 
         private void radio_stage5_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ParentForm.UIthread.stage = 5;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
+            //Thread.Sleep(10);
+            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
+            LoadDataGridView();
         }
 
     }

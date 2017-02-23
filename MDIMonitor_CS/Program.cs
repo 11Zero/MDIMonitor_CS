@@ -13,9 +13,18 @@ namespace MDIMonitor_CS
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrameWin());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new FrameWin());
+
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

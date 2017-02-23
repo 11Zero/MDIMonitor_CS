@@ -16,20 +16,25 @@ namespace MDIMonitor_CS
         public CurDataForm[] CurForm = new CurDataForm[4];
         public UserDatForm UserForm = null;
         public HisDataForm HisForm = null;
+        public CurGridDataForm CurGridForm = null;
         public UserThread thread = null;
         public UIThread UIthread = null;
+        public WarningThread warningThread = null;
         public MeasureTimer MeasureThread = null;
         public string[] curDataValue = new string[8];
         public int CurFormCount = 0;
         public FrameWin()
         {
             InitializeComponent();
+            this.Size = new Size(1039, 561);
             thread = new UserThread(this);
             UIthread = new UIThread(this);
+            warningThread = new WarningThread(this);
             MeasureThread = new MeasureTimer(this);
 
             thread.Start();
             UIthread.Start();
+            warningThread.Start();
 
             menu_auto.Enabled = false;
             menu_auto.Checked = false;
@@ -37,6 +42,11 @@ namespace MDIMonitor_CS
             SerialForm.MdiParent = this;
             SerialForm.Location = new Point(0, 0);
 
+
+
+            CurGridForm = new CurGridDataForm(this);
+            CurGridForm.MdiParent = this;
+            CurGridForm.Location = new Point(0, 0);
             //for (int i = 0; i < 4; i++)
             //{
             //    if (CurForm[i] != null)
@@ -58,11 +68,15 @@ namespace MDIMonitor_CS
             this.StripContainer.ContentPanel.Controls.Clear();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
-            SerialForm.Show();
+            //SerialForm.Show();
 
 
             HisForm.Size = this.StripContainer.ContentPanel.Size;
             HisForm.Parent = this.StripContainer.ContentPanel;
+
+            CurGridForm.Size = this.StripContainer.ContentPanel.Size;
+            CurGridForm.Parent = this.StripContainer.ContentPanel;
+            //CurGridForm.Show();
 
             UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
@@ -106,6 +120,20 @@ namespace MDIMonitor_CS
                     this.UIthread.Kill();
                 else if (msgid == -4)
                     this.UIthread.End();
+
+            }
+            if (thread_id == 2)
+            {
+                if (msgid > 0)
+                    this.warningThread.PostMessage(msgid);
+                else if (msgid == -1)
+                    this.warningThread.Stop();
+                else if (msgid == -2)
+                    this.warningThread.Resume();
+                else if (msgid == -3)
+                    this.warningThread.Kill();
+                else if (msgid == -4)
+                    this.warningThread.End();
 
             }
         }
@@ -172,7 +200,7 @@ namespace MDIMonitor_CS
 
             //this.StripContainer.ContentPanel.Controls.Clear();
             //this.StripContainer.ContentPanel.SendToBack();
-            //UserForm.Size = this.StripContainer.ContentPanel.Size;
+            UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
             UserForm.InitialGrid();
             UserForm.Show();
@@ -184,7 +212,7 @@ namespace MDIMonitor_CS
         {
             //this.StripContainer.ContentPanel.Controls.Clear();
             //this.StripContainer.ContentPanel.SendToBack();
-            //CurForm.Size = this.StripContainer.ContentPanel.Size;
+            HisForm.Size = this.StripContainer.ContentPanel.Size;
             HisForm.Parent = this.StripContainer.ContentPanel;
             HisForm.Show();
             HisForm.BringToFront();
@@ -232,6 +260,14 @@ namespace MDIMonitor_CS
             //ToolTip tip = new ToolTip();
             //tip.ShowAlways = true;
             //tip.SetToolTip(this.statusLabel, statusLabel.Text);
+        }
+
+        private void menu_CurDataForm_Click(object sender, EventArgs e)
+        {
+            CurGridForm.Size = this.StripContainer.ContentPanel.Size;
+            CurGridForm.Parent = this.StripContainer.ContentPanel;
+            CurGridForm.Show();
+            CurGridForm.BringToFront();
         }
 
     }

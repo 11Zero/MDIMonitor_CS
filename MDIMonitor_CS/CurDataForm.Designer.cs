@@ -80,7 +80,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1027, 458);
+            this.ClientSize = new System.Drawing.Size(1027, 454);
             this.Controls.Add(this.btn_OK);
             this.Controls.Add(this.combox_ch);
             this.Controls.Add(this.combox_Node);

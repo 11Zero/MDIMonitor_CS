@@ -6,7 +6,9 @@ D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Rel
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csproj.GenerateResource.Cache
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.exe
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.pdb
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurDataForm.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.HisDataForm.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.UserDatForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe.config
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurGridDataForm.resources

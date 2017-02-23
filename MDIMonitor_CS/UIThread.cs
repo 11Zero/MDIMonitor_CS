@@ -24,8 +24,10 @@ namespace MDIMonitor_CS
         private SQLiteCommand sqlCommand = null;
         public delegate void ChartDelegate(int _ch, DataTable _dataTable, int Form_id);
         public delegate void HisChartDelegate(Chart _Chart, DataTable _dataTable);
+        public delegate void UserDataDelegate(DataTable _dataTable);
         //public delegate void PanelDelegate(Panel _panel, int _grid_id);
         private object[] invokeChartData = new object[3];
+        private object invokeUserGridData = new object();
         private object[] invokeHisChartData = new object[2];
         //private object[] invokePanelData = new object[2];
         private int totalNode = 4;
@@ -37,6 +39,7 @@ namespace MDIMonitor_CS
         //private int data_node_count = 0;
         private DataTable hisChartData = new DataTable();
         public List<DataTable> userDataTable = new List<DataTable>();
+        public DataTable AdminDataTable = new DataTable();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
         public UIThread(Form parent)
         {
@@ -49,7 +52,7 @@ namespace MDIMonitor_CS
                 CH_Node[i] = 4;
             }
             DataTable dt = new DataTable();
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 userDataTable.Add(dt);
             }
@@ -144,6 +147,10 @@ namespace MDIMonitor_CS
                         case 6:
                             {
                                 msgFunction_6();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
+                        case 7:
+                            {
+                                msgFunction_7();//例如消息码为3是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -281,7 +288,7 @@ namespace MDIMonitor_CS
             ////hisChartData
             //}
         }
-        private DataTable ReadUserSQL(string fileName, string tableName)
+        public DataTable ReadUserSQL(string fileName, string tableName)
         {
             //string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
             if (!File.Exists(fileName))
@@ -319,6 +326,12 @@ namespace MDIMonitor_CS
             //DataTable dt = connection.GetSchema();
             SQLiteDBHelper SQLHelper = new SQLiteDBHelper(fileName);
             DataTable dt = new DataTable();
+            if (tableName=="Admin")
+            {
+                string sqlcmd = String.Format("select * from {0} where NUM>0 and NUM<100;)", tableName);
+                dt = SQLHelper.ExecuteDataTable(sqlcmd, null);
+                return dt;
+            }
             for (int i = 0; i < totalNode; i++)
             {
                 string sqlcmd = String.Format("select * from {0} where NUM='{1}';)", tableName, i + 1);
@@ -355,7 +368,7 @@ namespace MDIMonitor_CS
         {
             Parent.statusLabel.Text = String.Format("user数据库存储中");
             //int stage = 1;
-            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal" };
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2" };
             //for (int i = 0; i < 4; i++)
             //{
             //    userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
@@ -467,6 +480,19 @@ namespace MDIMonitor_CS
             //}
         }
 
+        private void UpdateUserGrid()
+        {
+            if (Parent.UserForm.cur_dataGrid_id > Parent.UserForm.data_dataGridView.Count - 1)
+                return;
+            invokeUserGridData = Parent.UserForm.data_dataGridView[Parent.UserForm.cur_dataGrid_id];
+            Parent.UserForm.dataGrid_InitialVal.BeginInvoke(new UserDataDelegate(UserDataDelegateMethod), invokeUserGridData);
+        }
+
+        private void UserDataDelegateMethod(DataTable _dataTable)
+        {
+            Parent.UserForm.dataGrid_InitialVal.DataSource = _dataTable;
+        }
+
         /// <summary>
         /// 执行HisChart委托
         /// </summary>
@@ -521,6 +547,9 @@ namespace MDIMonitor_CS
             //}
             //nowtime = nowtime + step;
             string[] data = Parent.curDataValue;//上游获取的数据，在此刷入chart
+
+
+
             int ch = Convert.ToInt16(data[1]);
             int node = Convert.ToInt16(data[0]);
             //if(data_node_count==3)
@@ -562,14 +591,13 @@ namespace MDIMonitor_CS
 
         private void msgFunction_4()//读测量参数
         {
-
             Parent.statusLabel.Text = String.Format("载入数据库中");
 
             //int grid_id = this.Parent.UserForm.cur_dataGrid_id;
             //if (grid_id > 3)
             //    return;
-            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal" };
-            for (int i = 0; i < 4; i++)
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2" };
+            for (int i = 0; i < 5; i++)
             {
                 userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
                 while (userDataTable[i].Rows.Count > totalNode)
@@ -582,6 +610,7 @@ namespace MDIMonitor_CS
             {
                 Parent.statusLabel.Text = String.Format("测量参数载入失败");
             }
+            AdminDataTable = ReadUserSQL("user.dat", "Admin");
             //this.Parent.StripContainer.ContentPanel.Controls.Clear();
             //this.Parent.UserForm.Size = this.Parent.StripContainer.ContentPanel.Size;
             //this.Parent.UserForm.Parent = this.Parent.StripContainer.ContentPanel;
@@ -664,6 +693,18 @@ namespace MDIMonitor_CS
                 //this.Parent.PostMessage(2, 0);
                 //this.Parent.SerialForm.rich_smstext.Text = "";
             }
+            else if (phone_cmd[2].IndexOf("打开警报器") >= 0)
+            {
+ 
+            }
+            else if (phone_cmd[2].IndexOf("关闭警报器") >= 0)
+            {
+            }
+        }
+
+        private void msgFunction_7()//刷新user参数界面
+        {
+            UpdateUserGrid();
         }
     }
 }

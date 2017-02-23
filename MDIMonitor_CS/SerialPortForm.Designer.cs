@@ -87,9 +87,14 @@
             this.label19 = new System.Windows.Forms.Label();
             this.cbox_warnlist = new System.Windows.Forms.ComboBox();
             this.btn_do_warn = new System.Windows.Forms.Button();
+            this.trackBar_vol = new System.Windows.Forms.TrackBar();
+            this.label20 = new System.Windows.Forms.Label();
+            this.check_circulate = new System.Windows.Forms.CheckBox();
+            this.check_light = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_vol)).BeginInit();
             this.SuspendLayout();
             // 
             // cbox_Phone_PortName
@@ -471,17 +476,17 @@
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(514, 91);
+            this.btn_ok.Location = new System.Drawing.Point(406, 227);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(75, 23);
             this.btn_ok.TabIndex = 9;
-            this.btn_ok.Text = "应用";
+            this.btn_ok.Text = "保存";
             this.btn_ok.UseVisualStyleBackColor = true;
             this.btn_ok.Click += new System.EventHandler(this.btn_ok_Click);
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(514, 125);
+            this.btn_cancel.Location = new System.Drawing.Point(406, 277);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_cancel.TabIndex = 10;
@@ -502,15 +507,15 @@
             // 
             // text_targetphone
             // 
-            this.text_targetphone.Location = new System.Drawing.Point(92, 212);
+            this.text_targetphone.Location = new System.Drawing.Point(65, 218);
             this.text_targetphone.Name = "text_targetphone";
-            this.text_targetphone.Size = new System.Drawing.Size(166, 21);
+            this.text_targetphone.Size = new System.Drawing.Size(127, 21);
             this.text_targetphone.TabIndex = 11;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(39, 215);
+            this.label13.Location = new System.Drawing.Point(12, 221);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(53, 12);
             this.label13.TabIndex = 12;
@@ -520,7 +525,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.label14.Location = new System.Drawing.Point(39, 242);
+            this.label14.Location = new System.Drawing.Point(12, 248);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 12);
             this.label14.TabIndex = 12;
@@ -529,17 +534,17 @@
             // rich_smstext
             // 
             this.rich_smstext.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rich_smstext.Location = new System.Drawing.Point(92, 239);
+            this.rich_smstext.Location = new System.Drawing.Point(65, 245);
             this.rich_smstext.Name = "rich_smstext";
-            this.rich_smstext.Size = new System.Drawing.Size(166, 55);
+            this.rich_smstext.Size = new System.Drawing.Size(127, 55);
             this.rich_smstext.TabIndex = 13;
             this.rich_smstext.Text = "";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(280, 215);
+            this.button1.Location = new System.Drawing.Point(12, 267);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 70);
+            this.button1.Size = new System.Drawing.Size(47, 33);
             this.button1.TabIndex = 14;
             this.button1.Text = "发送";
             this.button1.UseVisualStyleBackColor = true;
@@ -558,7 +563,7 @@
             this.groupBox3.Controls.Add(this.label17);
             this.groupBox3.Controls.Add(this.label18);
             this.groupBox3.Controls.Add(this.label19);
-            this.groupBox3.Location = new System.Drawing.Point(625, 12);
+            this.groupBox3.Location = new System.Drawing.Point(551, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(225, 184);
             this.groupBox3.TabIndex = 8;
@@ -670,26 +675,70 @@
             // 
             this.cbox_warnlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_warnlist.FormattingEnabled = true;
-            this.cbox_warnlist.Location = new System.Drawing.Point(410, 234);
+            this.cbox_warnlist.Location = new System.Drawing.Point(224, 249);
             this.cbox_warnlist.Name = "cbox_warnlist";
             this.cbox_warnlist.Size = new System.Drawing.Size(121, 20);
             this.cbox_warnlist.TabIndex = 15;
+            this.cbox_warnlist.SelectedIndexChanged += new System.EventHandler(this.cbox_warnlist_SelectedIndexChanged);
             // 
             // btn_do_warn
             // 
-            this.btn_do_warn.Location = new System.Drawing.Point(441, 260);
+            this.btn_do_warn.Location = new System.Drawing.Point(589, 297);
             this.btn_do_warn.Name = "btn_do_warn";
             this.btn_do_warn.Size = new System.Drawing.Size(75, 23);
             this.btn_do_warn.TabIndex = 16;
             this.btn_do_warn.Text = "报警";
             this.btn_do_warn.UseVisualStyleBackColor = true;
+            this.btn_do_warn.Visible = false;
             this.btn_do_warn.Click += new System.EventHandler(this.btn_do_warn_Click);
+            // 
+            // trackBar_vol
+            // 
+            this.trackBar_vol.Location = new System.Drawing.Point(255, 220);
+            this.trackBar_vol.Name = "trackBar_vol";
+            this.trackBar_vol.Size = new System.Drawing.Size(90, 45);
+            this.trackBar_vol.TabIndex = 17;
+            this.trackBar_vol.Scroll += new System.EventHandler(this.trackBar_vol_Scroll);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(222, 227);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(29, 12);
+            this.label20.TabIndex = 18;
+            this.label20.Text = "音量";
+            // 
+            // check_circulate
+            // 
+            this.check_circulate.AutoSize = true;
+            this.check_circulate.Location = new System.Drawing.Point(224, 282);
+            this.check_circulate.Name = "check_circulate";
+            this.check_circulate.Size = new System.Drawing.Size(48, 16);
+            this.check_circulate.TabIndex = 19;
+            this.check_circulate.Text = "循环";
+            this.check_circulate.UseVisualStyleBackColor = true;
+            this.check_circulate.CheckedChanged += new System.EventHandler(this.check_circulate_CheckedChanged);
+            // 
+            // check_light
+            // 
+            this.check_light.AutoSize = true;
+            this.check_light.Location = new System.Drawing.Point(297, 282);
+            this.check_light.Name = "check_light";
+            this.check_light.Size = new System.Drawing.Size(48, 16);
+            this.check_light.TabIndex = 20;
+            this.check_light.Text = "闪光";
+            this.check_light.UseVisualStyleBackColor = true;
+            this.check_light.CheckedChanged += new System.EventHandler(this.check_light_CheckedChanged);
             // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 486);
+            this.ClientSize = new System.Drawing.Size(1033, 482);
+            this.Controls.Add(this.check_light);
+            this.Controls.Add(this.check_circulate);
+            this.Controls.Add(this.label20);
             this.Controls.Add(this.btn_do_warn);
             this.Controls.Add(this.cbox_warnlist);
             this.Controls.Add(this.button1);
@@ -716,6 +765,7 @@
             this.Controls.Add(this.btn_Open);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
+            this.Controls.Add(this.trackBar_vol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SerialPortForm";
             this.Text = "SerialPortForm";
@@ -726,6 +776,7 @@
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_vol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -790,8 +841,12 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.ComboBox cbox_warnlist;
         private System.Windows.Forms.Button btn_do_warn;
+        private System.Windows.Forms.Label label20;
+        public System.Windows.Forms.TrackBar trackBar_vol;
+        public System.Windows.Forms.CheckBox check_circulate;
+        public System.Windows.Forms.CheckBox check_light;
+        public System.Windows.Forms.ComboBox cbox_warnlist;
 
     }
 }
