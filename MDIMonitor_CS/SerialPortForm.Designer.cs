@@ -91,6 +91,8 @@
             this.label20 = new System.Windows.Forms.Label();
             this.check_circulate = new System.Windows.Forms.CheckBox();
             this.check_light = new System.Windows.Forms.CheckBox();
+            this.btn_test_warn1 = new System.Windows.Forms.Button();
+            this.btn_test_warn2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -694,16 +696,16 @@
             // 
             // trackBar_vol
             // 
-            this.trackBar_vol.Location = new System.Drawing.Point(255, 220);
+            this.trackBar_vol.Location = new System.Drawing.Point(246, 218);
             this.trackBar_vol.Name = "trackBar_vol";
-            this.trackBar_vol.Size = new System.Drawing.Size(90, 45);
+            this.trackBar_vol.Size = new System.Drawing.Size(60, 45);
             this.trackBar_vol.TabIndex = 17;
             this.trackBar_vol.Scroll += new System.EventHandler(this.trackBar_vol_Scroll);
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(222, 227);
+            this.label20.Location = new System.Drawing.Point(222, 224);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(29, 12);
             this.label20.TabIndex = 18;
@@ -712,7 +714,7 @@
             // check_circulate
             // 
             this.check_circulate.AutoSize = true;
-            this.check_circulate.Location = new System.Drawing.Point(224, 282);
+            this.check_circulate.Location = new System.Drawing.Point(302, 223);
             this.check_circulate.Name = "check_circulate";
             this.check_circulate.Size = new System.Drawing.Size(48, 16);
             this.check_circulate.TabIndex = 19;
@@ -729,13 +731,36 @@
             this.check_light.TabIndex = 20;
             this.check_light.Text = "闪光";
             this.check_light.UseVisualStyleBackColor = true;
+            this.check_light.Visible = false;
             this.check_light.CheckedChanged += new System.EventHandler(this.check_light_CheckedChanged);
+            // 
+            // btn_test_warn1
+            // 
+            this.btn_test_warn1.Location = new System.Drawing.Point(233, 278);
+            this.btn_test_warn1.Name = "btn_test_warn1";
+            this.btn_test_warn1.Size = new System.Drawing.Size(97, 23);
+            this.btn_test_warn1.TabIndex = 21;
+            this.btn_test_warn1.Text = "一级报警测试";
+            this.btn_test_warn1.UseVisualStyleBackColor = true;
+            this.btn_test_warn1.Click += new System.EventHandler(this.btn_test_warn1_Click);
+            // 
+            // btn_test_warn2
+            // 
+            this.btn_test_warn2.Location = new System.Drawing.Point(233, 307);
+            this.btn_test_warn2.Name = "btn_test_warn2";
+            this.btn_test_warn2.Size = new System.Drawing.Size(97, 23);
+            this.btn_test_warn2.TabIndex = 22;
+            this.btn_test_warn2.Text = "二级报警测试";
+            this.btn_test_warn2.UseVisualStyleBackColor = true;
+            this.btn_test_warn2.Click += new System.EventHandler(this.btn_test_warn2_Click);
             // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 482);
+            this.Controls.Add(this.btn_test_warn2);
+            this.Controls.Add(this.btn_test_warn1);
             this.Controls.Add(this.check_light);
             this.Controls.Add(this.check_circulate);
             this.Controls.Add(this.label20);
@@ -847,6 +872,8 @@
         public System.Windows.Forms.CheckBox check_circulate;
         public System.Windows.Forms.CheckBox check_light;
         public System.Windows.Forms.ComboBox cbox_warnlist;
+        private System.Windows.Forms.Button btn_test_warn1;
+        private System.Windows.Forms.Button btn_test_warn2;
 
     }
 }

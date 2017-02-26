@@ -89,9 +89,9 @@ namespace MDIMonitor_CS
         }
         ~FrameWin()
         {
-            this.thread.Kill();
-            this.UIthread.Kill();
-            this.MeasureThread.Kill();
+            //this.thread.Kill();
+            //this.UIthread.Kill();
+            //this.MeasureThread.Kill();
         }
         public void PostMessage(int msgid, int thread_id)
         {

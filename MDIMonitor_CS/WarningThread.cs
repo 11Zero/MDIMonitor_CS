@@ -120,14 +120,14 @@ namespace MDIMonitor_CS
                             {
                                 msgFunction_5();//例如消息码为2是，执行msgFunction_2()函数
                             } break;
-                        //case 6:
-                        //    {
-                        //        msgFunction_6();//例如消息码为2是，执行msgFunction_2()函数
-                        //    } break;
-                        //case 7:
-                        //    {
-                        //        msgFunction_7();//例如消息码为2是，执行msgFunction_2()函数
-                        //    } break;
+                        case 6:
+                            {
+                                msgFunction_6();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
+                        case 7:
+                            {
+                                msgFunction_7();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
                         //case 8:
                         //    {
                         //        msgFunction_8();//例如消息码为2是，执行msgFunction_2()函数
@@ -336,6 +336,7 @@ namespace MDIMonitor_CS
 
         private void WarnRecFun(object Sensorer, SerialDataReceivedEventArgs e)
         {
+            return;
             if (portWarn.IsOpen == false)
             {
                 Parent.statusLabel.Text = "警报端口未开启";
@@ -383,57 +384,73 @@ namespace MDIMonitor_CS
                 portWarn_ShouldOpen = !portWarn_ShouldOpen;
                 if (portWarn.IsOpen && !portWarn_ShouldOpen)
                 {
-                    Warn_cmd_buffer.buffer[5] = 0x06;//循环静音
-                    Warn_cmd_buffer.buffer[6] = 0x01;//闪光关
+                    this.Parent.SerialForm.WarnOpen = false;
+
                     this.Parent.SerialForm.check_light.Checked = false;
                     this.Parent.SerialForm.check_circulate.Checked = true;
                     this.Parent.SerialForm.cbox_warnlist.SelectedIndex = 6;
+                    this.Parent.SerialForm.trackBar_vol.Value = 1;
+
+                    this.Parent.SerialForm.trackBar_vol.Enabled = false;
                     this.Parent.SerialForm.check_light.Enabled = false;
                     this.Parent.SerialForm.check_circulate.Enabled = false;
                     this.Parent.SerialForm.cbox_warnlist.Enabled = false;
-                    msgFunction_4();
-                    msgFunction_3();
+                    //Warn_cmd_buffer.buffer[5] = 0x06;//循环静音
+                    //Warn_cmd_buffer.buffer[6] = 0x01;//闪光关
+                    Warn_cmd_Queue.Clear();
+                    Warn_cmd_buffer = new cmd_buffer();
+                    Warn_cmd_buffer.buffer[5] = 0x06;
+                    Warn_cmd_buffer.buffer[6] = 0x01;
+                    portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+                    //Thread.Sleep(200);
+                    //msgFunction_4();
+                    //msgFunction_3();
                     //this.PostMessage(15);//向端口发送声音初始化指令
                     Thread.Sleep(20);
                     portWarn.Close();
+
                 }
                 if (!portWarn.IsOpen && portWarn_ShouldOpen)
                 {
                     if (!SetWarnPort())
                         portWarn_ShouldOpen = !portWarn_ShouldOpen;
                 }
-                this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
+                //this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
                 Parent.SerialForm.cbox_Warn_PortName.Enabled = !portWarn_ShouldOpen;
                 if (!portWarn.IsOpen)
                 {
 
-                    Parent.statusLabel.Text = String.Format("警报端口开关已关闭");
+                    Parent.statusLabel.Text = String.Format("警报端口已关闭");
                     //this.Parent.menu_auto.Enabled = false;
                     //this.Parent.menu_auto.Checked = false;
                 }
                 else
                 {
-                    byte[] tempWarn_cmd = Warn_cmd_buffer.buffer;
-                    byte buffer3 = Warn_cmd_buffer.buffer[3];
-                    byte buffer5 = Warn_cmd_buffer.buffer[5];
-                    byte buffer6 = Warn_cmd_buffer.buffer[6];
-                    Warn_cmd_buffer.buffer[3] = 0x06;
-                    Warn_cmd_buffer.buffer[5] = 0x00;
-                    Warn_cmd_buffer.buffer[6] = (byte)(this.Parent.SerialForm.trackBar_vol.Value);
-                    //this.PostMessage(15);//向端口发送声音指令
-                    msgFunction_4();
-                    msgFunction_3();
-                    Thread.Sleep(20);
-                    Warn_cmd_buffer.buffer[3] = buffer3;
-                    Warn_cmd_buffer.buffer[5] = buffer5;
-                    Warn_cmd_buffer.buffer[6] = buffer6;
+                    //byte[] tempWarn_cmd = Warn_cmd_buffer.buffer;
+                    //byte buffer3 = Warn_cmd_buffer.buffer[3];
+                    //byte buffer5 = Warn_cmd_buffer.buffer[5];
+                    //byte buffer6 = Warn_cmd_buffer.buffer[6];
+                    //Warn_cmd_buffer.buffer[3] = 0x06;
+                    //Warn_cmd_buffer.buffer[5] = 0x00;
+                    //Warn_cmd_buffer.buffer[6] = (byte)(this.Parent.SerialForm.trackBar_vol.Value);
+                    ////this.PostMessage(15);//向端口发送声音指令
+                    //msgFunction_4();
+                    //msgFunction_3();
+                    //Thread.Sleep(20);
+                    //Warn_cmd_buffer.buffer[3] = buffer3;
+                    //Warn_cmd_buffer.buffer[5] = buffer5;
+                    //Warn_cmd_buffer.buffer[6] = buffer6;
 
-                    Warn_cmd_buffer.buffer[6] = 0x01;//闪光关
-                    Warn_cmd_buffer.buffer[5] = 0x06;//一次静音
+                    //Warn_cmd_buffer.buffer[6] = 0x01;//闪光关
+                    //Warn_cmd_buffer.buffer[5] = 0x06;//一次静音
+                    this.Parent.SerialForm.WarnOpen = true;
+
                     this.Parent.SerialForm.check_light.Enabled = true;
                     this.Parent.SerialForm.check_circulate.Enabled = true;
                     this.Parent.SerialForm.cbox_warnlist.Enabled = true;
+                    this.Parent.SerialForm.trackBar_vol.Enabled = true;
 
+                    this.Parent.SerialForm.trackBar_vol.Value = 1;
                     this.Parent.SerialForm.check_light.Checked = true;
                     this.Parent.SerialForm.check_circulate.Checked = true;
                     this.Parent.SerialForm.cbox_warnlist.SelectedIndex = 6;
@@ -441,12 +458,18 @@ namespace MDIMonitor_CS
                     //Warn_cmd_buffer.buffer[5] = 0x00;
                     //Warn_cmd_buffer.buffer[6] = (byte)this.Parent.SerialForm.trackBar_vol.Value;
                     //this.PostMessage(15);//向端口发送声音初始化指令
-                    msgFunction_4();
-                    msgFunction_3();
+                    Warn_cmd_Queue.Clear();
+                    Warn_cmd_buffer = new cmd_buffer();
+                    Warn_cmd_buffer.buffer[5] = 0x86;
+                    Warn_cmd_buffer.buffer[6] = 0x01;
+                    portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+                    //msgFunction_4();
+                    //msgFunction_3();
                     //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
-                    Parent.statusLabel.Text = String.Format("警报端口开关已开启");
+                    Parent.statusLabel.Text = String.Format("警报端口已开启");
                     //this.Parent.menu_auto.Enabled = true;
                 }
+                Thread.Sleep(1000);
                 return;
             }
             catch (Exception e)
@@ -544,6 +567,47 @@ namespace MDIMonitor_CS
             portWarnAttribute[2] = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Bits"));//数据位
             portWarnAttribute[3] = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Stop"));//停止位
             #endregion
+        }
+
+        private void msgFunction_6()//一级报警，不闪灯光
+        {
+            Warn_cmd_Queue.Clear();
+            Warn_cmd_buffer = new cmd_buffer();
+            if (this.Parent.SerialForm.check_circulate.Checked)
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x80 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }
+            else
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x00 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }   
+            Warn_cmd_buffer.buffer[6] = 0x00;
+            portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            //msgFunction_4();
+            //msgFunction_3();
+            //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+           
+            Parent.statusLabel_warning.Text = String.Format("[{0}]一级报警已响应", DateTime.Now.ToLongTimeString());
+        }
+
+        private void msgFunction_7()//二级报警，闪烁灯光
+        {
+            Warn_cmd_Queue.Clear();
+            Warn_cmd_buffer = new cmd_buffer();
+            if (this.Parent.SerialForm.check_circulate.Checked)
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x80 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }
+            else
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x00 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }     
+            Warn_cmd_buffer.buffer[6] = 0x01;
+            portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            //msgFunction_4();
+            //msgFunction_3();
+            //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            Parent.statusLabel_warning.Text = String.Format("[{0}]二级报警已响应", DateTime.Now.ToLongTimeString());
         }
     }
 }

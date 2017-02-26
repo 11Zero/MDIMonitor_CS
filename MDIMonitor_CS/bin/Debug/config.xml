@@ -2,7 +2,7 @@
 <Soft>
   <COM id="Sensor" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM3">
   </COM>
-  <COM id="Warn" Baud="5" Parity="2" Bits="3" Stop="0" Last_id="COM3">
+  <COM id="Warn" Baud="5" Parity="2" Bits="3" Stop="0" Last_id="COM5">
   </COM>
   <COM id="Phone" Baud="11" Parity="2" Bits="2" Stop="0" Last_id="COM3">
   </COM>

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.CurChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.combox_Node = new System.Windows.Forms.ComboBox();
             this.combox_ch = new System.Windows.Forms.ComboBox();
@@ -38,13 +37,12 @@
             // 
             // CurChart
             // 
-            chartArea1.Name = "ChartArea1";
-            this.CurChart.ChartAreas.Add(chartArea1);
             this.CurChart.Location = new System.Drawing.Point(0, 0);
             this.CurChart.Name = "CurChart";
             this.CurChart.Size = new System.Drawing.Size(940, 459);
             this.CurChart.TabIndex = 4;
             this.CurChart.Text = "chart1";
+            this.CurChart.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseDoubleClick);
             // 
             // combox_Node
             // 
@@ -64,6 +62,7 @@
             this.combox_ch.Name = "combox_ch";
             this.combox_ch.Size = new System.Drawing.Size(45, 20);
             this.combox_ch.TabIndex = 6;
+            this.combox_ch.Visible = false;
             this.combox_ch.SelectedIndexChanged += new System.EventHandler(this.combox_ch_SelectedIndexChanged);
             // 
             // btn_OK

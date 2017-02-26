@@ -56,6 +56,7 @@ namespace MDIMonitor_CS
             dataBase = new SQLiteConnection();
             sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            thread.IsBackground = true;
             nodeChNum = new int[4];
             UpdateXml();
         }
@@ -1008,7 +1009,8 @@ namespace MDIMonitor_CS
                 this.Parent.statusLabel_warning.Text = warninfo;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
-                    //PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
+                    PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
+                    this.Parent.PostMessage(7, 2);//发送二级报警指令
                     this.Parent.statusLabel_phone.Text = String.Format("向管理员{0}发送报警信息", Parent.UIthread.AdminDataTable.Rows[i][1].ToString());
                     Thread.Sleep(100);
                 }
@@ -1020,7 +1022,8 @@ namespace MDIMonitor_CS
                 this.Parent.statusLabel_warning.Text = warninfo;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
-                    //PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
+                    PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
+                    this.Parent.PostMessage(6, 2);//发送一级报警指令
                     this.Parent.statusLabel_phone.Text = String.Format("向管理员{0}发送报警信息", Parent.UIthread.AdminDataTable.Rows[i][1].ToString());
                     Thread.Sleep(100);
                 }

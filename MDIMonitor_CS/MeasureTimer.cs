@@ -24,6 +24,7 @@ namespace MDIMonitor_CS
             //dataBase = new SQLiteConnection();
             //sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            thread.IsBackground = true;
             //UpdateXml();
         }
 

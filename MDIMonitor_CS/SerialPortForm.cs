@@ -14,6 +14,7 @@ namespace MDIMonitor_CS
     public partial class SerialPortForm : Form
     {
         FrameWin m_ParentForm = null;
+        public bool WarnOpen = false;
         public SerialPortForm(FrameWin parent)
         {
             InitializeComponent();
@@ -144,6 +145,8 @@ namespace MDIMonitor_CS
 
         private void trackBar_vol_Scroll(object sender, EventArgs e)
         {
+            if (!WarnOpen)
+                return;
             //byte[] tempWarn_cmd = this.m_ParentForm.thread.Warn_cmd_buffer;
             //byte buffer3 = this.m_ParentForm.warningThread.Warn_cmd_buffer[3];
             //byte buffer5 = this.m_ParentForm.warningThread.Warn_cmd_buffer[5];
@@ -164,6 +167,9 @@ namespace MDIMonitor_CS
 
         private void cbox_warnlist_SelectedIndexChanged(object sender, EventArgs e)
         {
+            return;
+            if (!WarnOpen)
+                return;
             int selectindex = cbox_warnlist.SelectedIndex;
             if(selectindex==-1)
                 return ;
@@ -174,20 +180,28 @@ namespace MDIMonitor_CS
                 Warn_cmd_buffer[6] = 0x01;
             else
                 Warn_cmd_buffer[6] = 0x00;
-            if (selectindex == 0)
+            if (check_circulate.Checked)
             {
-                if (Warn_cmd_buffer[5] < 0x80)
-                    Warn_cmd_buffer[5] = 0x07;
-                else
-                    Warn_cmd_buffer[5] = 0x87;
+                Warn_cmd_buffer[5] = (byte)(0x80 + cbox_warnlist.SelectedIndex + 1);
             }
             else
             {
-                if (Warn_cmd_buffer[5] < 0x80)
-                    Warn_cmd_buffer[5] = Convert.ToByte(selectindex);
-                else
-                    Warn_cmd_buffer[5] =(byte)(0x80+Convert.ToByte(selectindex));
-            }
+                Warn_cmd_buffer[5] = (byte)(0x00 + cbox_warnlist.SelectedIndex + 1);
+            }   
+            //if (selectindex == 0)
+            //{
+            //    if (check_circulate.Checked == false)
+            //        Warn_cmd_buffer[5] = 0x07;
+            //    else
+            //        Warn_cmd_buffer[5] = 0x87;
+            //}
+            //else
+            //{
+            //    if (check_circulate.Checked == false)
+            //        Warn_cmd_buffer[5] = Convert.ToByte(selectindex);
+            //    else
+            //        Warn_cmd_buffer[5] =(byte)(0x80+Convert.ToByte(selectindex));
+            //}
             this.m_ParentForm.PostMessage(4, 2);//向端口发送声音指令
             Thread.Sleep(20);
             this.m_ParentForm.PostMessage(3, 2);//指示端口执行声音指令
@@ -195,6 +209,9 @@ namespace MDIMonitor_CS
 
         private void check_circulate_CheckedChanged(object sender, EventArgs e)
         {
+            return;
+            if (!WarnOpen)
+                return;
             byte[] Warn_cmd_buffer = this.m_ParentForm.warningThread.Warn_cmd_buffer.buffer;//{ 0x7E, 0xFF, 0x06, 0x3A, 0x00, 0x80, 0x01, 0xEF };
             //this.m_ParentForm.thread.Warn_cmd_buffer[3] = 0x3A;
             if (check_circulate.Checked == true)
@@ -221,6 +238,9 @@ namespace MDIMonitor_CS
 
         private void check_light_CheckedChanged(object sender, EventArgs e)
         {
+            return;
+            if (!WarnOpen)
+                return;
             byte[] Warn_cmd_buffer = this.m_ParentForm.warningThread.Warn_cmd_buffer.buffer;
             //this.m_ParentForm.thread.Warn_cmd_buffer[3] = 0x3A;
             if (check_light.Checked == false)
@@ -234,6 +254,16 @@ namespace MDIMonitor_CS
             this.m_ParentForm.PostMessage(4, 2);//向端口发送声音指令
             Thread.Sleep(20);
             this.m_ParentForm.PostMessage(3, 2);//指示端口执行声音指令
+        }
+
+        private void btn_test_warn1_Click(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(6, 2);//发送一级报警指令
+        }
+
+        private void btn_test_warn2_Click(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(7, 2);//发送二级报警指令
         }
     }
 }

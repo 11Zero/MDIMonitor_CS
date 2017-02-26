@@ -8,6 +8,7 @@ using System.Data;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.IO;
 using System.Data.SQLite;
+using ClassForecast;
 
 namespace MDIMonitor_CS
 {
@@ -22,11 +23,11 @@ namespace MDIMonitor_CS
         private bool userStopFlag = false;
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
-        public delegate void ChartDelegate(int _ch, DataTable _dataTable, int Form_id);
+        public delegate void ChartDelegate(int _ch, DataTable _dataTable, int Form_id,int _node);
         public delegate void HisChartDelegate(Chart _Chart, DataTable _dataTable);
         public delegate void UserDataDelegate(DataTable _dataTable);
         //public delegate void PanelDelegate(Panel _panel, int _grid_id);
-        private object[] invokeChartData = new object[3];
+        private object[] invokeChartData = new object[4];
         private object invokeUserGridData = new object();
         private object[] invokeHisChartData = new object[2];
         //private object[] invokePanelData = new object[2];
@@ -41,12 +42,14 @@ namespace MDIMonitor_CS
         public List<DataTable> userDataTable = new List<DataTable>();
         public DataTable AdminDataTable = new DataTable();
         private DateTime nowtime = new DateTime();//System.DateTime.Now;//new DateTime().TimeOfDay;
+        public Forecast[,] dataForecast = null;
         public UIThread(Form parent)
         {
             Parent = (FrameWin)parent;//强制转换
             msgQueue = new Queue<int>();
             sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
+            thread.IsBackground = true;
             for (int i = 0; i < 4; i++)
             {
                 CH_Node[i] = 4;
@@ -58,6 +61,16 @@ namespace MDIMonitor_CS
             }
             totalNode = this.Parent.thread.totalNodeCount;
             CH_Node = this.Parent.thread.nodeChNum;
+            dataForecast = new Forecast[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    dataForecast[i, j] = new Forecast();
+                    dataForecast[i, j].input_row = 80;
+                    dataForecast[i, j].input_test_row = 20;
+                }
+            }
         }
         ~UIThread()
         {
@@ -452,11 +465,12 @@ namespace MDIMonitor_CS
             //{
             if (Parent.CurForm[Form_id].IsHandleCreated == true)
             {
-                if (Parent.CurForm[Form_id].cur_ch == ch && Parent.CurForm[Form_id].cur_node == node)
+                if (Parent.CurForm[Form_id].cur_node == node)
                 {
                     invokeChartData[0] = ch - 1;
                     invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1];
                     invokeChartData[2] = Form_id;
+                    invokeChartData[3] = node-1;
                     Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
                 }
             }
@@ -469,11 +483,19 @@ namespace MDIMonitor_CS
         /// </summary>
         /// <param name="_Chart">要更新的Chart控件</param>
         /// <param name="_dataTable">要写入的数据</param>
-        public void ChartDelegateMethod(int _ch, DataTable _dataTable, int Form_id)
+        public void ChartDelegateMethod(int _ch, DataTable _dataTable, int Form_id,int _node)
         {
             //for (int i = 0; i < 4; i++)
             //{
             Parent.CurForm[Form_id].CurChart.Series[_ch].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+            if (dataForecast[_node - 1, _ch - 1].IsFilled)
+            {
+                DataTable dt = _dataTable.Copy();
+                dt.Merge(dataForecast[_node - 1, _ch - 1].MakeForecast(0).Copy());
+                //this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
+                Parent.CurForm[Form_id].CurChart.Series[_ch + 4].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
+                //this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
+            }
             //series[i].Points.DataBind(dataTable.AsEnumerable(), "时间", series[i].Name, "");
             //series[i].ChartType = SeriesChartType.Spline;
             //this.CurChart.Series.Add(series[i]);
@@ -556,6 +578,7 @@ namespace MDIMonitor_CS
             //    data_node_count=0;
 
             data_of_all_node[ch - 1, node - 1] = data[5]+data[6];
+            dataForecast[ch - 1, node - 1].AddDataToSource(double.Parse(data[5]));
             //if (smssended == false)
             //{
  
@@ -579,6 +602,7 @@ namespace MDIMonitor_CS
                     //time = nowday.ToLongDateString();
                     //time = nowday.ToLongTimeString();
                     Parent.CurForm[i].dataSet.Tables[ch - 1].Rows.Add(data[3], data[5]);
+                    //dataForecast
                     this.UpdateChart(i, node, ch);
                 }
 
