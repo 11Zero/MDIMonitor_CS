@@ -47,15 +47,17 @@ namespace MDIMonitor_CS
             CurGridForm = new CurGridDataForm(this);
             CurGridForm.MdiParent = this;
             CurGridForm.Location = new Point(0, 0);
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    if (CurForm[i] != null)
-            //        continue;
-            //    CurForm[i].MdiParent = this;
-            //    CurForm[i].Location = new Point(0, 0);
-            //    CurForm[i].Size = this.StripContainer.ContentPanel.Size;
-            //    CurForm[i].Parent = this.StripContainer.ContentPanel;
-            //}
+            for (int i = 0; i < 4; i++)
+            {
+                if (CurForm[i] != null)
+                    continue;
+                CurForm[i] = new CurDataForm(this);
+                CurForm[i].MdiParent = this;
+                CurForm[i].Location = new Point(0, 0);
+                CurForm[i].Size = this.StripContainer.ContentPanel.Size;
+                CurForm[i].Parent = this.StripContainer.ContentPanel;
+                CurForm[i].cur_node = i+1;
+            }
 
             HisForm = new HisDataForm(this);
             HisForm.MdiParent = this;
@@ -68,7 +70,9 @@ namespace MDIMonitor_CS
             this.StripContainer.ContentPanel.Controls.Clear();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
+            //this.PostMessage(6, 0);
             //SerialForm.Show();
+            //SerialForm.Visible = false;
 
 
             HisForm.Size = this.StripContainer.ContentPanel.Size;
@@ -76,7 +80,8 @@ namespace MDIMonitor_CS
 
             CurGridForm.Size = this.StripContainer.ContentPanel.Size;
             CurGridForm.Parent = this.StripContainer.ContentPanel;
-            //CurGridForm.Show();
+            CurGridForm.Show();
+            CurGridForm.Visible = false;
 
             UserForm.Size = this.StripContainer.ContentPanel.Size;
             UserForm.Parent = this.StripContainer.ContentPanel;
@@ -162,22 +167,22 @@ namespace MDIMonitor_CS
 
             //this.StripContainer.ContentPanel.Controls.Clear();
             //this.StripContainer.ContentPanel.SendToBack();
-            if (CurFormCount > 3)
-                CurFormCount = 0;
-                if (CurForm[CurFormCount] == null || CurForm[CurFormCount].IsDisposed)
-                {
-                    CurForm[CurFormCount] = new CurDataForm(this);
-                    CurForm[CurFormCount].MdiParent = this;
-                    CurForm[CurFormCount].Location = new Point(0, 0);
-                    CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
-                    CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
-                }
-            //CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
-            //CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
-                CurForm[CurFormCount].Text = String.Format("监测窗口{0}", CurFormCount+1);
-            CurForm[CurFormCount].Show();
-            CurForm[CurFormCount].BringToFront();
-            CurFormCount++;
+            //if (CurFormCount > 3)
+            //    CurFormCount = 0;
+            //    if (CurForm[CurFormCount] == null || CurForm[CurFormCount].IsDisposed)
+            //    {
+            //        CurForm[CurFormCount] = new CurDataForm(this);
+            //        CurForm[CurFormCount].MdiParent = this;
+            //        CurForm[CurFormCount].Location = new Point(0, 0);
+            //        CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
+            //        CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
+            //    }
+            ////CurForm[CurFormCount].Size = this.StripContainer.ContentPanel.Size;
+            ////CurForm[CurFormCount].Parent = this.StripContainer.ContentPanel;
+            //    CurForm[CurFormCount].Text = String.Format("监测窗口{0}", CurFormCount+1);
+            //CurForm[CurFormCount].Show();
+            //CurForm[CurFormCount].BringToFront();
+            //CurFormCount++;
             //CurForm[CurFormCount].TopMost = true;
         }
 
@@ -266,8 +271,45 @@ namespace MDIMonitor_CS
         {
             CurGridForm.Size = this.StripContainer.ContentPanel.Size;
             CurGridForm.Parent = this.StripContainer.ContentPanel;
+            CurGridForm.Visible = true;
             CurGridForm.Show();
             CurGridForm.BringToFront();
+        }
+
+        private void MenuItem_monitor1_Click(object sender, EventArgs e)
+        {
+            CurForm[0].Text = String.Format("监测窗口1");
+            CurForm[0].Size = this.StripContainer.ContentPanel.Size;
+            CurForm[0].Parent = this.StripContainer.ContentPanel;
+            CurForm[0].Show();
+            CurForm[0].BringToFront();
+        }
+
+        private void 监控MenuItem_monitor2_Click(object sender, EventArgs e)
+        {
+            CurForm[1].Text = String.Format("监测窗口2");
+            CurForm[1].Size = this.StripContainer.ContentPanel.Size;
+            CurForm[1].Parent = this.StripContainer.ContentPanel;
+            CurForm[1].Show();
+            CurForm[1].BringToFront();
+        }
+
+        private void MenuItem_monitor3_Click(object sender, EventArgs e)
+        {
+            CurForm[2].Text = String.Format("监测窗口3");
+            CurForm[2].Size = this.StripContainer.ContentPanel.Size;
+            CurForm[2].Parent = this.StripContainer.ContentPanel;
+            CurForm[2].Show();
+            CurForm[2].BringToFront();
+        }
+
+        private void MenuItem_monitor4_Click(object sender, EventArgs e)
+        {
+            CurForm[3].Text = String.Format("监测窗口4");
+            CurForm[3].Size = this.StripContainer.ContentPanel.Size;
+            CurForm[3].Parent = this.StripContainer.ContentPanel;
+            CurForm[3].Show();
+            CurForm[3].BringToFront();
         }
 
     }

@@ -27,16 +27,19 @@ namespace MDIMonitor_CS
         {
            
             //DataTable dt = new DataTable();
-            curGridData.Columns.Add("节点",typeof(string));
-            curGridData.Columns.Add("通道", typeof(string));
-            curGridData.Columns.Add("名称", typeof(string));
-            curGridData.Columns.Add("时间", typeof(string));
-            curGridData.Columns.Add("测量值", typeof(string));
-            curGridData.Columns.Add("单位", typeof(string));
-            curGridData.Columns.Add("灵敏度", typeof(string));
-            curGridData.Columns.Add("初始值", typeof(string));
-            curGridData.Columns.Add("位置", typeof(string));
-            curGridData.RowChanged+=new DataRowChangeEventHandler(curGridData_RowChanged);
+            if (curGridData.Columns.Count < 1)
+            {
+                curGridData.Columns.Add("节点", typeof(string));
+                curGridData.Columns.Add("通道", typeof(string));
+                curGridData.Columns.Add("名称", typeof(string));
+                curGridData.Columns.Add("时间", typeof(string));
+                curGridData.Columns.Add("测量值", typeof(string));
+                curGridData.Columns.Add("单位", typeof(string));
+                curGridData.Columns.Add("灵敏度", typeof(string));
+                curGridData.Columns.Add("初始值", typeof(string));
+                curGridData.Columns.Add("位置", typeof(string));
+                curGridData.RowChanged += new DataRowChangeEventHandler(curGridData_RowChanged);
+            }
             //if (curGridData.Columns.Count > 0)
             //{
             //    dataGrid_curdata.Columns[0].Width = 20;

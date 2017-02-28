@@ -39,10 +39,12 @@
             // 
             this.CurChart.Location = new System.Drawing.Point(0, 0);
             this.CurChart.Name = "CurChart";
-            this.CurChart.Size = new System.Drawing.Size(940, 459);
+            this.CurChart.Size = new System.Drawing.Size(1026, 459);
             this.CurChart.TabIndex = 4;
             this.CurChart.Text = "chart1";
+            this.CurChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseClick);
             this.CurChart.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseDoubleClick);
+            //this.CurChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseMove);
             // 
             // combox_Node
             // 
@@ -52,6 +54,7 @@
             this.combox_Node.Name = "combox_Node";
             this.combox_Node.Size = new System.Drawing.Size(45, 20);
             this.combox_Node.TabIndex = 5;
+            this.combox_Node.Visible = false;
             this.combox_Node.SelectedIndexChanged += new System.EventHandler(this.combox_Node_SelectedIndexChanged);
             // 
             // combox_ch
@@ -73,6 +76,7 @@
             this.btn_OK.TabIndex = 7;
             this.btn_OK.Text = "确定";
             this.btn_OK.UseVisualStyleBackColor = true;
+            this.btn_OK.Visible = false;
             this.btn_OK.Click += new System.EventHandler(this.btn_OK_Click);
             // 
             // CurDataForm
@@ -84,7 +88,7 @@
             this.Controls.Add(this.combox_ch);
             this.Controls.Add(this.combox_Node);
             this.Controls.Add(this.CurChart);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CurDataForm";
             this.Text = "CurDataForm";
             ((System.ComponentModel.ISupportInitialize)(this.CurChart)).EndInit();

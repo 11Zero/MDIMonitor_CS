@@ -438,10 +438,13 @@ namespace MDIMonitor_CS
                         portPhone.StopBits = StopBits.Two;
                 }
             }
-            portPhone.ReceivedBytesThreshold = 1;
-            portPhone.ReadBufferSize = 2048;
-            portPhone.WriteBufferSize = 2048;
-            portPhone.Encoding = System.Text.Encoding.ASCII;
+            //if (!portPhone.IsOpen)
+            //{
+                portPhone.ReceivedBytesThreshold = 1;
+                portPhone.ReadBufferSize = 2048;
+                portPhone.WriteBufferSize = 2048;
+                portPhone.Encoding = System.Text.Encoding.ASCII;
+            //}
 
             //根据选择的数据，设置奇偶校验位
 
@@ -761,6 +764,12 @@ namespace MDIMonitor_CS
                 currentline.Replace("\0", "");
                 if (currentline == "" || currentline.IndexOf("OK") != -1)
                     return;
+                //if (currentline.IndexOf("设置施工阶段") >= 0)
+                //{
+                //    string stage= currentline.Substring(currentline.IndexOf("设置施工阶段")+6,1);//.IndexOf("设置施工阶段")
+                //    this.Parent.statusLabel_phone.Text = String.Format("短信指令设置施工阶段为{0}",stage);
+                //    return;
+                //}
                 if (currentline.IndexOf("+EAIC") >= 0 || currentline.IndexOf("RING") >= 0 || currentline.IndexOf("+CLIP") >= 0)
                 {
                     this.Parent.statusLabel_phone.Text = "手机收到来电";
@@ -918,7 +927,7 @@ namespace MDIMonitor_CS
                 for (int i = 0; i < totalNodeCount; i++)
                 {
                     TakeMeasure485((byte)(i + 1));
-                    System.Threading.Thread.Sleep(delayTime);//测量时间间隔
+                    //System.Threading.Thread.Sleep(delayTime);//测量时间间隔
 
                     int bufferSize = portSensor.ReadBufferSize;
                     byte[] readBuffer = new byte[bufferSize];
@@ -935,6 +944,7 @@ namespace MDIMonitor_CS
                             for (int j = 0; j < nodeChNum[i]; j++)
                             {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                                 //System.Threading.Thread.Sleep(2000);//测量时间间隔
+                                System.Threading.Thread.Sleep(delayTime / nodeChNum[i]);//测量时间间隔
                                 Parent.statusLabel.Text = String.Format("测量{0}", j);
                                 string[] dataUnit = new string[9];
                                 dataUnit[0] = String.Format("{0}", i + 1);//节点
@@ -1007,10 +1017,16 @@ namespace MDIMonitor_CS
             {
                 string warninfo = String.Format("节点{0}通道{1}二级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_2, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
+                this.Parent.PostMessage(7, 2);//发送二级报警指令
+                if (!this.Parent.warningThread.portWarn.IsOpen)
+                    return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
+                    if ((bool)Parent.UIthread.AdminDataTable.Rows[i][3] == false)
+	                {
+                        continue;
+	                }
                     PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
-                    this.Parent.PostMessage(7, 2);//发送二级报警指令
                     this.Parent.statusLabel_phone.Text = String.Format("向管理员{0}发送报警信息", Parent.UIthread.AdminDataTable.Rows[i][1].ToString());
                     Thread.Sleep(100);
                 }
@@ -1020,10 +1036,16 @@ namespace MDIMonitor_CS
             {
                 string warninfo = String.Format("节点{0}通道{1}一级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_1, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
+                this.Parent.PostMessage(6, 2);//发送一级报警指令
+                if (!this.Parent.warningThread.portWarn.IsOpen)
+                    return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
+                    if ((bool)Parent.UIthread.AdminDataTable.Rows[i][3] == false)
+                    {
+                        continue;
+                    }
                     PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
-                    this.Parent.PostMessage(6, 2);//发送一级报警指令
                     this.Parent.statusLabel_phone.Text = String.Format("向管理员{0}发送报警信息", Parent.UIthread.AdminDataTable.Rows[i][1].ToString());
                     Thread.Sleep(100);
                 }
@@ -1674,20 +1696,20 @@ namespace MDIMonitor_CS
                 Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor_ShouldOpen;
                 if (!portSensor.IsOpen)
                 {
-                    Parent.statusLabel.Text = String.Format("测量端口开关已关闭");
+                    Parent.statusLabel.Text = String.Format("测量端口已关闭");
                     this.Parent.menu_auto.Enabled = false;
                     //this.Parent.menu_auto.Checked = false;
                 }
                 else
                 {
-                    Parent.statusLabel.Text = String.Format("测量端口开关已开启");
+                    Parent.statusLabel.Text = String.Format("测量端口已开启");
                     this.Parent.menu_auto.Enabled = true;
                 }
                 return;
             }
             catch (Exception)
             {
-                Parent.statusLabel.Text = String.Format("测量端口开关变更失败");
+                Parent.statusLabel.Text = String.Format("测量端口变更失败");
                 throw;
             }
         }
@@ -1706,13 +1728,13 @@ namespace MDIMonitor_CS
                 this.Parent.SerialForm.check_PhonePort.Checked = portPhone_ShouldOpen;
                 Parent.SerialForm.cbox_Phone_PortName.Enabled = !portPhone_ShouldOpen;
                 if (portPhone.IsOpen)
-                    Parent.statusLabel.Text = String.Format("通讯端口开关已开启");
+                    Parent.statusLabel.Text = String.Format("通讯端口已开启");
                 else
-                    Parent.statusLabel.Text = String.Format("通讯端口开关已关闭");
+                    Parent.statusLabel.Text = String.Format("通讯端口已关闭");
             }
             catch (Exception)
             {
-                Parent.statusLabel.Text = String.Format("通讯端口开关变更失败");
+                Parent.statusLabel.Text = String.Format("通讯端口变更失败");
                 throw;
             }
         }

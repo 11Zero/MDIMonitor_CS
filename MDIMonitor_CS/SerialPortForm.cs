@@ -126,7 +126,6 @@ namespace MDIMonitor_CS
 
         private void SerialPortForm_Load(object sender, EventArgs e)
         {
-
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -21,6 +21,7 @@ namespace MDIMonitor_CS
         public int cur_node = -1;
         public int cur_ch = -1;
         public int Form_id = -1;
+        public string[] unit = new string[4];
         //public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
         //private object[] invokeChartData = new object[2];
         public CurDataForm(FrameWin parent)
@@ -178,7 +179,15 @@ namespace MDIMonitor_CS
         //        combox_Node.SelectedIndex = 0;
         //}
         private void InitChart()//初始化chart
-        {
+        { 
+            if (combox_Node.Items.Count < 1)
+            {
+                for (int i = 0; i < this.m_ParentForm.UIthread.totalNode; i++)
+                {
+                    combox_Node.Items.Add(i+1);
+                }
+            }
+
             for (int i = 0; i < 4; i++)
             {
                 dataSet.Tables.Add(new DataTable(String.Format("table{0}", i)));
@@ -194,14 +203,17 @@ namespace MDIMonitor_CS
                 this.CurChart.ChartAreas[i].BorderDashStyle = ChartDashStyle.Solid;
                 this.CurChart.ChartAreas[i].AxisX.Title = String.Format("通道{0}", i + 1);
                 this.CurChart.ChartAreas[i].AxisX.TitleAlignment = StringAlignment.Center;
-                this.CurChart.ChartAreas[i].AxisY.Title = "监测值";
+                this.CurChart.ChartAreas[i].AxisY.Title = String.Format("监测值({0})",unit[i]);
 
                 CurChart.ChartAreas[i].BackColor = Color.WhiteSmoke;
                 CurChart.ChartAreas[i].AxisY.MajorGrid.LineColor = Color.SeaGreen;                      //网格线颜色
                 CurChart.ChartAreas[i].AxisX.MajorGrid.LineColor = Color.SeaGreen;
                 CurChart.ChartAreas[i].AxisX.MajorGrid.Interval = 8;
+                //CurChart.ChartAreas[i].AxisY.MajorGrid.Interval = 5;
                 CurChart.ChartAreas[i].AxisX.MajorGrid.LineDashStyle = ChartDashStyle.Dash;             //网线线型
                 CurChart.ChartAreas[i].AxisY.MajorGrid.LineDashStyle = ChartDashStyle.Dash;
+                CurChart.ChartAreas[i].AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+                CurChart.ChartAreas[i].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             }
 
 
@@ -254,10 +266,10 @@ namespace MDIMonitor_CS
                 }
                 for (int i = 0; i < 50; i++)
                 {
-                    ForcestdataSet.Tables[k].Rows.Add("预测", ran.Next(0, 20));
+                    ForcestdataSet.Tables[k].Rows.Add("预测", 0);
                 }
                 DataTable dt = dataSet.Tables[k].Copy();
-                dt.Merge(ForcestdataSet.Tables[k]);
+                dt.Merge(ForcestdataSet.Tables[k].Copy());
                 this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
                 this.CurChart.Series[k + 4].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
                 this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
@@ -267,11 +279,17 @@ namespace MDIMonitor_CS
             {
                 CurChart.ChartAreas[i].AxisX.ScrollBar.Enabled = true;
                 CurChart.ChartAreas[i].AxisX.ScrollBar.Size = 10;
-                CurChart.ChartAreas[i].AxisX.ScaleView.Size = 70;//可视区域数据点数 
+                CurChart.ChartAreas[i].AxisX.ScaleView.Size = 50;//可视区域数据点数 
                 CurChart.ChartAreas[i].AxisX.ScaleView.MinSize = 10;
                 CurChart.ChartAreas[i].AxisX.ScaleView.Position = CurChart.Series[0].Points.Count - CurChart.ChartAreas[0].AxisX.ScaleView.Size;
                 CurChart.ChartAreas[i].AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
                 CurChart.ChartAreas[i].AxisX.ScrollBar.LineColor = System.Drawing.Color.Black;
+                CurChart.ChartAreas[i].CursorY.IsUserEnabled = true;
+                CurChart.ChartAreas[i].CursorX.IsUserEnabled = true;
+                CurChart.ChartAreas[i].CursorY.LineColor = Color.Black;
+                CurChart.ChartAreas[i].CursorX.LineColor = Color.Black;
+                CurChart.ChartAreas[i].CursorY.LineDashStyle = ChartDashStyle.DashDot;
+                CurChart.ChartAreas[i].CursorX.LineDashStyle = ChartDashStyle.DashDot;
             }
         }
         private void btn_OK_Click(object sender, EventArgs e)
@@ -351,6 +369,55 @@ namespace MDIMonitor_CS
                 }
             }
         }
+
+        private void CurChart_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (!IsZoomed)
+            {
+                int x = e.X;
+                int y = e.Y;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (x > CurChart.ChartAreas[i].Position.X * CurChart.Width / 100 &&
+                        x < (CurChart.ChartAreas[i].Position.X + CurChart.ChartAreas[i].Position.Width) * CurChart.Width / 100 &&
+                        y > CurChart.ChartAreas[i].Position.Y * CurChart.Height / 100 &&
+                        y < (CurChart.ChartAreas[i].Position.Y + CurChart.ChartAreas[i].Position.Height) * CurChart.Height / 100)
+                    {
+                        continue;
+                    }
+                    CurChart.ChartAreas[i].CursorX.Position = 0.0;
+                    CurChart.ChartAreas[i].CursorY.Position = 0.0;
+                        
+                        ////CurChart.ChartAreas[i].
+                        //for (int j = 0; j < 4; j++)
+                        //{
+                        //    if (i != j)
+                        //        CurChart.ChartAreas[j].Visible = false;
+                        //}
+                        //CurChart.ChartAreas[i].Position.X = 0;
+                        //CurChart.ChartAreas[i].Position.Y = 0;
+                        //CurChart.ChartAreas[i].Position.Width = 100;
+                        //CurChart.ChartAreas[i].Position.Height = 100;
+                        //break;
+
+                 
+
+                }
+            }
+            else
+            {
+                //for (int i = 0; i < 4; i++)
+                //{
+                //    CurChart.ChartAreas[i].Visible = true;
+                //    CurChart.ChartAreas[i].Position.X = (i / 2) * 50;
+                //    CurChart.ChartAreas[i].Position.Y = (i % 2) * 50;
+                //    CurChart.ChartAreas[i].Position.Width = 50;
+                //    CurChart.ChartAreas[i].Position.Height = 50;
+                //}
+            }
+        }
+
+       
         ///// <summary>
         ///// 执行委托
         ///// </summary>

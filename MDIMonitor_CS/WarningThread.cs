@@ -10,7 +10,7 @@ namespace MDIMonitor_CS
 {
     public class WarningThread
     {
-        SerialPort portWarn = null;
+        public SerialPort portWarn = null;
         private bool portWarn_ShouldOpen = false;
         private bool WarnDataRecFuncSetted = false;
         private int[] portWarnAttribute = new int[4];
@@ -128,14 +128,14 @@ namespace MDIMonitor_CS
                             {
                                 msgFunction_7();//例如消息码为2是，执行msgFunction_2()函数
                             } break;
-                        //case 8:
-                        //    {
-                        //        msgFunction_8();//例如消息码为2是，执行msgFunction_2()函数
-                        //    } break;
-                        //case 9:
-                        //    {
-                        //        msgFunction_9();//例如消息码为2是，执行msgFunction_2()函数
-                        //    } break;
+                        case 8:
+                            {
+                                msgFunction_8();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
+                        case 9:
+                            {
+                                msgFunction_9();//例如消息码为2是，执行msgFunction_2()函数
+                            } break;
                         //case 10:
                         //    {
                         //        msgFunction_10();//例如消息码为2是，执行msgFunction_2()函数
@@ -571,6 +571,11 @@ namespace MDIMonitor_CS
 
         private void msgFunction_6()//一级报警，不闪灯光
         {
+            if (!portWarn.IsOpen)
+            {
+                Parent.statusLabel_warning.Text = String.Format("[{0}]一级报警已触发，但警报端口未打开", DateTime.Now.ToLongTimeString());
+                return;
+            }
             Warn_cmd_Queue.Clear();
             Warn_cmd_buffer = new cmd_buffer();
             if (this.Parent.SerialForm.check_circulate.Checked)
@@ -581,7 +586,7 @@ namespace MDIMonitor_CS
             {
                 Warn_cmd_buffer.buffer[5] = (byte)(0x00 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
             }   
-            Warn_cmd_buffer.buffer[6] = 0x00;
+            Warn_cmd_buffer.buffer[6] = 0x01;
             portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
             //msgFunction_4();
             //msgFunction_3();
@@ -592,6 +597,11 @@ namespace MDIMonitor_CS
 
         private void msgFunction_7()//二级报警，闪烁灯光
         {
+            if (!portWarn.IsOpen)
+            {
+                Parent.statusLabel_warning.Text = String.Format("[{0}]二级报警已触发，但警报端口未打开", DateTime.Now.ToLongTimeString());
+                return;
+            }
             Warn_cmd_Queue.Clear();
             Warn_cmd_buffer = new cmd_buffer();
             if (this.Parent.SerialForm.check_circulate.Checked)
@@ -602,12 +612,62 @@ namespace MDIMonitor_CS
             {
                 Warn_cmd_buffer.buffer[5] = (byte)(0x00 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
             }     
-            Warn_cmd_buffer.buffer[6] = 0x01;
+            Warn_cmd_buffer.buffer[6] = 0x00;
             portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
             //msgFunction_4();
             //msgFunction_3();
             //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
             Parent.statusLabel_warning.Text = String.Format("[{0}]二级报警已响应", DateTime.Now.ToLongTimeString());
+        }
+
+        private void msgFunction_8()//手机指令报警
+        {
+            if (!portWarn.IsOpen)
+            {
+                Parent.statusLabel_warning.Text = String.Format("[{0}]手机远程指令报警，但警报端口未打开", DateTime.Now.ToLongTimeString());
+                return;
+            }
+            Warn_cmd_Queue.Clear();
+            Warn_cmd_buffer = new cmd_buffer();
+            if (this.Parent.SerialForm.check_circulate.Checked)
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x80 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }
+            else
+            {
+                Warn_cmd_buffer.buffer[5] = (byte)(0x00 + this.Parent.SerialForm.cbox_warnlist.SelectedIndex + 1);
+            }
+            Warn_cmd_buffer.buffer[6] = 0x01;
+            portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            //msgFunction_4();
+            //msgFunction_3();
+            //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            Parent.statusLabel_warning.Text = String.Format("[{0}]手机远程报警指令已响应", DateTime.Now.ToLongTimeString());
+        }
+
+        private void msgFunction_9()//手机指令熄警
+        {
+            if (!portWarn.IsOpen)
+            {
+                Parent.statusLabel_warning.Text = String.Format("[{0}]手机远程指令熄警，但警报端口未打开", DateTime.Now.ToLongTimeString());
+                return;
+            }
+            Warn_cmd_Queue.Clear();
+            Warn_cmd_buffer = new cmd_buffer();
+            if (this.Parent.SerialForm.check_circulate.Checked)
+            {
+                Warn_cmd_buffer.buffer[5] = 0x86;
+            }
+            else
+            {
+                Warn_cmd_buffer.buffer[5] = 0x06;
+            }
+            Warn_cmd_buffer.buffer[6] = 0x01;
+            portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            //msgFunction_4();
+            //msgFunction_3();
+            //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            Parent.statusLabel_warning.Text = String.Format("[{0}]手机远程熄警指令已响应", DateTime.Now.ToLongTimeString());
         }
     }
 }

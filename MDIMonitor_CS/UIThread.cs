@@ -31,7 +31,7 @@ namespace MDIMonitor_CS
         private object invokeUserGridData = new object();
         private object[] invokeHisChartData = new object[2];
         //private object[] invokePanelData = new object[2];
-        private int totalNode = 4;
+        public int totalNode = 4;
         private int[] CH_Node = new int[4];
         public int stage = 1;
         public string[] phone_cmd = new string[3];//存储接收到的用户短信号码,时间和指令
@@ -67,8 +67,10 @@ namespace MDIMonitor_CS
                 for (int j = 0; j < 4; j++)
                 {
                     dataForecast[i, j] = new Forecast();
-                    dataForecast[i, j].input_row = 80;
-                    dataForecast[i, j].input_test_row = 20;
+                    dataForecast[i, j].input_col = 3;
+                    dataForecast[i, j].input_row = 30;
+                    dataForecast[i, j].input_test_row = 5;
+                    dataForecast[i, j].sample_num = 5;
                 }
             }
         }
@@ -408,6 +410,18 @@ namespace MDIMonitor_CS
                     SQLHelper.ExecuteNonQuery(sqlcmd, null);
                 }
             }
+            for (int j = 0; j < AdminDataTable.Rows.Count; j++)
+            {
+                sqlcmd = String.Format("update Admin set Name='{0}',Phone='{1}',Checked='{2}' where NUM={3}",
+                    AdminDataTable.Rows[j][1], AdminDataTable.Rows[j][2], AdminDataTable.Rows[j][3], AdminDataTable.Rows[j][0]);
+                //if (j + 1 > totalNode)
+                //{
+                //    sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
+                //    tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
+                //    userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                //}
+                SQLHelper.ExecuteNonQuery(sqlcmd, null);
+            }
             Parent.statusLabel.Text = String.Format("user数据库存储完成");
             return;
         }
@@ -463,16 +477,25 @@ namespace MDIMonitor_CS
         {
             //for (int i = 0; i < 4; i++)
             //{
-            if (Parent.CurForm[Form_id].IsHandleCreated == true)
+            try
             {
-                if (Parent.CurForm[Form_id].cur_node == node)
-                {
-                    invokeChartData[0] = ch - 1;
-                    invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1];
-                    invokeChartData[2] = Form_id;
-                    invokeChartData[3] = node-1;
-                    Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
-                }
+                //if (Parent.CurForm[Form_id].IsHandleCreated == true)
+                //{
+                    if (Parent.CurForm[Form_id].cur_node == node)
+                    {
+                        invokeChartData[0] = ch;
+                        invokeChartData[1] = Parent.CurForm[Form_id].dataSet.Tables[ch - 1].Copy();
+                        invokeChartData[2] = Form_id;
+                        invokeChartData[3] = node;
+                        Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
+                    }
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show(ex.Message);
             }
 
             //}
@@ -487,14 +510,33 @@ namespace MDIMonitor_CS
         {
             //for (int i = 0; i < 4; i++)
             //{
-            Parent.CurForm[Form_id].CurChart.Series[_ch].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
-            if (dataForecast[_node - 1, _ch - 1].IsFilled)
+            try
             {
-                DataTable dt = _dataTable.Copy();
-                dt.Merge(dataForecast[_node - 1, _ch - 1].MakeForecast(0).Copy());
-                //this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
-                Parent.CurForm[Form_id].CurChart.Series[_ch + 4].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
-                //this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
+                //Parent.CurForm[Form_id].CurChart.Series[_ch+3].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+//*问题，通道一总是出现序列为空
+                if (dataForecast[_node - 1, _ch - 1].IsFilled)
+                {
+                    //if (_ch - 1 == 0)
+                    //{
+                    //    string str = "";
+                    //}
+                    DataTable dt = _dataTable.Copy();
+                    dt.Merge(dataForecast[_node - 1, _ch - 1].MakeForecast(0).Copy());
+                    //this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
+                    Parent.CurForm[Form_id].CurChart.Series[_ch + 3].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
+                    Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+                    //this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
+                }
+                else
+                {
+                    Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+                    Parent.CurForm[Form_id].CurChart.Series[_ch + 3].Points.Clear();
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show(ex.Message);
             }
             //series[i].Points.DataBind(dataTable.AsEnumerable(), "时间", series[i].Name, "");
             //series[i].ChartType = SeriesChartType.Spline;
@@ -504,6 +546,12 @@ namespace MDIMonitor_CS
 
         private void UpdateUserGrid()
         {
+            if (Parent.UserForm.cur_dataGrid_id==5)
+            {
+                invokeUserGridData = Parent.UserForm.AdminTable;
+                Parent.UserForm.dataGrid_InitialVal.BeginInvoke(new UserDataDelegate(UserDataDelegateMethod), invokeUserGridData);
+                return;
+            }
             if (Parent.UserForm.cur_dataGrid_id > Parent.UserForm.data_dataGridView.Count - 1)
                 return;
             invokeUserGridData = Parent.UserForm.data_dataGridView[Parent.UserForm.cur_dataGrid_id];
@@ -576,9 +624,12 @@ namespace MDIMonitor_CS
             int node = Convert.ToInt16(data[0]);
             //if(data_node_count==3)
             //    data_node_count=0;
-
+            if (ch == 2)
+            {
+                string str = "";
+            }
             data_of_all_node[ch - 1, node - 1] = data[5]+data[6];
-            dataForecast[ch - 1, node - 1].AddDataToSource(double.Parse(data[5]));
+            dataForecast[node - 1,ch - 1 ].AddDataToSource(double.Parse(data[5]));
             //if (smssended == false)
             //{
  
@@ -590,8 +641,8 @@ namespace MDIMonitor_CS
                     continue;
                 if (Parent.CurForm[i].cur_node == node)
                 {
-                    if (Parent.CurForm[i].dataTable.Rows.Count > 0)
-                        Parent.CurForm[i].dataTable.Rows.RemoveAt(0);
+                    if (Parent.CurForm[i].dataSet.Tables[ch - 1].Rows.Count > 0)
+                        Parent.CurForm[i].dataSet.Tables[ch - 1].Rows.RemoveAt(0);
                     if (ch > 4 && ch < 1)
                     {
                         return;
@@ -629,12 +680,22 @@ namespace MDIMonitor_CS
                 this.Parent.UserForm.data_dataGridView[i] = userDataTable[i].Copy();
                 this.Parent.UserForm.databack_dataGridView[i] = userDataTable[i].Copy();
             }
+            for (int i = 0; i < totalNode; i++)
+            {
+                if(i>=4)
+                    break;
+                for (int j = 0; j < 4; j++)
+                {
+                    this.Parent.CurForm[i].unit[j] = userDataTable[2].Rows[i][j].ToString();
+                }
+            }
             Parent.statusLabel.Text = String.Format("测量参数载入完成");
             if (this.Parent.UserForm.data_dataGridView[0].Columns.Count == 0)
             {
                 Parent.statusLabel.Text = String.Format("测量参数载入失败");
             }
             AdminDataTable = ReadUserSQL("user.dat", "Admin");
+            this.Parent.UserForm.AdminTable = AdminDataTable.Copy();
             //this.Parent.StripContainer.ContentPanel.Controls.Clear();
             //this.Parent.UserForm.Size = this.Parent.StripContainer.ContentPanel.Size;
             //this.Parent.UserForm.Parent = this.Parent.StripContainer.ContentPanel;
@@ -652,6 +713,11 @@ namespace MDIMonitor_CS
             string number = "";
             if (phone_cmd[2].IndexOf("查询所有节点") >= 0)//查询所有节点通道信息
             {
+                if (!this.Parent.thread.portSensor.IsOpen)
+                {
+                    this.Parent.statusLabel_phone.Text = "测量端口未开启，查询失败";
+                    return;
+                }
                  totalNode = this.Parent.thread.totalNodeCount;
                  CH_Node = this.Parent.thread.nodeChNum;
                  for (int i = 0; i < totalNode; i++)
@@ -675,6 +741,11 @@ namespace MDIMonitor_CS
             }
             else if (phone_cmd[2].IndexOf("查询节点") >= 0)//短信指令【查询节点1】节点号需根据实际连接的节点数目确定
             {
+                if (!this.Parent.thread.portSensor.IsOpen)
+                {
+                    this.Parent.statusLabel_phone.Text = "测量端口未开启，查询失败";
+                    return;
+                }
                 int curnode = Convert.ToInt16(phone_cmd[2].Replace("查询节点", ""));
                 if (curnode <= totalNode && curnode>0)
                 {
@@ -701,6 +772,7 @@ namespace MDIMonitor_CS
                 {
                     stage = Convert.ToInt16(phone_cmd[2].Replace("设置施工阶段", ""));
                     this.Parent.PostMessage(4, 1);//更新现阶段数据库
+                    this.Parent.statusLabel.Text = String.Format("施工阶段已更改为阶段{0}",stage);
                 }
                 else
                     this.Parent.statusLabel_phone.Text = "设置施工阶段的短信指令有误，未执行";
@@ -719,10 +791,11 @@ namespace MDIMonitor_CS
             }
             else if (phone_cmd[2].IndexOf("打开警报器") >= 0)
             {
- 
+                this.Parent.PostMessage(8, 2);
             }
             else if (phone_cmd[2].IndexOf("关闭警报器") >= 0)
             {
+                this.Parent.PostMessage(9, 2);
             }
         }
 

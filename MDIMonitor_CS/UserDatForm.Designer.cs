@@ -163,9 +163,8 @@
             this.radio_Mark.Size = new System.Drawing.Size(59, 16);
             this.radio_Mark.TabIndex = 4;
             this.radio_Mark.TabStop = true;
-            this.radio_Mark.Text = "空  白";
+            this.radio_Mark.Text = "管理员";
             this.radio_Mark.UseVisualStyleBackColor = true;
-            this.radio_Mark.Visible = false;
             this.radio_Mark.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
             // radio_WarningVal2

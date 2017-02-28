@@ -16,6 +16,7 @@ namespace MDIMonitor_CS
         //public DataGridView[] dataGridView = null;
         public List<DataTable> data_dataGridView = null;
         public List<DataTable> databack_dataGridView = null;
+        public DataTable AdminTable = null;
         //public DataView[] dataView = null;
         public int cur_dataGrid_id = new int();
         private bool InitFlag = false;
@@ -27,6 +28,7 @@ namespace MDIMonitor_CS
             //dataView = new DataView[4];
             data_dataGridView = new List<DataTable>();
             databack_dataGridView = new List<DataTable>();
+            AdminTable = new DataTable();
             DataTable dt = new DataTable();
             for (int i = 0; i < 5; i++)
             {
@@ -224,6 +226,18 @@ namespace MDIMonitor_CS
         {
             this.m_ParentForm.PostMessage(7, 1);//更新user界面
             Thread.Sleep(20);
+            if (dataGrid_InitialVal.Columns.Count == 4 )
+            {
+                dataGrid_InitialVal.Columns[0].Width = 50;
+                dataGrid_InitialVal.Columns[0].HeaderText = "序号";
+                dataGrid_InitialVal.Columns[0].Frozen = true;
+                dataGrid_InitialVal.Columns[0].ReadOnly = true;
+                foreach (DataGridViewColumn item in dataGrid_InitialVal.Columns)
+                {
+                    item.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+                return;
+            }
             if (dataGrid_InitialVal.Columns.Count > 0)
             {
                 dataGrid_InitialVal.Columns[0].Width = 50;
@@ -375,6 +389,7 @@ namespace MDIMonitor_CS
                 this.m_ParentForm.UIthread.userDataTable[i] = data_dataGridView[i].Copy();
                 //databack_dataGridView[i] = data_dataGridView[i].Copy();
             }
+            this.m_ParentForm.UIthread.AdminDataTable = AdminTable.Copy();
             //numeric_measure_step.Increment = 500;
             //numeric_node_num.Increment = 1;
             //numeric_cur_node.Increment = 1;
@@ -484,11 +499,11 @@ namespace MDIMonitor_CS
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             cur_dataGrid_id = 5;
-            DataTable dt = new DataTable();
-            dt.Columns.Add("预留1");
-            dt.Columns.Add("预留2");
-            dt.Rows.Add("-","-");
-            dataGrid_InitialVal.DataSource = dt;
+            //DataTable dt = new DataTable();
+            //dt.Columns.Add("预留1");
+            //dt.Columns.Add("预留2");
+            //dt.Rows.Add("-","-");
+            //dataGrid_InitialVal.DataSource = dt;
             LoadDataGridView();
         }
 
