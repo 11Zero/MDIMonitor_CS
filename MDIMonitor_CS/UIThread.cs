@@ -55,7 +55,7 @@ namespace MDIMonitor_CS
                 CH_Node[i] = 4;
             }
             DataTable dt = new DataTable();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 userDataTable.Add(dt);
             }
@@ -383,7 +383,7 @@ namespace MDIMonitor_CS
         {
             Parent.statusLabel.Text = String.Format("user数据库存储中");
             //int stage = 1;
-            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2" };
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2", "Position", "Name" };
             //for (int i = 0; i < 4; i++)
             //{
             //    userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
@@ -479,8 +479,8 @@ namespace MDIMonitor_CS
             //{
             try
             {
-                //if (Parent.CurForm[Form_id].IsHandleCreated == true)
-                //{
+                if (Parent.CurForm[Form_id].IsHandleCreated == true)
+                {
                     if (Parent.CurForm[Form_id].cur_node == node)
                     {
                         invokeChartData[0] = ch;
@@ -489,7 +489,7 @@ namespace MDIMonitor_CS
                         invokeChartData[3] = node;
                         Parent.CurForm[Form_id].CurChart.BeginInvoke(new ChartDelegate(ChartDelegateMethod), invokeChartData);
                     }
-                //}
+                }
 
             }
             catch (Exception ex)
@@ -546,7 +546,7 @@ namespace MDIMonitor_CS
 
         private void UpdateUserGrid()
         {
-            if (Parent.UserForm.cur_dataGrid_id==5)
+            if (Parent.UserForm.cur_dataGrid_id==7)
             {
                 invokeUserGridData = Parent.UserForm.AdminTable;
                 Parent.UserForm.dataGrid_InitialVal.BeginInvoke(new UserDataDelegate(UserDataDelegateMethod), invokeUserGridData);
@@ -671,8 +671,8 @@ namespace MDIMonitor_CS
             //int grid_id = this.Parent.UserForm.cur_dataGrid_id;
             //if (grid_id > 3)
             //    return;
-            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2" };
-            for (int i = 0; i < 5; i++)
+            string[] tableName = { "InitialVal", "Sensitivity", "Unit", "WarningVal_1", "WarningVal_2" ,"Position","Name"};
+            for (int i = 0; i < 7; i++)
             {
                 userDataTable[i] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[i], stage));
                 while (userDataTable[i].Rows.Count > totalNode)

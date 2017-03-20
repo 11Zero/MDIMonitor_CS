@@ -227,9 +227,16 @@ namespace MDIMonitor_CS
 
         private void FrameWin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            thread.Kill();
-            UIthread.Kill();
-            MeasureThread.Kill();
+            if (thread.portPhone.IsOpen)
+                thread.portPhone.Close();
+            if (thread.portSensor.IsOpen)
+                thread.portSensor.Close();
+            if (warningThread.portWarn.IsOpen)
+                warningThread.portWarn.Close();
+            //thread.portPhone.
+            //thread.Kill();
+            //UIthread.Kill();
+            //MeasureThread.Kill();
         }
 
         private void menu_auto_Click(object sender, EventArgs e)

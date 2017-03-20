@@ -37,20 +37,19 @@
             // 
             // CurChart
             // 
-            this.CurChart.Location = new System.Drawing.Point(0, 0);
+            this.CurChart.Location = new System.Drawing.Point(7, 6);
             this.CurChart.Name = "CurChart";
-            this.CurChart.Size = new System.Drawing.Size(1026, 459);
+            this.CurChart.Size = new System.Drawing.Size(782, 503);
             this.CurChart.TabIndex = 4;
             this.CurChart.Text = "chart1";
             this.CurChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseClick);
             this.CurChart.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseDoubleClick);
-            //this.CurChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseMove);
             // 
             // combox_Node
             // 
             this.combox_Node.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combox_Node.FormattingEnabled = true;
-            this.combox_Node.Location = new System.Drawing.Point(970, 298);
+            this.combox_Node.Location = new System.Drawing.Point(686, 472);
             this.combox_Node.Name = "combox_Node";
             this.combox_Node.Size = new System.Drawing.Size(45, 20);
             this.combox_Node.TabIndex = 5;
@@ -61,7 +60,7 @@
             // 
             this.combox_ch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.combox_ch.FormattingEnabled = true;
-            this.combox_ch.Location = new System.Drawing.Point(970, 341);
+            this.combox_ch.Location = new System.Drawing.Point(737, 421);
             this.combox_ch.Name = "combox_ch";
             this.combox_ch.Size = new System.Drawing.Size(45, 20);
             this.combox_ch.TabIndex = 6;
@@ -70,7 +69,7 @@
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(970, 388);
+            this.btn_OK.Location = new System.Drawing.Point(737, 468);
             this.btn_OK.Name = "btn_OK";
             this.btn_OK.Size = new System.Drawing.Size(45, 27);
             this.btn_OK.TabIndex = 7;
@@ -83,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1027, 454);
+            this.ClientSize = new System.Drawing.Size(794, 521);
             this.Controls.Add(this.btn_OK);
             this.Controls.Add(this.combox_ch);
             this.Controls.Add(this.combox_Node);

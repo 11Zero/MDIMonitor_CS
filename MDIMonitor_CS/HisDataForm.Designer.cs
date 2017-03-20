@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.HisChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.hScroll_His = new System.Windows.Forms.HScrollBar();
             this.folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
@@ -48,25 +48,25 @@
             // HisChart
             // 
             this.HisChart.BorderlineColor = System.Drawing.Color.Black;
-            chartArea2.Name = "ChartArea1";
-            this.HisChart.ChartAreas.Add(chartArea2);
-            this.HisChart.Location = new System.Drawing.Point(12, 62);
+            chartArea1.Name = "ChartArea1";
+            this.HisChart.ChartAreas.Add(chartArea1);
+            this.HisChart.Location = new System.Drawing.Point(12, 84);
             this.HisChart.Name = "HisChart";
-            this.HisChart.Size = new System.Drawing.Size(754, 412);
+            this.HisChart.Size = new System.Drawing.Size(770, 404);
             this.HisChart.TabIndex = 0;
             this.HisChart.Text = "chart1";
             // 
             // hScroll_His
             // 
-            this.hScroll_His.Location = new System.Drawing.Point(72, 422);
+            this.hScroll_His.Location = new System.Drawing.Point(26, 436);
             this.hScroll_His.Name = "hScroll_His";
-            this.hScroll_His.Size = new System.Drawing.Size(670, 10);
+            this.hScroll_His.Size = new System.Drawing.Size(741, 10);
             this.hScroll_His.TabIndex = 1;
             this.hScroll_His.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScroll_His_Scroll);
             // 
             // btn_Brower
             // 
-            this.btn_Brower.Location = new System.Drawing.Point(630, 24);
+            this.btn_Brower.Location = new System.Drawing.Point(532, 25);
             this.btn_Brower.Name = "btn_Brower";
             this.btn_Brower.Size = new System.Drawing.Size(43, 23);
             this.btn_Brower.TabIndex = 2;
@@ -87,15 +87,15 @@
             // 
             this.text_path.Location = new System.Drawing.Point(53, 26);
             this.text_path.Name = "text_path";
-            this.text_path.Size = new System.Drawing.Size(560, 21);
+            this.text_path.Size = new System.Drawing.Size(464, 21);
             this.text_path.TabIndex = 4;
             // 
             // listView_File
             // 
             this.listView_File.GridLines = true;
-            this.listView_File.Location = new System.Drawing.Point(783, 62);
+            this.listView_File.Location = new System.Drawing.Point(581, 12);
             this.listView_File.Name = "listView_File";
-            this.listView_File.Size = new System.Drawing.Size(238, 153);
+            this.listView_File.Size = new System.Drawing.Size(201, 66);
             this.listView_File.TabIndex = 5;
             this.listView_File.UseCompatibleStateImageBehavior = false;
             this.listView_File.View = System.Windows.Forms.View.List;
@@ -104,17 +104,17 @@
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(854, 351);
+            this.dataGridView1.Location = new System.Drawing.Point(718, 468);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(132, 113);
+            this.dataGridView1.Size = new System.Drawing.Size(80, 50);
             this.dataGridView1.TabIndex = 6;
             this.dataGridView1.Visible = false;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(781, 248);
+            this.label2.Location = new System.Drawing.Point(16, 60);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 7;
@@ -122,7 +122,7 @@
             // 
             // text_lmd
             // 
-            this.text_lmd.Location = new System.Drawing.Point(828, 245);
+            this.text_lmd.Location = new System.Drawing.Point(63, 57);
             this.text_lmd.Name = "text_lmd";
             this.text_lmd.Size = new System.Drawing.Size(100, 21);
             this.text_lmd.TabIndex = 8;
@@ -130,7 +130,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(781, 285);
+            this.label4.Location = new System.Drawing.Point(194, 60);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 7;
@@ -138,7 +138,7 @@
             // 
             // text_pos
             // 
-            this.text_pos.Location = new System.Drawing.Point(828, 282);
+            this.text_pos.Location = new System.Drawing.Point(241, 56);
             this.text_pos.Name = "text_pos";
             this.text_pos.Size = new System.Drawing.Size(100, 21);
             this.text_pos.TabIndex = 8;
@@ -148,7 +148,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1033, 482);
+            this.ClientSize = new System.Drawing.Size(794, 521);
             this.Controls.Add(this.text_pos);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.text_lmd);

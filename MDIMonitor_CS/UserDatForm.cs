@@ -30,7 +30,7 @@ namespace MDIMonitor_CS
             databack_dataGridView = new List<DataTable>();
             AdminTable = new DataTable();
             DataTable dt = new DataTable();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 7; i++)
             {
                 data_dataGridView.Add(dt);
                 databack_dataGridView.Add(dt);
@@ -495,10 +495,22 @@ namespace MDIMonitor_CS
             //dataGrid_WarningVal.DataSource = data_dataGridView[cur_dataGrid_id];
             //LoadDataGridView(cur_dataGrid_id, ref dataGrid_WarningVal);
         }
+        private void radio_Position_CheckedChanged(object sender, EventArgs e)
+        {
+            cur_dataGrid_id =5;
+            LoadDataGridView();
+        }
+
+        private void radio_Name_CheckedChanged(object sender, EventArgs e)
+        {
+            cur_dataGrid_id = 6;
+            LoadDataGridView();
+        }
+
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            cur_dataGrid_id = 5;
+            cur_dataGrid_id = 7;
             //DataTable dt = new DataTable();
             //dt.Columns.Add("预留1");
             //dt.Columns.Add("预留2");

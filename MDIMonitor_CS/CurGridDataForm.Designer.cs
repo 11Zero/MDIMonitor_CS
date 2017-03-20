@@ -68,14 +68,14 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGrid_curdata.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGrid_curdata.RowTemplate.Height = 23;
-            this.dataGrid_curdata.Size = new System.Drawing.Size(827, 224);
+            this.dataGrid_curdata.Size = new System.Drawing.Size(782, 224);
             this.dataGrid_curdata.TabIndex = 0;
             // 
             // CurGridDataForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 486);
+            this.ClientSize = new System.Drawing.Size(794, 521);
             this.Controls.Add(this.dataGrid_curdata);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CurGridDataForm";

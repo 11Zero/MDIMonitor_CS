@@ -947,21 +947,27 @@ namespace MDIMonitor_CS
                                 System.Threading.Thread.Sleep(delayTime / nodeChNum[i]);//测量时间间隔
                                 Parent.statusLabel.Text = String.Format("测量{0}", j);
                                 string[] dataUnit = new string[9];
-                                dataUnit[0] = String.Format("{0}", i + 1);//节点
-                                dataUnit[1] = String.Format("{0}", j + 1);//通道
-                                dataUnit[2] = String.Format("名称");//名称
-                                dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
-
-                                double InitVal = 0.0;
+                                 double InitVal = 0.0;
                                 double LMD = 0.0;
+                                string unit = "未设置";
+                                string name = "未设置";
+                                string pos = "未设置";
+
                                 if (this.Parent.UIthread.userDataTable[0].Rows.Count > i && this.Parent.UIthread.userDataTable[0].Columns.Count > j + 1)
                                 {
                                     InitVal = Convert.ToDouble(this.Parent.UIthread.userDataTable[0].Rows[i][j + 1]);
                                     LMD = Convert.ToDouble(this.Parent.UIthread.userDataTable[1].Rows[i][j + 1]);
+                                    unit = this.Parent.UIthread.userDataTable[2].Rows[i][j + 1].ToString();
+                                    pos = this.Parent.UIthread.userDataTable[5].Rows[i][j + 1].ToString();
+                                    name = this.Parent.UIthread.userDataTable[6].Rows[i][j + 1].ToString();
                                 }
                                 else
                                     this.Parent.statusLabel.Text = "测量配置文件数据不足，按默认值0.0计算，请及时检查";
                                 //if(LMD<=0.0)
+                               dataUnit[0] = String.Format("{0}", i + 1);//节点
+                                dataUnit[1] = String.Format("{0}", j + 1);//通道
+                                dataUnit[2] = name;//String.Format("名称");//名称
+                                dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
                                 dataUnit[4] = String.Format("{0}", LMD);//灵敏度
                                 dataUnit[8] = String.Format("{0}", InitVal);//初始值
                                 if (j * 2 + 3 >= bufferSize)
@@ -974,15 +980,15 @@ namespace MDIMonitor_CS
                                 dataValue = (dataValue << 8) & 0x0ff00;
                                 dataValue = dataValue + readBuffer[j * 2 + 4];
                                 //Random ran = new Random();
-                                int value = (int)dataValue;
-                                double dValue = value - InitVal;
+                               int value = (int)dataValue;
+                                double dValue = value;
                                 if (LMD > 0)
-                                    dValue = value / LMD;
-                                else
-                                    dValue = 0.0;
-                                dataUnit[5] = String.Format("{0}", dValue);//测量值
-                                dataUnit[6] = String.Format("单位");
-                                dataUnit[7] = String.Format("位置");
+                                    dValue = dValue / LMD;
+                                //else
+                                //    dValue = 0.0;
+                                dataUnit[5] = String.Format("{0:0.000}", dValue - InitVal);//测量值
+                                dataUnit[6] = unit;//String.Format("单位");
+                                dataUnit[7] = pos;//String.Format("位置");
                                 SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
                                 WarningFunc(dataUnit);
                                 //string strview = "";
@@ -1022,7 +1028,7 @@ namespace MDIMonitor_CS
                     return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
-                    if ((bool)Parent.UIthread.AdminDataTable.Rows[i][3] == false)
+                    if ((bool)(Parent.UIthread.AdminDataTable.Rows[i][3]) == false)
 	                {
                         continue;
 	                }
@@ -1041,7 +1047,7 @@ namespace MDIMonitor_CS
                     return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
-                    if ((bool)Parent.UIthread.AdminDataTable.Rows[i][3] == false)
+                    if ((bool)(Parent.UIthread.AdminDataTable.Rows[i][3]) == false)
                     {
                         continue;
                     }
@@ -1168,7 +1174,6 @@ namespace MDIMonitor_CS
         {
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.Load(xmlName);
-            Application.Exit();
             XmlNodeList xnlist = xmlDoc.SelectNodes("//" + xmlElement);
             string str = "";
             foreach (XmlNode xn in xnlist)
@@ -1717,6 +1722,8 @@ namespace MDIMonitor_CS
         {
             try
             {
+                if (portPhone == null )
+                    portPhone = new SerialPort();
                 portPhone_ShouldOpen = !portPhone_ShouldOpen;
                 if (portPhone.IsOpen && !portPhone_ShouldOpen)
                     portPhone.Close();
@@ -1820,17 +1827,30 @@ namespace MDIMonitor_CS
             //循环该计算机上所有串行端口的集合
             Parent.SerialForm.cbox_Sensor_PortName.Items.Clear();
             Parent.SerialForm.cbox_Phone_PortName.Items.Clear();
+            Parent.SerialForm.cbox_Warn_PortName.Items.Clear();
             foreach (string s in pc.Ports.SerialPortNames)
             {
                 Parent.SerialForm.cbox_Sensor_PortName.Items.Add(s);
                 Parent.SerialForm.cbox_Phone_PortName.Items.Add(s);
+                Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
             }
             if (pc.Ports.SerialPortNames.Count > 0)
             {
                 Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = 0;
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = 0;
             }
-
+            if(Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName)>=0)
+            {
+                Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
+            }
+            if (Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName) >= 0)
+            {
+                Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName);
+            }
+            if (Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName) >= 0)
+            {
+                Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName);
+            }
             Parent.SerialForm.cbox_Phone_Baud.SelectedIndex = portPhoneAttribute[0];//比特率
             Parent.SerialForm.cbox_Phone_Parity.SelectedIndex = portPhoneAttribute[1];//校验位
             Parent.SerialForm.cbox_Phone_Bits.SelectedIndex = portPhoneAttribute[2];//数据位

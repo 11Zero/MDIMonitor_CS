@@ -93,10 +93,12 @@
             this.check_light = new System.Windows.Forms.CheckBox();
             this.btn_test_warn1 = new System.Windows.Forms.Button();
             this.btn_test_warn2 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_vol)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbox_Phone_PortName
@@ -191,7 +193,7 @@
             // 
             // btn_Open
             // 
-            this.btn_Open.Location = new System.Drawing.Point(670, 262);
+            this.btn_Open.Location = new System.Drawing.Point(87, 26);
             this.btn_Open.Name = "btn_Open";
             this.btn_Open.Size = new System.Drawing.Size(75, 23);
             this.btn_Open.TabIndex = 2;
@@ -201,7 +203,7 @@
             // 
             // btn_Close
             // 
-            this.btn_Close.Location = new System.Drawing.Point(784, 262);
+            this.btn_Close.Location = new System.Drawing.Point(201, 26);
             this.btn_Close.Name = "btn_Close";
             this.btn_Close.Size = new System.Drawing.Size(75, 23);
             this.btn_Close.TabIndex = 2;
@@ -211,7 +213,7 @@
             // 
             // btn_SensorSendData
             // 
-            this.btn_SensorSendData.Location = new System.Drawing.Point(670, 295);
+            this.btn_SensorSendData.Location = new System.Drawing.Point(87, 59);
             this.btn_SensorSendData.Name = "btn_SensorSendData";
             this.btn_SensorSendData.Size = new System.Drawing.Size(75, 23);
             this.btn_SensorSendData.TabIndex = 2;
@@ -222,7 +224,7 @@
             // 
             // rich_Send
             // 
-            this.rich_Send.Location = new System.Drawing.Point(670, 324);
+            this.rich_Send.Location = new System.Drawing.Point(87, 88);
             this.rich_Send.Name = "rich_Send";
             this.rich_Send.Size = new System.Drawing.Size(189, 40);
             this.rich_Send.TabIndex = 3;
@@ -231,7 +233,7 @@
             // 
             // rich_Receive
             // 
-            this.rich_Receive.Location = new System.Drawing.Point(670, 373);
+            this.rich_Receive.Location = new System.Drawing.Point(87, 137);
             this.rich_Receive.Name = "rich_Receive";
             this.rich_Receive.Size = new System.Drawing.Size(189, 40);
             this.rich_Receive.TabIndex = 3;
@@ -241,7 +243,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(623, 344);
+            this.label6.Location = new System.Drawing.Point(40, 108);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(41, 12);
             this.label6.TabIndex = 1;
@@ -251,7 +253,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(623, 378);
+            this.label7.Location = new System.Drawing.Point(40, 142);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 1;
@@ -260,7 +262,7 @@
             // 
             // btn_test1
             // 
-            this.btn_test1.Location = new System.Drawing.Point(883, 274);
+            this.btn_test1.Location = new System.Drawing.Point(300, 38);
             this.btn_test1.Name = "btn_test1";
             this.btn_test1.Size = new System.Drawing.Size(75, 23);
             this.btn_test1.TabIndex = 4;
@@ -271,7 +273,7 @@
             // 
             // btn_test2
             // 
-            this.btn_test2.Location = new System.Drawing.Point(883, 303);
+            this.btn_test2.Location = new System.Drawing.Point(300, 67);
             this.btn_test2.Name = "btn_test2";
             this.btn_test2.Size = new System.Drawing.Size(75, 23);
             this.btn_test2.TabIndex = 4;
@@ -282,7 +284,7 @@
             // 
             // btn_endthread
             // 
-            this.btn_endthread.Location = new System.Drawing.Point(883, 333);
+            this.btn_endthread.Location = new System.Drawing.Point(300, 97);
             this.btn_endthread.Name = "btn_endthread";
             this.btn_endthread.Size = new System.Drawing.Size(75, 23);
             this.btn_endthread.TabIndex = 2;
@@ -293,7 +295,7 @@
             // 
             // btn_stopthread
             // 
-            this.btn_stopthread.Location = new System.Drawing.Point(883, 365);
+            this.btn_stopthread.Location = new System.Drawing.Point(300, 129);
             this.btn_stopthread.Name = "btn_stopthread";
             this.btn_stopthread.Size = new System.Drawing.Size(75, 23);
             this.btn_stopthread.TabIndex = 5;
@@ -304,7 +306,7 @@
             // 
             // btn_resumethread
             // 
-            this.btn_resumethread.Location = new System.Drawing.Point(883, 395);
+            this.btn_resumethread.Location = new System.Drawing.Point(300, 159);
             this.btn_resumethread.Name = "btn_resumethread";
             this.btn_resumethread.Size = new System.Drawing.Size(75, 23);
             this.btn_resumethread.TabIndex = 6;
@@ -315,7 +317,7 @@
             // 
             // btn_killthread
             // 
-            this.btn_killthread.Location = new System.Drawing.Point(883, 425);
+            this.btn_killthread.Location = new System.Drawing.Point(300, 189);
             this.btn_killthread.Name = "btn_killthread";
             this.btn_killthread.Size = new System.Drawing.Size(75, 23);
             this.btn_killthread.TabIndex = 7;
@@ -498,7 +500,7 @@
             // 
             // btn_PhoneSendData
             // 
-            this.btn_PhoneSendData.Location = new System.Drawing.Point(784, 295);
+            this.btn_PhoneSendData.Location = new System.Drawing.Point(201, 59);
             this.btn_PhoneSendData.Name = "btn_PhoneSendData";
             this.btn_PhoneSendData.Size = new System.Drawing.Size(75, 23);
             this.btn_PhoneSendData.TabIndex = 2;
@@ -685,7 +687,7 @@
             // 
             // btn_do_warn
             // 
-            this.btn_do_warn.Location = new System.Drawing.Point(589, 297);
+            this.btn_do_warn.Location = new System.Drawing.Point(6, 61);
             this.btn_do_warn.Name = "btn_do_warn";
             this.btn_do_warn.Size = new System.Drawing.Size(75, 23);
             this.btn_do_warn.TabIndex = 16;
@@ -754,17 +756,39 @@
             this.btn_test_warn2.UseVisualStyleBackColor = true;
             this.btn_test_warn2.Click += new System.EventHandler(this.btn_test_warn2_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btn_Open);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.btn_Close);
+            this.panel1.Controls.Add(this.btn_endthread);
+            this.panel1.Controls.Add(this.btn_SensorSendData);
+            this.panel1.Controls.Add(this.btn_do_warn);
+            this.panel1.Controls.Add(this.btn_PhoneSendData);
+            this.panel1.Controls.Add(this.rich_Send);
+            this.panel1.Controls.Add(this.rich_Receive);
+            this.panel1.Controls.Add(this.btn_test1);
+            this.panel1.Controls.Add(this.btn_test2);
+            this.panel1.Controls.Add(this.btn_stopthread);
+            this.panel1.Controls.Add(this.btn_resumethread);
+            this.panel1.Controls.Add(this.btn_killthread);
+            this.panel1.Location = new System.Drawing.Point(551, 245);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(391, 213);
+            this.panel1.TabIndex = 23;
+            // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1033, 482);
+            this.ClientSize = new System.Drawing.Size(794, 521);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_test_warn2);
             this.Controls.Add(this.btn_test_warn1);
             this.Controls.Add(this.check_light);
             this.Controls.Add(this.check_circulate);
             this.Controls.Add(this.label20);
-            this.Controls.Add(this.btn_do_warn);
             this.Controls.Add(this.cbox_warnlist);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.rich_smstext);
@@ -776,20 +800,6 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.btn_killthread);
-            this.Controls.Add(this.btn_resumethread);
-            this.Controls.Add(this.btn_stopthread);
-            this.Controls.Add(this.btn_test2);
-            this.Controls.Add(this.btn_test1);
-            this.Controls.Add(this.rich_Receive);
-            this.Controls.Add(this.rich_Send);
-            this.Controls.Add(this.btn_PhoneSendData);
-            this.Controls.Add(this.btn_SensorSendData);
-            this.Controls.Add(this.btn_endthread);
-            this.Controls.Add(this.btn_Close);
-            this.Controls.Add(this.btn_Open);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.trackBar_vol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SerialPortForm";
@@ -802,6 +812,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_vol)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -874,6 +886,7 @@
         public System.Windows.Forms.ComboBox cbox_warnlist;
         private System.Windows.Forms.Button btn_test_warn1;
         private System.Windows.Forms.Button btn_test_warn2;
+        private System.Windows.Forms.Panel panel1;
 
     }
 }
