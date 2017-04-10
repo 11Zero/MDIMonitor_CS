@@ -38,11 +38,9 @@
             this.MenuItem_monitor4 = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_CurDataForm = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_HisForm = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_ScanPort = new System.Windows.Forms.ToolStripMenuItem();
             this.传感参数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_Userdat = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_auto = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_measure_step = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_single_measure = new System.Windows.Forms.ToolStripMenuItem();
             this.串口设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_SerialForm = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +49,10 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_warning = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_phone = new System.Windows.Forms.ToolStripStatusLabel();
+            this.用户帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Help = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Registr = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_About = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.StripContainer.BottomToolStripPanel.SuspendLayout();
             this.StripContainer.TopToolStripPanel.SuspendLayout();
@@ -66,7 +68,8 @@
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.数据浏览ToolStripMenuItem,
             this.传感参数ToolStripMenuItem,
-            this.串口设置ToolStripMenuItem});
+            this.串口设置ToolStripMenuItem,
+            this.用户帮助ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -79,8 +82,7 @@
             this.数据浏览ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_CurForm,
             this.menu_CurDataForm,
-            this.menu_HisForm,
-            this.menu_ScanPort});
+            this.menu_HisForm});
             this.数据浏览ToolStripMenuItem.Name = "数据浏览ToolStripMenuItem";
             this.数据浏览ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.数据浏览ToolStripMenuItem.Text = "数据浏览";
@@ -128,6 +130,7 @@
             // 
             // menu_CurDataForm
             // 
+            this.menu_CurDataForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_CurDataForm.Name = "menu_CurDataForm";
             this.menu_CurDataForm.Size = new System.Drawing.Size(124, 22);
             this.menu_CurDataForm.Text = "表格监控";
@@ -141,20 +144,11 @@
             this.menu_HisForm.Text = "历史数据";
             this.menu_HisForm.Click += new System.EventHandler(this.menu_HisForm_Click);
             // 
-            // menu_ScanPort
-            // 
-            this.menu_ScanPort.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.menu_ScanPort.Name = "menu_ScanPort";
-            this.menu_ScanPort.Size = new System.Drawing.Size(124, 22);
-            this.menu_ScanPort.Text = "测试按钮";
-            this.menu_ScanPort.Click += new System.EventHandler(this.menu_ScanPort_Click);
-            // 
             // 传感参数ToolStripMenuItem
             // 
             this.传感参数ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menu_Userdat,
             this.menu_auto,
-            this.menu_measure_step,
             this.menu_single_measure});
             this.传感参数ToolStripMenuItem.Name = "传感参数ToolStripMenuItem";
             this.传感参数ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
@@ -162,31 +156,27 @@
             // 
             // menu_Userdat
             // 
+            this.menu_Userdat.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_Userdat.Name = "menu_Userdat";
-            this.menu_Userdat.Size = new System.Drawing.Size(152, 22);
+            this.menu_Userdat.Size = new System.Drawing.Size(124, 22);
             this.menu_Userdat.Text = "测量数值";
             this.menu_Userdat.Click += new System.EventHandler(this.menu_Userdat_Click);
             // 
             // menu_auto
             // 
+            this.menu_auto.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_auto.Checked = true;
             this.menu_auto.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menu_auto.Name = "menu_auto";
-            this.menu_auto.Size = new System.Drawing.Size(152, 22);
+            this.menu_auto.Size = new System.Drawing.Size(124, 22);
             this.menu_auto.Text = "自动测量";
             this.menu_auto.Click += new System.EventHandler(this.menu_auto_Click);
             // 
-            // menu_measure_step
-            // 
-            this.menu_measure_step.Name = "menu_measure_step";
-            this.menu_measure_step.Size = new System.Drawing.Size(152, 22);
-            this.menu_measure_step.Text = "测量时距";
-            this.menu_measure_step.Click += new System.EventHandler(this.menu_measure_step_Click);
-            // 
             // menu_single_measure
             // 
+            this.menu_single_measure.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_single_measure.Name = "menu_single_measure";
-            this.menu_single_measure.Size = new System.Drawing.Size(152, 22);
+            this.menu_single_measure.Size = new System.Drawing.Size(124, 22);
             this.menu_single_measure.Text = "单次测量";
             this.menu_single_measure.Click += new System.EventHandler(this.menu_single_measure_Click);
             // 
@@ -215,6 +205,8 @@
             // 
             // StripContainer.ContentPanel
             // 
+            this.StripContainer.ContentPanel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("StripContainer.ContentPanel.BackgroundImage")));
+            this.StripContainer.ContentPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.StripContainer.ContentPanel.Size = new System.Drawing.Size(794, 521);
             this.StripContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StripContainer.Location = new System.Drawing.Point(0, 0);
@@ -267,6 +259,37 @@
             this.statusLabel_phone.Text = "暂无通信指令";
             this.statusLabel_phone.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
+            // 用户帮助ToolStripMenuItem
+            // 
+            this.用户帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_Help,
+            this.menu_Registr,
+            this.menu_About});
+            this.用户帮助ToolStripMenuItem.Name = "用户帮助ToolStripMenuItem";
+            this.用户帮助ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.用户帮助ToolStripMenuItem.Text = "用户帮助";
+            // 
+            // menu_Help
+            // 
+            this.menu_Help.Name = "menu_Help";
+            this.menu_Help.Size = new System.Drawing.Size(152, 22);
+            this.menu_Help.Text = "操作指南";
+            this.menu_Help.Click += new System.EventHandler(this.menu_Help_Click);
+            // 
+            // menu_Registr
+            // 
+            this.menu_Registr.Name = "menu_Registr";
+            this.menu_Registr.Size = new System.Drawing.Size(152, 22);
+            this.menu_Registr.Text = "注册管理";
+            this.menu_Registr.Click += new System.EventHandler(this.menu_Registr_Click);
+            // 
+            // menu_About
+            // 
+            this.menu_About.Name = "menu_About";
+            this.menu_About.Size = new System.Drawing.Size(152, 22);
+            this.menu_About.Text = "关于我们";
+            this.menu_About.Click += new System.EventHandler(this.menu_About_Click);
+            // 
             // FrameWin
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -278,7 +301,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "FrameWin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "桥梁监控";
+            this.Text = "碗扣式满堂支架预警系统";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrameWin_FormClosing);
             this.MouseEnter += new System.EventHandler(this.FrameWin_MouseEnter);
             this.menuStrip.ResumeLayout(false);
@@ -301,7 +324,6 @@
         private System.Windows.Forms.ToolStripMenuItem 数据浏览ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_CurForm;
         private System.Windows.Forms.ToolStripMenuItem menu_HisForm;
-        private System.Windows.Forms.ToolStripMenuItem menu_ScanPort;
         private System.Windows.Forms.StatusStrip statusStrip;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.ToolStripMenuItem 传感参数ToolStripMenuItem;
@@ -309,7 +331,6 @@
         public System.Windows.Forms.ToolStripContainer StripContainer;
         private System.Windows.Forms.ToolStripMenuItem menu_single_measure;
         public System.Windows.Forms.ToolStripMenuItem menu_auto;
-        private System.Windows.Forms.ToolStripMenuItem menu_measure_step;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel_warning;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel_phone;
         private System.Windows.Forms.ToolStripMenuItem menu_CurDataForm;
@@ -317,6 +338,11 @@
         private System.Windows.Forms.ToolStripMenuItem 监控MenuItem_monitor2;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_monitor3;
         private System.Windows.Forms.ToolStripMenuItem MenuItem_monitor4;
+        public System.String FromTitle;
+        private System.Windows.Forms.ToolStripMenuItem 用户帮助ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menu_Help;
+        private System.Windows.Forms.ToolStripMenuItem menu_Registr;
+        private System.Windows.Forms.ToolStripMenuItem menu_About;
         //private System.Windows.Forms.Panel panel_Frame;
     }
 }

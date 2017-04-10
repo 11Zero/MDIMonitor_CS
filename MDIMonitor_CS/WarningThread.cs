@@ -265,7 +265,10 @@ namespace MDIMonitor_CS
                         portWarn.StopBits = StopBits.Two;
                 }
             }
-            portWarn.Handshake = Handshake.None;
+            if (!portWarn.IsOpen)
+            {
+                portWarn.Handshake = Handshake.None;
+            }
             //portWarn.ReceivedBytesThreshold = 1;
             //portWarn.ReadBufferSize = 2048;
             //portWarn.WriteBufferSize = 2048;
@@ -371,10 +374,11 @@ namespace MDIMonitor_CS
         }
 
 
-        private void msgFunction_1()
-        { 
-            if(!SetWarnPort())
-                Parent.statusLabel.Text = "报警端口修改失败";
+        private void msgFunction_1()//修改报警端口
+        {
+            SetWarnPort();
+            //if(!SetWarnPort())
+            //    Parent.statusLabel.Text = "报警端口修改失败";
         }
 
         private void msgFunction_2()//变更报警端口开关

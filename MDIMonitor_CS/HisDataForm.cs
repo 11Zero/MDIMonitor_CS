@@ -85,7 +85,7 @@ namespace MDIMonitor_CS
             }
             Series series = new Series("监测1");
             series.Points.DataBind(dataTable.AsEnumerable(), "时间", "数据", "");
-            series.ChartType = SeriesChartType.Spline;
+            series.ChartType = SeriesChartType.Line;
             this.HisChart.Series.Add(series);
             hScroll_His.Enabled = false;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.Axis.Interval = 80;

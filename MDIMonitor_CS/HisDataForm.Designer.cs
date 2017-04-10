@@ -58,9 +58,9 @@
             // 
             // hScroll_His
             // 
-            this.hScroll_His.Location = new System.Drawing.Point(26, 436);
+            this.hScroll_His.Location = new System.Drawing.Point(26, 435);
             this.hScroll_His.Name = "hScroll_His";
-            this.hScroll_His.Size = new System.Drawing.Size(741, 10);
+            this.hScroll_His.Size = new System.Drawing.Size(741, 15);
             this.hScroll_His.TabIndex = 1;
             this.hScroll_His.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScroll_His_Scroll);
             // 

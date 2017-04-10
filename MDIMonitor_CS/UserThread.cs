@@ -286,9 +286,12 @@ namespace MDIMonitor_CS
                         portSensor.StopBits = StopBits.Two;
                 }
             }
-            portSensor.ReceivedBytesThreshold = 1;
-            portSensor.ReadBufferSize = 2048;
-            portSensor.WriteBufferSize = 2048;
+            if (!portSensor.IsOpen)
+            {
+                portSensor.ReceivedBytesThreshold = 1;
+                portSensor.ReadBufferSize = 2048;
+                portSensor.WriteBufferSize = 2048;
+            }
 
             //根据选择的数据，设置奇偶校验位
 
@@ -301,11 +304,11 @@ namespace MDIMonitor_CS
             //打开串口的方法
             try
             {
-                if (portSensor_ShouldOpen)
-                {
+                //if (portSensor_ShouldOpen)
+                //{
                     if (!portSensor.IsOpen)
                         portSensor.Open();
-                }
+                //}
                 else
                 {
                     this.Parent.statusLabel.Text = "设置已生效";
@@ -1019,7 +1022,7 @@ namespace MDIMonitor_CS
             double value = Convert.ToDouble(dataUnit[5]);
             double WarningVal_1 = Convert.ToDouble(this.Parent.UIthread.userDataTable[3].Rows[node - 1][ch]);
             double WarningVal_2 = Convert.ToDouble(this.Parent.UIthread.userDataTable[4].Rows[node - 1][ch]);
-            if (value >= WarningVal_2)
+            if (Math.Abs(value) >= Math.Abs(WarningVal_2))
             {
                 string warninfo = String.Format("节点{0}通道{1}二级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_2, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
@@ -1038,7 +1041,7 @@ namespace MDIMonitor_CS
                 }
                 return false;
             }
-            if (value >= WarningVal_1)
+            if (Math.Abs(value) >= Math.Abs(WarningVal_1))
             {
                 string warninfo = String.Format("节点{0}通道{1}一级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_1, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
@@ -1689,27 +1692,29 @@ namespace MDIMonitor_CS
         {
             try
             {
-                portSensor_ShouldOpen = !portSensor_ShouldOpen;
-                if (portSensor.IsOpen && !portSensor_ShouldOpen)
+                //portSensor_ShouldOpen = !portSensor_ShouldOpen;
+                if (portSensor.IsOpen)// && !portSensor_ShouldOpen
                     portSensor.Close();
-                if (!portSensor.IsOpen && portSensor_ShouldOpen)
-                {
-                    if (!SetSensorPort())
-                        portSensor_ShouldOpen = !portSensor_ShouldOpen;
-                }
-                this.Parent.SerialForm.check_SensorPort.Checked = portSensor_ShouldOpen;
-                Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor_ShouldOpen;
+                else
+                    SetSensorPort();
+                //if (!portSensor.IsOpen && portSensor_ShouldOpen)
+                //{
+                //    if (!SetSensorPort())
+                //        portSensor_ShouldOpen = !portSensor_ShouldOpen;
+                //}
+                //this.Parent.SerialForm.check_SensorPort.Checked = portSensor.IsOpen;// portSensor_ShouldOpen;
+                Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor.IsOpen;// portSensor_ShouldOpen;
                 if (!portSensor.IsOpen)
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已关闭");
-                    this.Parent.menu_auto.Enabled = false;
                     //this.Parent.menu_auto.Checked = false;
                 }
                 else
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已开启");
-                    this.Parent.menu_auto.Enabled = true;
+                    //this.Parent.menu_auto.Enabled = true;
                 }
+                this.Parent.menu_auto.Enabled = false;
                 return;
             }
             catch (Exception)

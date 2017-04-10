@@ -75,6 +75,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="cmd_buffer.cs" />
     <Compile Include="CurGridDataForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +106,12 @@
     <Compile Include="HisDataForm.Designer.cs">
       <DependentUpon>HisDataForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
     <Compile Include="MeasureTimer.cs" />
     <Compile Include="PDUdecoding.cs" />
     <Compile Include="Program.cs" />
@@ -121,6 +133,15 @@
     <Compile Include="UserSerialPort.cs" />
     <Compile Include="UserThread.cs" />
     <Compile Include="WarningThread.cs" />
+    <Compile Include="WelcomeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WelcomeForm.Designer.cs">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CurGridDataForm.resx">
       <DependentUpon>CurGridDataForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,9 +150,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrameWin.resx">
       <DependentUpon>FrameWin.cs</DependentUpon>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FrameWin1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="HisDataForm.resx">
       <DependentUpon>HisDataForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -148,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserDatForm.resx">
       <DependentUpon>UserDatForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WelcomeForm.resx">
+      <DependentUpon>WelcomeForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
@@ -187,7 +216,12 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="background.png" />
     <Content Include="Icon.ico" />
+    <None Include="welcome.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

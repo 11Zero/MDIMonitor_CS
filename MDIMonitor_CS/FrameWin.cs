@@ -25,7 +25,13 @@ namespace MDIMonitor_CS
         public int CurFormCount = 0;
         public FrameWin()
         {
+            WelcomeForm welcome = new WelcomeForm();
+            welcome.Show();
+            Thread.Sleep(2000);
+            welcome.Close();
             InitializeComponent();
+
+
             this.Size = new Size(1039, 561);
             thread = new UserThread(this);
             UIthread = new UIThread(this);
@@ -159,6 +165,7 @@ namespace MDIMonitor_CS
             this.thread.PostMessage(12);//发送消息设置SerialForm窗口控件状态
             SerialForm.Show();
             SerialForm.BringToFront();
+            this.Text = FromTitle + " - 串口设置";
             //SerialForm.TopMost = true;
         }
 
@@ -210,6 +217,7 @@ namespace MDIMonitor_CS
             UserForm.InitialGrid();
             UserForm.Show();
             UserForm.BringToFront();
+            this.Text = FromTitle + " - 用户配置";
             //UserForm.TopMost = true;
         }
 
@@ -221,6 +229,7 @@ namespace MDIMonitor_CS
             HisForm.Parent = this.StripContainer.ContentPanel;
             HisForm.Show();
             HisForm.BringToFront();
+            this.Text = FromTitle + " - 历史数据浏览";
             //HisForm.TopMost = true;
             
         }
@@ -281,6 +290,7 @@ namespace MDIMonitor_CS
             CurGridForm.Visible = true;
             CurGridForm.Show();
             CurGridForm.BringToFront();
+            this.Text = FromTitle + " - 实时数据流";
         }
 
         private void MenuItem_monitor1_Click(object sender, EventArgs e)
@@ -290,6 +300,7 @@ namespace MDIMonitor_CS
             CurForm[0].Parent = this.StripContainer.ContentPanel;
             CurForm[0].Show();
             CurForm[0].BringToFront();
+            this.Text = FromTitle + " - 监测窗口1";
         }
 
         private void 监控MenuItem_monitor2_Click(object sender, EventArgs e)
@@ -299,6 +310,7 @@ namespace MDIMonitor_CS
             CurForm[1].Parent = this.StripContainer.ContentPanel;
             CurForm[1].Show();
             CurForm[1].BringToFront();
+            this.Text = FromTitle + " - 监测窗口2";
         }
 
         private void MenuItem_monitor3_Click(object sender, EventArgs e)
@@ -308,6 +320,7 @@ namespace MDIMonitor_CS
             CurForm[2].Parent = this.StripContainer.ContentPanel;
             CurForm[2].Show();
             CurForm[2].BringToFront();
+            this.Text = FromTitle + " - 监测窗口3";
         }
 
         private void MenuItem_monitor4_Click(object sender, EventArgs e)
@@ -317,6 +330,23 @@ namespace MDIMonitor_CS
             CurForm[3].Parent = this.StripContainer.ContentPanel;
             CurForm[3].Show();
             CurForm[3].BringToFront();
+            this.Text = FromTitle + " - 监测窗口4";
+        }
+
+        private void menu_Help_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Application.StartupPath.ToString() + "\\help.chm");
+        }
+
+        private void menu_Registr_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menu_About_Click(object sender, EventArgs e)
+        {
+            AboutBox about = new AboutBox();
+            about.Show();
         }
 
     }
