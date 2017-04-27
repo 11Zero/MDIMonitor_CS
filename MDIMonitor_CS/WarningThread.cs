@@ -522,12 +522,12 @@ namespace MDIMonitor_CS
             portWarn = new SerialPort();
             this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
             //Parent.SerialForm.cbox_Warn_PortName.Enabled = false;
-            Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
-            foreach (string s in pc.Ports.SerialPortNames)
+            //Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
+            foreach (string s in SerialPort.GetPortNames())
             {
                 Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
             }
-            if (pc.Ports.SerialPortNames.Contains(UserThread.getXmlValue("COM", "id", "Warn", "Last_id")))
+            if (SerialPort.GetPortNames().Contains(UserThread.getXmlValue("COM", "id", "Warn", "Last_id")))
             {
                 Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(UserThread.getXmlValue("COM", "id", "Warn", "Last_id"));
             }

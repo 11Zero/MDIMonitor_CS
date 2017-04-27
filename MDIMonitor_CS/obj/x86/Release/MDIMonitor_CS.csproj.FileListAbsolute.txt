@@ -15,3 +15,4 @@ D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.WelcomeForm.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Login.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.AboutBox.resources

@@ -44,15 +44,15 @@
             this.menu_single_measure = new System.Windows.Forms.ToolStripMenuItem();
             this.串口设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_SerialForm = new System.Windows.Forms.ToolStripMenuItem();
+            this.用户帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Help = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_Registr = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_About = new System.Windows.Forms.ToolStripMenuItem();
             this.StripContainer = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_warning = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_phone = new System.Windows.Forms.ToolStripStatusLabel();
-            this.用户帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Help = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_Registr = new System.Windows.Forms.ToolStripMenuItem();
-            this.menu_About = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.StripContainer.BottomToolStripPanel.SuspendLayout();
             this.StripContainer.TopToolStripPanel.SuspendLayout();
@@ -158,7 +158,7 @@
             // 
             this.menu_Userdat.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_Userdat.Name = "menu_Userdat";
-            this.menu_Userdat.Size = new System.Drawing.Size(124, 22);
+            this.menu_Userdat.Size = new System.Drawing.Size(152, 22);
             this.menu_Userdat.Text = "测量数值";
             this.menu_Userdat.Click += new System.EventHandler(this.menu_Userdat_Click);
             // 
@@ -168,7 +168,7 @@
             this.menu_auto.Checked = true;
             this.menu_auto.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menu_auto.Name = "menu_auto";
-            this.menu_auto.Size = new System.Drawing.Size(124, 22);
+            this.menu_auto.Size = new System.Drawing.Size(152, 22);
             this.menu_auto.Text = "自动测量";
             this.menu_auto.Click += new System.EventHandler(this.menu_auto_Click);
             // 
@@ -176,7 +176,7 @@
             // 
             this.menu_single_measure.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_single_measure.Name = "menu_single_measure";
-            this.menu_single_measure.Size = new System.Drawing.Size(124, 22);
+            this.menu_single_measure.Size = new System.Drawing.Size(152, 22);
             this.menu_single_measure.Text = "单次测量";
             this.menu_single_measure.Click += new System.EventHandler(this.menu_single_measure_Click);
             // 
@@ -195,6 +195,40 @@
             this.menu_SerialForm.Size = new System.Drawing.Size(152, 22);
             this.menu_SerialForm.Text = "串口参数";
             this.menu_SerialForm.Click += new System.EventHandler(this.menu_SerialForm_Click);
+            // 
+            // 用户帮助ToolStripMenuItem
+            // 
+            this.用户帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_Help,
+            this.menu_Registr,
+            this.menu_About});
+            this.用户帮助ToolStripMenuItem.Name = "用户帮助ToolStripMenuItem";
+            this.用户帮助ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.用户帮助ToolStripMenuItem.Text = "用户帮助";
+            // 
+            // menu_Help
+            // 
+            this.menu_Help.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_Help.Name = "menu_Help";
+            this.menu_Help.Size = new System.Drawing.Size(152, 22);
+            this.menu_Help.Text = "操作指南";
+            this.menu_Help.Click += new System.EventHandler(this.menu_Help_Click);
+            // 
+            // menu_Registr
+            // 
+            this.menu_Registr.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_Registr.Name = "menu_Registr";
+            this.menu_Registr.Size = new System.Drawing.Size(152, 22);
+            this.menu_Registr.Text = "注册管理";
+            this.menu_Registr.Click += new System.EventHandler(this.menu_Registr_Click);
+            // 
+            // menu_About
+            // 
+            this.menu_About.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_About.Name = "menu_About";
+            this.menu_About.Size = new System.Drawing.Size(152, 22);
+            this.menu_About.Text = "关于我们";
+            this.menu_About.Click += new System.EventHandler(this.menu_About_Click);
             // 
             // StripContainer
             // 
@@ -259,37 +293,6 @@
             this.statusLabel_phone.Text = "暂无通信指令";
             this.statusLabel_phone.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // 用户帮助ToolStripMenuItem
-            // 
-            this.用户帮助ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_Help,
-            this.menu_Registr,
-            this.menu_About});
-            this.用户帮助ToolStripMenuItem.Name = "用户帮助ToolStripMenuItem";
-            this.用户帮助ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
-            this.用户帮助ToolStripMenuItem.Text = "用户帮助";
-            // 
-            // menu_Help
-            // 
-            this.menu_Help.Name = "menu_Help";
-            this.menu_Help.Size = new System.Drawing.Size(152, 22);
-            this.menu_Help.Text = "操作指南";
-            this.menu_Help.Click += new System.EventHandler(this.menu_Help_Click);
-            // 
-            // menu_Registr
-            // 
-            this.menu_Registr.Name = "menu_Registr";
-            this.menu_Registr.Size = new System.Drawing.Size(152, 22);
-            this.menu_Registr.Text = "注册管理";
-            this.menu_Registr.Click += new System.EventHandler(this.menu_Registr_Click);
-            // 
-            // menu_About
-            // 
-            this.menu_About.Name = "menu_About";
-            this.menu_About.Size = new System.Drawing.Size(152, 22);
-            this.menu_About.Text = "关于我们";
-            this.menu_About.Click += new System.EventHandler(this.menu_About_Click);
-            // 
             // FrameWin
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -329,7 +332,7 @@
         private System.Windows.Forms.ToolStripMenuItem 传感参数ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menu_Userdat;
         public System.Windows.Forms.ToolStripContainer StripContainer;
-        private System.Windows.Forms.ToolStripMenuItem menu_single_measure;
+        public System.Windows.Forms.ToolStripMenuItem menu_single_measure;
         public System.Windows.Forms.ToolStripMenuItem menu_auto;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel_warning;
         public System.Windows.Forms.ToolStripStatusLabel statusLabel_phone;

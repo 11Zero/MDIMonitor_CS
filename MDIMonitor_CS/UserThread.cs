@@ -18,6 +18,7 @@ namespace MDIMonitor_CS
     {
         public SerialPort portSensor = null;
         public SerialPort portPhone = null;
+        public bool portSensorScanStop = true;
         //SerialPort portWarn = null;
         private bool portSensor_ShouldOpen = false;
         private bool portPhone_ShouldOpen = false;
@@ -33,10 +34,13 @@ namespace MDIMonitor_CS
         private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
         public delegate void GridDelegate(DataTable _dataTable);
+        public delegate object delegateGetTextCallBack(object target);
         private object invokeGridData = new object();
         private static string xmlName;
         public int totalNodeCount = 0;
         public int[] nodeChNum = null;
+        public DateTime warn_time_1 = new DateTime(1970,1,1,0,0,0);
+        public DateTime warn_time_2 = new DateTime(1970, 1, 1, 0, 0, 0);
         public int ScanTimeStep = 2000;//默认延时2s间隔遍历节点一次
         public string[] phone_sms_send = new string[2];
         public int delayTime = 500;//默认延时0.5s间隔扫描每个节点
@@ -367,7 +371,7 @@ namespace MDIMonitor_CS
             else
             {
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName);
-                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                if (Parent.SerialForm.cbox_Phone_PortName.SelectedText == Parent.SerialForm.cbox_Sensor_PortName.SelectedText)
                 {
                     if (portSensor.IsOpen)
                     {
@@ -441,13 +445,13 @@ namespace MDIMonitor_CS
                         portPhone.StopBits = StopBits.Two;
                 }
             }
-            //if (!portPhone.IsOpen)
-            //{
+            if (!portPhone.IsOpen)
+            {
                 portPhone.ReceivedBytesThreshold = 1;
                 portPhone.ReadBufferSize = 2048;
                 portPhone.WriteBufferSize = 2048;
                 portPhone.Encoding = System.Text.Encoding.ASCII;
-            //}
+            }
 
             //根据选择的数据，设置奇偶校验位
 
@@ -456,6 +460,7 @@ namespace MDIMonitor_CS
             if (!PhoneDataRecFuncSetted)
             {
                 portPhone.DataReceived += new SerialDataReceivedEventHandler(PhoneRecFun);//DataPhoneeived事件委托
+                //portPhone.DataReceived -= new SerialDataReceivedEventHandler(PhoneRecFun);
                 PhoneDataRecFuncSetted = !PhoneDataRecFuncSetted;
             }
             //打开串口的方法
@@ -934,6 +939,8 @@ namespace MDIMonitor_CS
 
                     int bufferSize = portSensor.ReadBufferSize;
                     byte[] readBuffer = new byte[bufferSize];
+                    if (portSensor.BytesToRead <= 0)
+                        return;
                     int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
                     if (bufferLength == 21)//
                     {
@@ -1026,7 +1033,14 @@ namespace MDIMonitor_CS
             {
                 string warninfo = String.Format("节点{0}通道{1}二级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_2, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
-                this.Parent.PostMessage(7, 2);//发送二级报警指令
+                TimeSpan timespan = DateTime.Now - warn_time_2;
+                if (timespan.Seconds > 5)
+                {
+                    this.Parent.PostMessage(7, 2);//发送二级报警指令
+                    warn_time_2 = DateTime.Now;
+                }
+                else
+                    return false;
                 if (!this.Parent.warningThread.portWarn.IsOpen)
                     return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
@@ -1045,7 +1059,15 @@ namespace MDIMonitor_CS
             {
                 string warninfo = String.Format("节点{0}通道{1}一级报警，时间{6}，报警限值{2}{3}，实测值{4}{3}，位置{5}", node, ch, WarningVal_1, dataUnit[6], value, dataUnit[7], dataUnit[3]);
                 this.Parent.statusLabel_warning.Text = warninfo;
-                this.Parent.PostMessage(6, 2);//发送一级报警指令
+                TimeSpan timespan = DateTime.Now - warn_time_1;
+                if (timespan.Seconds > 5)
+                {
+                    this.Parent.PostMessage(6, 2);//发送二级报警指令
+                    warn_time_1 = DateTime.Now;
+                }
+                else
+                    return false;
+                //this.Parent.PostMessage(6, 2);//发送一级报警指令
                 if (!this.Parent.warningThread.portWarn.IsOpen)
                     return false;
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
@@ -1404,6 +1426,11 @@ namespace MDIMonitor_CS
             return File.Exists(path + "\\" + fileName);
         }
 
+        private bool TurnToZeros(string[] datastr)
+        {
+            return true;
+        }
+
 
         /// <summary>
         /// 将扫描到的节点数据写入数据库
@@ -1460,6 +1487,30 @@ namespace MDIMonitor_CS
             }
         }
 
+        //public string GetText(object target)//delegate
+        //{
+        //    string result = "";
+        //    if (target !=null)
+        //    {
+        //        if (target is ComboBox)
+        //            result = (string)((ComboBox)target).Invoke(new delegateGetTextCallBack(GetTextCallBack),null);
+        //        if (target is TextBox)
+        //            result = (string)((TextBox)target).Invoke(new delegateGetTextCallBack(GetTextCallBack),null);
+        //        //result = (string)target.Invoke(DispatcherPriority.Normal, new delegateGetTextCallBack(GetTextCallBack), object_id);
+        //    }
+        //    return result;
+        //}
+
+
+        //private object GetTextCallBack(object target)
+        //{
+        //    string result = "";
+        //    if (target is ComboBox)
+        //        result = ((ComboBox)target).SelectedItem.ToString();
+        //    if (target is TextBox)
+        //        result = ((TextBox)target).Text;
+        //    return result;
+        //}
 
         private void msgFunction_1()//单次扫描端口数据
         {
@@ -1525,16 +1576,18 @@ namespace MDIMonitor_CS
             //this.Parent.this.m_ParentForm.statusLabel.Text = "就绪";
             //实例化
             //这里需要添加引用Microsoft.VisualBasic的引用，提供操作计算机组件（如：音频，时钟，键盘文件系统等）的属性
-            Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
+            //Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
             //循环该计算机上所有串行端口的集合
             #region Sensor控件初始化
             this.Parent.SerialForm.check_SensorPort.Checked = portSensor_ShouldOpen;
             //Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
-            foreach (string s in pc.Ports.SerialPortNames)
+            //string[] portarray = SerialPort.GetPortNames();
+            foreach (string s in SerialPort.GetPortNames())//pc.Ports.SerialPortNames)
             {
                 Parent.SerialForm.cbox_Sensor_PortName.Items.Add(s);
             }
-            if (pc.Ports.SerialPortNames.Contains(getXmlValue("COM", "id", "Sensor", "Last_id")))
+            
+            if (SerialPort.GetPortNames().Contains(getXmlValue("COM", "id", "Sensor", "Last_id")))
             {
                 Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(getXmlValue("COM", "id", "Sensor", "Last_id"));
             }
@@ -1580,11 +1633,12 @@ namespace MDIMonitor_CS
             #region Phone控件初始化
             this.Parent.SerialForm.check_PhonePort.Checked = portPhone_ShouldOpen;
             //Parent.SerialForm.cbox_Phone_PortName.Enabled = false;
-            foreach (string s in pc.Ports.SerialPortNames)
+            foreach (string s in SerialPort.GetPortNames())//pc.Ports.SerialPortNames)
             {
                 Parent.SerialForm.cbox_Phone_PortName.Items.Add(s);
             }
-            if (pc.Ports.SerialPortNames.Contains(getXmlValue("COM", "id", "Phone", "Last_id")))
+            //string thisstr = getXmlValue("COM", "id", "Phone", "Last_id");
+            if (SerialPort.GetPortNames().Contains(getXmlValue("COM", "id", "Phone", "Last_id")))
             {
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(getXmlValue("COM", "id", "Phone", "Last_id"));
             }
@@ -1694,7 +1748,14 @@ namespace MDIMonitor_CS
             {
                 //portSensor_ShouldOpen = !portSensor_ShouldOpen;
                 if (portSensor.IsOpen)// && !portSensor_ShouldOpen
+                {
+                    //portSensor.DataReceived -= new SerialDataReceivedEventHandler(SensorRecFun);
+                    //SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
+                    auto_measure = false;
+                    this.Parent.menu_auto.Checked = false;
+                    portSensor.ReadExisting();
                     portSensor.Close();
+                }
                 else
                     SetSensorPort();
                 //if (!portSensor.IsOpen && portSensor_ShouldOpen)
@@ -1707,14 +1768,18 @@ namespace MDIMonitor_CS
                 if (!portSensor.IsOpen)
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已关闭");
-                    //this.Parent.menu_auto.Checked = false;
+                    this.Parent.menu_auto.Checked = false;
+                    this.Parent.menu_auto.Enabled = false;
+                    this.Parent.menu_single_measure.Enabled = false;
                 }
                 else
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已开启");
-                    //this.Parent.menu_auto.Enabled = true;
+                    this.Parent.menu_auto.Checked = false;
+                    this.Parent.menu_auto.Enabled = true;
+                    this.Parent.menu_single_measure.Enabled = true;
                 }
-                this.Parent.menu_auto.Enabled = false;
+                //this.Parent.menu_auto.Enabled = false;
                 return;
             }
             catch (Exception)
@@ -1731,7 +1796,12 @@ namespace MDIMonitor_CS
                     portPhone = new SerialPort();
                 portPhone_ShouldOpen = !portPhone_ShouldOpen;
                 if (portPhone.IsOpen && !portPhone_ShouldOpen)
+                {
+                    portPhone.DataReceived -= new SerialDataReceivedEventHandler(PhoneRecFun);
+                    PhoneDataRecFuncSetted = !PhoneDataRecFuncSetted;
+                    portPhone.ReadExisting();
                     portPhone.Close();
+                }
                 if (!portPhone.IsOpen && portPhone_ShouldOpen)
                 {
                     if (!SetPhonePort())
