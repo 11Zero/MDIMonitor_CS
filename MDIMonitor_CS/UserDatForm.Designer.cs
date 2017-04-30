@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_OK = new System.Windows.Forms.Button();
             this.dataGrid_InitialVal = new System.Windows.Forms.DataGridView();
             this.radio_InitialVal = new System.Windows.Forms.RadioButton();
@@ -37,6 +37,8 @@
             this.radio_Unit = new System.Windows.Forms.RadioButton();
             this.radio_WarningVal1 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radio_Name = new System.Windows.Forms.RadioButton();
+            this.radio_Position = new System.Windows.Forms.RadioButton();
             this.radio_Mark = new System.Windows.Forms.RadioButton();
             this.radio_WarningVal2 = new System.Windows.Forms.RadioButton();
             this.btn_NO = new System.Windows.Forms.Button();
@@ -55,8 +57,6 @@
             this.radio_stage4 = new System.Windows.Forms.RadioButton();
             this.radio_stage2 = new System.Windows.Forms.RadioButton();
             this.radio_stage3 = new System.Windows.Forms.RadioButton();
-            this.radio_Position = new System.Windows.Forms.RadioButton();
-            this.radio_Name = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid_InitialVal)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_measure_step)).BeginInit();
@@ -81,22 +81,24 @@
             // 
             this.dataGrid_InitialVal.AllowUserToAddRows = false;
             this.dataGrid_InitialVal.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGrid_InitialVal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.InactiveCaption;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGrid_InitialVal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGrid_InitialVal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGrid_InitialVal.Location = new System.Drawing.Point(12, 8);
             this.dataGrid_InitialVal.Name = "dataGrid_InitialVal";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dataGrid_InitialVal.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dataGrid_InitialVal.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGrid_InitialVal.RowTemplate.Height = 23;
             this.dataGrid_InitialVal.Size = new System.Drawing.Size(531, 265);
             this.dataGrid_InitialVal.TabIndex = 0;
+            this.dataGrid_InitialVal.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_InitialVal_CellEndEdit);
+            this.dataGrid_InitialVal.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_InitialVal_CellValueChanged);
             // 
             // radio_InitialVal
             // 
@@ -158,6 +160,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(171, 128);
             this.panel1.TabIndex = 4;
+            // 
+            // radio_Name
+            // 
+            this.radio_Name.AutoSize = true;
+            this.radio_Name.Location = new System.Drawing.Point(107, 35);
+            this.radio_Name.Name = "radio_Name";
+            this.radio_Name.Size = new System.Drawing.Size(47, 16);
+            this.radio_Name.TabIndex = 6;
+            this.radio_Name.TabStop = true;
+            this.radio_Name.Text = "名称";
+            this.radio_Name.UseVisualStyleBackColor = true;
+            this.radio_Name.CheckedChanged += new System.EventHandler(this.radio_Name_CheckedChanged);
+            // 
+            // radio_Position
+            // 
+            this.radio_Position.AutoSize = true;
+            this.radio_Position.Location = new System.Drawing.Point(107, 13);
+            this.radio_Position.Name = "radio_Position";
+            this.radio_Position.Size = new System.Drawing.Size(47, 16);
+            this.radio_Position.TabIndex = 5;
+            this.radio_Position.TabStop = true;
+            this.radio_Position.Text = "位置";
+            this.radio_Position.UseVisualStyleBackColor = true;
+            this.radio_Position.CheckedChanged += new System.EventHandler(this.radio_Position_CheckedChanged);
             // 
             // radio_Mark
             // 
@@ -343,30 +369,6 @@
             this.radio_stage3.Text = "阶段3";
             this.radio_stage3.UseVisualStyleBackColor = true;
             this.radio_stage3.CheckedChanged += new System.EventHandler(this.radio_stage3_CheckedChanged);
-            // 
-            // radio_Position
-            // 
-            this.radio_Position.AutoSize = true;
-            this.radio_Position.Location = new System.Drawing.Point(107, 13);
-            this.radio_Position.Name = "radio_Position";
-            this.radio_Position.Size = new System.Drawing.Size(47, 16);
-            this.radio_Position.TabIndex = 5;
-            this.radio_Position.TabStop = true;
-            this.radio_Position.Text = "位置";
-            this.radio_Position.UseVisualStyleBackColor = true;
-            this.radio_Position.CheckedChanged += new System.EventHandler(this.radio_Position_CheckedChanged);
-            // 
-            // radio_Name
-            // 
-            this.radio_Name.AutoSize = true;
-            this.radio_Name.Location = new System.Drawing.Point(107, 35);
-            this.radio_Name.Name = "radio_Name";
-            this.radio_Name.Size = new System.Drawing.Size(47, 16);
-            this.radio_Name.TabIndex = 6;
-            this.radio_Name.TabStop = true;
-            this.radio_Name.Text = "名称";
-            this.radio_Name.UseVisualStyleBackColor = true;
-            this.radio_Name.CheckedChanged += new System.EventHandler(this.radio_Name_CheckedChanged);
             // 
             // UserDatForm
             // 

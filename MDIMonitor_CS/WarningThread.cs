@@ -20,6 +20,7 @@ namespace MDIMonitor_CS
         int cmd_count = 0;
         public byte[] Warn_back_buffer = new byte[8];
         public int Warn_cmd_id = -1;
+        public int warn_flag = 0;//警报器当前标志0为不报警，1为一级，2为二级；
         private static string xmlName;
         private bool end = false;//结束线程标志
         private bool kill = false;//终结线程标志
@@ -592,6 +593,7 @@ namespace MDIMonitor_CS
             }   
             Warn_cmd_buffer.buffer[6] = 0x01;
             portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);
+            warn_flag = 1;
             //msgFunction_4();
             //msgFunction_3();
             //portWarn.Write(Warn_cmd_buffer.buffer, 0, Warn_cmd_buffer.buffer.Length);

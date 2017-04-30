@@ -23,3 +23,21 @@ D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Deb
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.WelcomeForm.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.Login.resources
 D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.AboutBox.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.exe.config
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.exe
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.pdb
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.exe
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\MDIMonitor_CS.pdb
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\System.Data.SQLite.dll
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csprojResolveAssemblyReference.cache
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.AboutBox.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.CurGridDataForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.CurDataForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.FrameWin.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.HisDataForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.Login.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.Properties.Resources.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.SerialPortForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.UserDatForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.WelcomeForm.resources
+E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csproj.GenerateResource.Cache

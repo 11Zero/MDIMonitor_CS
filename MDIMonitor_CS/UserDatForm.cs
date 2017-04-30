@@ -20,6 +20,8 @@ namespace MDIMonitor_CS
         //public DataView[] dataView = null;
         public int cur_dataGrid_id = new int();
         private bool InitFlag = false;
+        public int step_flag = 0;
+        public int user_flag = 0;
         public UserDatForm(FrameWin parent)
         {
             InitializeComponent();
@@ -95,96 +97,6 @@ namespace MDIMonitor_CS
             }
 
             InitXmlValue();
-            //numeric_measure_step.Increment = 500;
-            //numeric_node_num.Increment = 1;
-            //numeric_cur_node.Increment = 1;
-            //numeric_ch_of_curnode.Increment = 1;
-
-            //numeric_measure_step.Minimum = 500;
-            //numeric_measure_step.Maximum = 20000;
-            //if (this.m_ParentForm.MeasureThread.ScanTimeStep <= numeric_measure_step.Maximum)
-            //    numeric_measure_step.Value = this.m_ParentForm.MeasureThread.ScanTimeStep;
-            //else
-            //    numeric_measure_step.Value = numeric_measure_step.Minimum;
-            
-            //numeric_node_num.Minimum = 0;
-            //numeric_node_num.Maximum = 4;
-            //if (this.m_ParentForm.thread.totalNodeCount <= numeric_node_num.Maximum)
-            //    numeric_node_num.Value = this.m_ParentForm.thread.totalNodeCount;
-            //else
-            //{
-            //    numeric_node_num.Value = 0;
-            //    this.m_ParentForm.statusLabel.Text = String.Format("节点数目超过4,请检查config文件");
-            //    numeric_cur_node.Value = 0;
-            //    numeric_ch_of_curnode.Value = 0;
-            //    numeric_cur_node.Enabled = false;
-            //    numeric_ch_of_curnode.Enabled = false;
-            //    return;
-            //}
-
-            //numeric_cur_node.Minimum = 0;
-            //numeric_cur_node.Maximum = numeric_node_num.Value;
-            //numeric_cur_node.Value = 1;
-            //numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[0];
-
-
-            //numeric_ch_of_curnode.Minimum = 0;
-            //numeric_ch_of_curnode.Maximum = 8;
-
-            //if (numeric_node_num.Value == 0)
-            //{
-            //    numeric_cur_node.Value = 0;
-            //    numeric_cur_node.Enabled = false;
-            //}
-            //else
-            //{
-            //}
-            //SaveDataGridView(0, ref dataGrid_InitialVal);
-            //SaveDataGridView(1, ref dataGrid_Sensitivity);
-            //SaveDataGridView(2, ref dataGrid_Unit);
-            //SaveDataGridView(3, ref dataGrid_WarningVal);
-            //radio_Senitivity_CheckedChanged(null,null);
-            ////dataGrid_Sensitivity.Visible = true;
-            //radio_Senitivity.Checked = true;
-            //cur_dataGrid_id = 0;
-            //LoadDataGridView(cur_dataGrid_id);
-            //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
-
-            //cur_dataGrid_id = 1;
-            //LoadDataGridView(cur_dataGrid_id);
-            //dataGrid_Sensitivity.DataSource = data_dataGridView[cur_dataGrid_id];
-
-            //cur_dataGrid_id = 2;
-            //LoadDataGridView(cur_dataGrid_id);
-            //dataGrid_Unit.DataSource = data_dataGridView[cur_dataGrid_id];
-
-            //cur_dataGrid_id = 3;
-            //LoadDataGridView(cur_dataGrid_id);
-            //dataGrid_WarningVal.DataSource = data_dataGridView[cur_dataGrid_id];
-
-            //radio_InitialVal.Checked = true;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    cur_dataGrid_id = i;
-            //    this.m_ParentForm.PostMessage(4, 1);
-            //}
-            //dataGrid_InitialVal.DataSource = data_dataGridView[0];
-            //dataGrid_Sensitivity.DataSource = data_dataGridView[1];
-            //dataGrid_Unit.DataSource = data_dataGridView[2];
-            //dataGrid_WarningVal.DataSource = data_dataGridView[3];
-
-            //radio_InitialVal.Checked = true;
-            //cur_dataGrid_id = 0;
-            //LoadDataGridView(cur_dataGrid_id);
-            //dataGrid_InitialVal.Visible = radio_InitialVal.Checked;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    dataGridView[i].DataSource = data_dataGridView[i];
-            //    dataGridView[i].Size = this.panel_DataGrid.Size;
-            //    dataGridView[i].Parent = this.panel_DataGrid;
-            //    dataGridView[i].CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            //    dataGridView[i].AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            //}
         }
 
         private void InitXmlValue()
@@ -258,91 +170,7 @@ namespace MDIMonitor_CS
                 }
             }
 
-            //if (dataGrid_id > 3)
-            //    return;
-            ////this.m_ParentForm.PostMessage(4, 1);
-            ////ref DataGridView dataview = dataGrid_InitialVal;
-            //if (InitFlag)
-            //{
-            //    //string str = databack_dataGridView[dataGrid_id].Rows[0][1].ToString();
-            //    //str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
-            //    data_dataGridView[dataGrid_id] = databack_dataGridView[dataGrid_id].Copy();//恢复本线程中未修改的数据
-            //    //this.m_ParentForm.UIthread.userDataTable[dataGrid_id] = databack_dataGridView[dataGrid_id].Copy();//恢复UI线程中未修改的数据
-            //    //str = databack_dataGridView[dataGrid_id].Rows[0][1].ToString();
-            //    //str = data_dataGridView[dataGrid_id].Rows[0][1].ToString();
 
-            //}
-            //refDataGridView.DataSource = data_dataGridView[dataGrid_id];
-            //dataGrid_InitialVal.Visible = true;
-            //dataGrid_Sensitivity.Visible = false;
-            //dataGrid_Unit.Visible = false;
-            //dataGrid_WarningVal.Visible = false;
-            ////dataGrid_InitialVal.Visible = radio_InitialVal.Checked;
-            ////dataGrid_Sensitivity.Visible = radio_Senitivity.Checked;
-            ////dataGrid_Unit.Visible = radio_Unit.Checked;
-            ////dataGrid_WarningVal.Visible = radio_WarningVal.Checked;
-            //if (refDataGridView.Columns.Count > 0)
-            //{
-            //    refDataGridView.Columns[0].Width = 50;
-            //    refDataGridView.Columns[0].HeaderText = "节点";
-            //    refDataGridView.Columns[0].Frozen = true;
-            //    refDataGridView.Columns[0].ReadOnly = true;
-            //    foreach (DataGridViewColumn item in refDataGridView.Columns)
-            //    {
-            //        item.SortMode = DataGridViewColumnSortMode.NotSortable;
-            //    }
-            //}
-            //if (dataGrid_Sensitivity.Columns.Count > 0)
-            //{
-            //    dataGrid_Sensitivity.Columns[0].Frozen = true;
-            //    foreach (DataGridViewColumn item in dataGrid_InitialVal.Columns)
-            //    {
-            //        item.SortMode = DataGridViewColumnSortMode.NotSortable;
-            //    }
-            //}
-
-            //if (dataGrid_Unit.Columns.Count > 0)
-            //{
-            //    dataGrid_Unit.Columns[0].Frozen = true;
-            //    foreach (DataGridViewColumn item in dataGrid_InitialVal.Columns)
-            //    {
-            //        item.SortMode = DataGridViewColumnSortMode.NotSortable;
-            //    }
-            //}
-
-            //if (dataGrid_WarningVal.Columns.Count > 0)
-            //{
-            //    dataGrid_WarningVal.Columns[0].Frozen = true;
-            //    foreach (DataGridViewColumn item in dataGrid_InitialVal.Columns)
-            //    {
-            //        item.SortMode = DataGridViewColumnSortMode.NotSortable;
-            //    }
-            //}
-
-
-
-            //switch (dataGrid_id)
-            //{
-            //    case 0:
-            //        { 
-            //            dataGrid_InitialVal.
-            //        }break;
-
-            //    default:
-            //        break;
-            //}
-            //for (int i = 0; i < 4; i++)
-            //{
-
-            //}
-            //dataGridView[dataGrid_id].Show();
-            //dataGridView[dataGrid_id].DataSource = data_dataGridView[dataGrid_id];
-            //dataGridView[dataGrid_id].Show();
-            //dataGridView[dataGrid_id].Size = this.panel_DataGrid.Size;
-            //dataGridView[dataGrid_id].Parent = this.panel_DataGrid;
-            //dataGridView[dataGrid_id].CellBorderStyle = DataGridViewCellBorderStyle.Single;
-            //dataGridView[dataGrid_id].AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-            // panel_DataGrid.Controls.Clear();
         }
 
         private void SaveDataGridView(int dataGrid_id)
@@ -385,10 +213,12 @@ namespace MDIMonitor_CS
             SaveDataGridView(4);
             for (int i = 0; i < this.m_ParentForm.UIthread.userDataTable.Count; i++)
             {
+                
                 //string str = data_dataGridView[i].Rows[0][1].ToString();
                 this.m_ParentForm.UIthread.userDataTable[i] = data_dataGridView[i].Copy();
                 //databack_dataGridView[i] = data_dataGridView[i].Copy();
             }
+            //dataGrid_InitialVal.CellValueChanged
             this.m_ParentForm.UIthread.AdminDataTable = AdminTable.Copy();
             //numeric_measure_step.Increment = 500;
             //numeric_node_num.Increment = 1;
@@ -453,6 +283,7 @@ namespace MDIMonitor_CS
 
         private void radio_InitialVal_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 0;
             cur_dataGrid_id = 0;
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
@@ -461,6 +292,7 @@ namespace MDIMonitor_CS
 
         private void radio_Senitivity_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 1;
             cur_dataGrid_id = 1;
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
@@ -471,6 +303,7 @@ namespace MDIMonitor_CS
 
         private void radio_Unit_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 7;
             cur_dataGrid_id = 2;
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
@@ -480,6 +313,7 @@ namespace MDIMonitor_CS
 
         private void radio_WarningVal1_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 3;
             cur_dataGrid_id = 3;
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
@@ -489,6 +323,7 @@ namespace MDIMonitor_CS
 
         private void radio_WarningVal2_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 4;
             cur_dataGrid_id = 4;
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
@@ -497,12 +332,14 @@ namespace MDIMonitor_CS
         }
         private void radio_Position_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 5;
             cur_dataGrid_id =5;
             LoadDataGridView();
         }
 
         private void radio_Name_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 6;
             cur_dataGrid_id = 6;
             LoadDataGridView();
         }
@@ -510,6 +347,7 @@ namespace MDIMonitor_CS
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
+            user_flag = 2;
             cur_dataGrid_id = 7;
             //DataTable dt = new DataTable();
             //dt.Columns.Add("预留1");
@@ -548,6 +386,7 @@ namespace MDIMonitor_CS
 
         private void radio_stage1_CheckedChanged(object sender, EventArgs e)
         {
+            step_flag = 0;
             this.m_ParentForm.UIthread.stage = 1;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
             //Thread.Sleep(10);
@@ -557,6 +396,7 @@ namespace MDIMonitor_CS
 
         private void radio_stage2_CheckedChanged(object sender, EventArgs e)
         {
+            step_flag = 1;
             this.m_ParentForm.UIthread.stage = 2;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
             //Thread.Sleep(10);
@@ -566,6 +406,7 @@ namespace MDIMonitor_CS
 
         private void radio_stage3_CheckedChanged(object sender, EventArgs e)
         {
+            step_flag = 2;
             this.m_ParentForm.UIthread.stage = 3;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
             //Thread.Sleep(10);
@@ -575,6 +416,7 @@ namespace MDIMonitor_CS
 
         private void radio_stage4_CheckedChanged(object sender, EventArgs e)
         {
+            step_flag = 3;
             this.m_ParentForm.UIthread.stage = 4;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
             //Thread.Sleep(10);
@@ -584,11 +426,36 @@ namespace MDIMonitor_CS
 
         private void radio_stage5_CheckedChanged(object sender, EventArgs e)
         {
+            step_flag = 5;
             this.m_ParentForm.UIthread.stage = 5;
             this.m_ParentForm.PostMessage(4, 1);//更新现阶段数据库
             //Thread.Sleep(10);
             //dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             LoadDataGridView();
+        }
+
+        private void dataGrid_InitialVal_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+        }
+
+        private void dataGrid_InitialVal_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            DataTable dt = new DataTable();
+            if (user_flag == 2)
+            {
+                dt = AdminTable.Copy();
+                dt.Rows.Clear();
+                for (int i = 0; i < dataGrid_InitialVal.Rows.Count; i++)
+                {
+                    string str = dataGrid_InitialVal.Rows[i].Cells[1].Value.ToString();
+                    if (dataGrid_InitialVal.Rows[i].Cells[1].ToString() != "")
+                    {
+                        dt.Rows.Add(i + 1, dataGrid_InitialVal.Rows[i].Cells[1].Value.ToString(),
+                            dataGrid_InitialVal.Rows[i].Cells[2].Value.ToString(), dataGrid_InitialVal.Rows[i].Cells[3].Value);
+                    }
+                }
+            }
+            AdminTable = dt.Copy();
         }
 
     }
