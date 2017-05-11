@@ -20,6 +20,7 @@ namespace MDIMonitor_CS
         private DateTime nowtime = new DateTime();
         public FileInfo openFile = null;
         public int totalRows = 0;
+        private string sql_date = "";
         //private SQLiteConnection dataBase = null;
         private SQLiteCommand sqlCommand = null;
         private int[] TableRowsCount = new int[12];
@@ -71,8 +72,11 @@ namespace MDIMonitor_CS
         }
         private void InitChart()//初始化chart
         {
+
             dataTable.Columns.Add("时间", typeof(String));
             dataTable.Columns.Add("数据", typeof(double));
+            dataTable.Columns.Add("单位", typeof(String));
+            dataTable.Columns.Add("位置", typeof(String));
             Random ran = new Random();
             DateTime stime = new DateTime(2014, 1, 1, 0, 0, 0);
             DateTime etime = new DateTime(2014, 1, 1, 0, 0, 1);
@@ -94,6 +98,12 @@ namespace MDIMonitor_CS
             //HisChart.ChartAreas[0].AxisX.ScrollBar.Size = 11;
             HisChart.ChartAreas[0].AxisX.ScaleView.Size = 35;//可视区域数据点数 
             HisChart.ChartAreas[0].AxisX.ScaleView.MinSize = 4;
+            HisChart.ChartAreas[0].BorderColor = Color.Black;
+            HisChart.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
+
+            HisChart.ChartAreas[0].CursorX.IsUserEnabled = true;
+            HisChart.ChartAreas[0].CursorX.LineColor = Color.Green;
+            HisChart.ChartAreas[0].CursorX.LineDashStyle = ChartDashStyle.DashDot;
             //HisChart.ChartAreas[0].AxisX.ScaleView.Position = HisChart.Series[0].Points.Count - HisChart.ChartAreas[0].AxisX.ScaleView.Size;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.ButtonColor = System.Drawing.Color.Silver;
             //HisChart.ChartAreas[0].AxisX.ScrollBar.LineColor = System.Drawing.Color.Black;
@@ -141,6 +151,7 @@ namespace MDIMonitor_CS
                 text_path.Text = folderBrowser.SelectedPath;
                 this.listView_File.BeginUpdate();   //数据更新，UI暂时挂起，直到EndUpdate绘制控件，可以有效避免闪烁并大大提高加载速度 
                 DirectoryInfo theFolder = new DirectoryInfo(folderBrowser.SelectedPath);
+                sql_date = theFolder.Name;
                 FileInfo[] thefileInfo = theFolder.GetFiles("*.*", SearchOption.TopDirectoryOnly);
                 foreach (FileInfo NextFile in thefileInfo)  //遍历文件
                 {
@@ -349,6 +360,8 @@ namespace MDIMonitor_CS
                     DataRow row = dataTable.NewRow();
                     row["时间"] = sqlDataTable.Rows[i][1];
                     row["数据"] = Convert.ToDouble(sqlDataTable.Rows[i][3]);
+                    row["单位"] = sqlDataTable.Rows[i][4];
+                    row["位置"] = sqlDataTable.Rows[i][5];
                     dataTable.Rows.Add(row);
                 }
                 this.m_ParentForm.PostMessage(1,1);
@@ -359,10 +372,24 @@ namespace MDIMonitor_CS
                 //dataTable.Columns.RemoveAt(0);
                 //sqlDataTable.Columns[3].DataType = typeof(double);
                 //HisChart.Series[0].Points.DataBind(dataTable.AsEnumerable(), "时间", "数据", "");
-                text_lmd.Text = sqlDataTable.Rows[0][2].ToString();
+                text_time.Text = sqlDataTable.Rows[0][2].ToString();
                 text_pos.Text = sqlDataTable.Rows[0][5].ToString();
             }
             m_ParentForm.statusLabel.Text = String.Format("数据已载入");
+
+            int index = (int)HisChart.ChartAreas[0].CursorX.Position - 1;
+            if (HisChart.Series.Count == 0 || index < 0 || index >= dataTable.Rows.Count)
+            {
+                text_pos.Text = "None";
+                text_time.Text = "None";
+                text_unit.Text = "None";
+                text_value.Text = "None";
+                return true;
+            }
+            text_time.Text = sql_date + " " + dataTable.Rows[index][0].ToString();
+            text_value.Text = dataTable.Rows[index][1].ToString();
+            text_unit.Text = dataTable.Rows[index][2].ToString();
+            text_pos.Text = dataTable.Rows[index][3].ToString();
             return true;
 
             //}
@@ -373,6 +400,23 @@ namespace MDIMonitor_CS
             //    return false; ;
             //}
             
+        }
+
+        private void HisChart_MouseClick(object sender, MouseEventArgs e)
+        {
+            int index = (int)HisChart.ChartAreas[0].CursorX.Position - 1;
+            if (HisChart.Series.Count == 0 || index < 0 || index >= dataTable.Rows.Count)
+            {
+                text_pos.Text = "None";
+                text_time.Text = "None";
+                text_unit.Text = "None";
+                text_value.Text = "None";
+                return;
+            }
+            text_time.Text = sql_date + " " + dataTable.Rows[index][0].ToString();
+            text_value.Text = dataTable.Rows[index][1].ToString();
+            text_unit.Text = dataTable.Rows[index][2].ToString();
+            text_pos.Text = dataTable.Rows[index][3].ToString();
         }
     }
 
