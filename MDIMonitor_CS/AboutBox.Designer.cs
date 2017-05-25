@@ -86,7 +86,7 @@
             this.labelProductName.Name = "labelProductName";
             this.labelProductName.Size = new System.Drawing.Size(271, 16);
             this.labelProductName.TabIndex = 19;
-            this.labelProductName.Text = "碗扣式满堂支架预警系统";
+            this.labelProductName.Text = "碗扣式满堂支架施工安全预警系统";
             this.labelProductName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelVersion
@@ -110,7 +110,7 @@
             this.labelCopyright.Name = "labelCopyright";
             this.labelCopyright.Size = new System.Drawing.Size(271, 16);
             this.labelCopyright.TabIndex = 21;
-            this.labelCopyright.Text = "HFUT保留产品所有权利";
+            this.labelCopyright.Text = "安徽省高等级公路工程监理公司保留产品所有权利";
             this.labelCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelCompanyName
@@ -122,7 +122,7 @@
             this.labelCompanyName.Name = "labelCompanyName";
             this.labelCompanyName.Size = new System.Drawing.Size(271, 16);
             this.labelCompanyName.TabIndex = 22;
-            this.labelCompanyName.Text = "合肥工业大学 土木与水利工程学院";
+            this.labelCompanyName.Text = "安徽省高等级公路工程监理公司 合肥工业大学";
             this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textBoxDescription

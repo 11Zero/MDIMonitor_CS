@@ -349,5 +349,11 @@ namespace MDIMonitor_CS
             about.Show();
         }
 
+
+        private void menu_zeros_Click(object sender, EventArgs e)
+        {
+            PostMessage(8,1);
+        }
+
     }
 }

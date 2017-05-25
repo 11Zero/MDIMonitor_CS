@@ -48,6 +48,7 @@ namespace MDIMonitor_CS
         private bool kill = false;//终结线程标志
         private bool stop = false;//暂停线程标志
         private Thread thread = null;
+        public double[,] origin_val = null;
         private Queue<int> msgQueue = null;//存储消息队列
         public bool auto_measure = false;
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
@@ -62,6 +63,7 @@ namespace MDIMonitor_CS
             thread = new Thread(new ThreadStart(Run));//真正定义线程
             thread.IsBackground = true;
             nodeChNum = new int[4];
+            origin_val = new double[4,8];
             UpdateXml();
         }
 
@@ -996,6 +998,7 @@ namespace MDIMonitor_CS
                                     dValue = dValue / LMD;
                                 //else
                                 //    dValue = 0.0;
+                                origin_val[i, j] = dValue;
                                 dataUnit[5] = String.Format("{0:0.000}", dValue - InitVal);//测量值
                                 dataUnit[6] = unit;//String.Format("单位");
                                 dataUnit[7] = pos;//String.Format("位置");

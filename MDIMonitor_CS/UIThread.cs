@@ -33,6 +33,7 @@ namespace MDIMonitor_CS
         //private object[] invokePanelData = new object[2];
         public int totalNode = 4;
         private int[] CH_Node = new int[4];
+        public double[,] init_val = null;
         public int stage = 1;
         public string[] phone_cmd = new string[3];//存储接收到的用户短信号码,时间和指令
         private string[,] data_of_all_node = new string[4, 8];//临时存储当前扫描到的节点通道数据
@@ -50,6 +51,7 @@ namespace MDIMonitor_CS
             sqlCommand = new SQLiteCommand();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
             thread.IsBackground = true;
+            init_val = new double[4, 8];
             for (int i = 0; i < 4; i++)
             {
                 CH_Node[i] = 4;
@@ -166,6 +168,10 @@ namespace MDIMonitor_CS
                         case 7:
                             {
                                 msgFunction_7();//例如消息码为3是，执行msgFunction_2()函数
+                            } break;
+                        case 8:
+                            {
+                                msgFunction_8();//例如消息码为3是，执行msgFunction_2()函数
                             } break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
@@ -823,6 +829,49 @@ namespace MDIMonitor_CS
         private void msgFunction_7()//刷新user参数界面
         {
             UpdateUserGrid();
+        }
+
+        private void msgFunction_8()//调零初始值，并更新数据库
+        {
+            msgFunction_4();
+            Array.Copy(this.Parent.thread.origin_val, init_val, init_val.Length);
+            string[] tableName = { "InitialVal"};
+            userDataTable[0] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[0], stage));
+            DataTable initvaltable = userDataTable[0].Copy();
+            for (int i = 0; i < initvaltable.Rows.Count; i++)
+			{
+                
+			    for (int j = 0; j < initvaltable.Columns.Count; j++)
+			    {
+                    if(j==0)
+                        initvaltable.Rows[i][j] = i+1;
+                    else
+                        initvaltable.Rows[i][j] = init_val[i,j-1];
+			    }
+			}
+            this.userDataTable[0] = initvaltable.Copy();
+            SQLiteDBHelper SQLHelper = new SQLiteDBHelper("user.dat");
+            string sqlcmd = "";
+            for (int i = 0; i < 1; i++)
+            {
+                for (int j = 0; j < userDataTable[i].Rows.Count; j++)
+                {
+                    sqlcmd = String.Format("update {0}_{8} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}' where NUM={7}",
+                        tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                    if (j + 1 > totalNode)
+                    {
+                        sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
+                        tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                    }
+                    SQLHelper.ExecuteNonQuery(sqlcmd, null);
+                }
+            }
+            //this.Parent.UserForm.databack_dataGridView[0] = initvaltable.Copy();
+            //msgFunction_5();//修改测量参数数据库
+            msgFunction_4();//读测量参数
+            msgFunction_7();//刷新user参数界面
         }
     }
 }
