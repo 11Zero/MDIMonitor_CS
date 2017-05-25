@@ -1,21 +1,3 @@
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.pdb
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.FrameWin.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Properties.Resources.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.SerialPortForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csproj.GenerateResource.Cache
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.exe
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.pdb
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurDataForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.HisDataForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.UserDatForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe.config
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurGridDataForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\ClassForecast.dll
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.WelcomeForm.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Login.resources
-D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.AboutBox.resources
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe.config
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.exe
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.pdb
@@ -34,3 +16,21 @@ E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Serial
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.UserDatForm.resources
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.WelcomeForm.resources
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csproj.GenerateResource.Cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe.config
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Release\ClassForecast.dll
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.AboutBox.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurGridDataForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.CurDataForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.FrameWin.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.HisDataForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Login.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.Properties.Resources.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.SerialPortForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.UserDatForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.WelcomeForm.resources
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csproj.GenerateResource.Cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.exe
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.pdb
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Release\MDIMonitor_CS.csprojResolveAssemblyReference.cache

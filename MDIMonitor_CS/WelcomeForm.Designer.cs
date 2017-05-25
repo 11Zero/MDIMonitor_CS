@@ -28,23 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeForm));
             this.SuspendLayout();
             // 
             // WelcomeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::MDIMonitor_CS.Properties.Resources.welcome;
-            this.ClientSize = new System.Drawing.Size(573, 431);
-            this.DoubleBuffered = false;
+            this.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(577, 368);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "WelcomeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "WelcomeForm";
+            this.Load += new System.EventHandler(this.WelcomeForm_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
     }
 }

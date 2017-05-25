@@ -15,5 +15,10 @@ namespace MDIMonitor_CS
         {
             InitializeComponent();
         }
+
+        private void WelcomeForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
