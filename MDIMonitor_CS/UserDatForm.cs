@@ -115,8 +115,8 @@ namespace MDIMonitor_CS
 
             numeric_node_num.Minimum = 0;
             numeric_node_num.Maximum = 4;
-            if (this.m_ParentForm.thread.totalNodeCount <= numeric_node_num.Maximum)
-                numeric_node_num.Value = this.m_ParentForm.thread.totalNodeCount;
+            if (this.m_ParentForm.nodeNum <= numeric_node_num.Maximum)
+                numeric_node_num.Value = this.m_ParentForm.nodeNum;
             else
             {
                 numeric_node_num.Value = 0;
@@ -131,7 +131,7 @@ namespace MDIMonitor_CS
             numeric_cur_node.Minimum = 0;
             numeric_cur_node.Maximum = numeric_node_num.Value;
             numeric_cur_node.Value = 1;
-            numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[0];
+            numeric_ch_of_curnode.Value = this.m_ParentForm.thread[0].nodeChNum;
         }
 
         private void LoadDataGridView()
@@ -163,7 +163,7 @@ namespace MDIMonitor_CS
             }
             for (int i = 0; i < dataGrid_InitialVal.Rows.Count; i++)
             {
-                if (i+1 > this.m_ParentForm.thread.totalNodeCount)
+                if (i+1 > this.m_ParentForm.nodeNum)
                 {
                     dataGrid_InitialVal.Rows[i].ReadOnly = true;
                     dataGrid_InitialVal.Rows[i].DefaultCellStyle.BackColor = Color.BurlyWood;
@@ -232,8 +232,8 @@ namespace MDIMonitor_CS
             {
                 if (numeric_cur_node.Value > 0)
                 {
-                    this.m_ParentForm.thread.nodeChNum[(int)(numeric_cur_node.Value) - 1] = (int)(numeric_ch_of_curnode.Value);
-                    this.m_ParentForm.thread.totalNodeCount = (int)(numeric_node_num.Value);
+                    this.m_ParentForm.thread[(int)(numeric_cur_node.Value)-1].nodeChNum = (int)(numeric_ch_of_curnode.Value);
+                    this.m_ParentForm.nodeNum = (int)(numeric_node_num.Value);
                     UserThread.setXmlValue("NODE", "id", "0", "Count", String.Format("{0}", (int)(numeric_node_num.Value)));
                     UserThread.setXmlValue("NODE", "id", String.Format("{0}", (int)(numeric_cur_node.Value)), "Count", String.Format("{0}", (int)(numeric_ch_of_curnode.Value)));
                     this.m_ParentForm.statusLabel.Text = String.Format("节点{0}通道数已更改", (int)(numeric_cur_node.Value));
@@ -260,7 +260,7 @@ namespace MDIMonitor_CS
             dataGrid_InitialVal.DataSource = data_dataGridView[cur_dataGrid_id];
             for (int i = 0; i < dataGrid_InitialVal.Rows.Count; i++)
             {
-                if (i + 1 > this.m_ParentForm.thread.totalNodeCount)
+                if (i + 1 > this.m_ParentForm.nodeNum)
                 {
                     dataGrid_InitialVal.Rows[i].ReadOnly = true;
                     dataGrid_InitialVal.Rows[i].DefaultCellStyle.BackColor = Color.BurlyWood;
@@ -362,7 +362,7 @@ namespace MDIMonitor_CS
             if (numeric_cur_node.Value > 0)
             {
                 numeric_ch_of_curnode.Maximum = 8;
-                numeric_ch_of_curnode.Value = this.m_ParentForm.thread.nodeChNum[(int)(numeric_cur_node.Value) - 1];
+                numeric_ch_of_curnode.Value = this.m_ParentForm.thread[(int)(numeric_cur_node.Value) - 1].nodeChNum;
             }
             else
             {

@@ -122,7 +122,7 @@
             this.labelCompanyName.Name = "labelCompanyName";
             this.labelCompanyName.Size = new System.Drawing.Size(271, 16);
             this.labelCompanyName.TabIndex = 22;
-            this.labelCompanyName.Text = "安徽省高等级公路工程监理公司 合肥工业大学";
+            this.labelCompanyName.Text = "安徽省高等级公路工程监理公司";
             this.labelCompanyName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textBoxDescription

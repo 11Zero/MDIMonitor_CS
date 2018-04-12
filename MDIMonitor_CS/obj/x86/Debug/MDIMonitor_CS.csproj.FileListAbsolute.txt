@@ -41,3 +41,4 @@ E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.SerialPo
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.UserDatForm.resources
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.WelcomeForm.resources
 E:\isudo\GitHub\MDIMonitor_CS\MDIMonitor_CS\obj\x86\Debug\MDIMonitor_CS.csproj.GenerateResource.Cache
+D:\C++公用文件夹\My Projects_VS2010\MDIMonitor_CS\MDIMonitor_CS\bin\Debug\System.Data.SQLite.dll

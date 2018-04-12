@@ -194,10 +194,13 @@ namespace MDIMonitor_CS
                 Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(portWarn.PortName);
                 if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Warn_PortName.Text || Parent.SerialForm.cbox_Sensor_PortName.Text == Parent.SerialForm.cbox_Warn_PortName.Text)
                 {
-                    if (Parent.thread.portPhone.IsOpen || Parent.thread.portSensor.IsOpen)
+                    for (int i = 0; i < this.Parent.nodeNum; i++)
                     {
-                        Parent.statusLabel.Text = "警报端口不能与手机端口或测量端口相同";
-                        return false;
+                        if (Parent.thread[i].portPhone.IsOpen || Parent.thread[i].portSensor.IsOpen)
+                        {
+                            Parent.statusLabel.Text = "警报端口不能与手机端口或测量端口相同";
+                            return false;
+                        }
                     }
                 }
             }

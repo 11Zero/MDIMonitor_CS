@@ -17,12 +17,16 @@ namespace MDIMonitor_CS
         public UserDatForm UserForm = null;
         public HisDataForm HisForm = null;
         public CurGridDataForm CurGridForm = null;
-        public UserThread thread = null;
+        public UserThread[] thread = null;
+        public System.IO.Ports.SerialPort portPhone = null;
+        public int[] portPhoneAttribute = new int[4];
         public UIThread UIthread = null;
+        public PhoneThread phoneThread = null;
         public WarningThread warningThread = null;
         public MeasureTimer MeasureThread = null;
         public string[] curDataValue = new string[8];
         public int CurFormCount = 0;
+        public int nodeNum = 4;
         public FrameWin()
         {
             WelcomeForm welcome = new WelcomeForm();
@@ -33,12 +37,24 @@ namespace MDIMonitor_CS
 
 
             this.Size = new Size(1039, 561);
-            thread = new UserThread(this);
+            portPhone = new System.IO.Ports.SerialPort();
+            thread = new UserThread[nodeNum];
+            for (int i = 0; i < nodeNum; i++)
+            {
+                thread[i] = new UserThread(this,i);
+                //thread[i].portPhone = portPhone;
+            }
+            //thread[4] = { new UserThread(this), new UserThread(this), new UserThread(this), new UserThread(this) };
             UIthread = new UIThread(this);
+            phoneThread = new PhoneThread(this);
             warningThread = new WarningThread(this);
             MeasureThread = new MeasureTimer(this);
 
-            thread.Start();
+            for (int i = 0; i < nodeNum; i++)
+            {
+                thread[i].Start();
+            }
+            //thread.Start();
             UIthread.Start();
             warningThread.Start();
 
@@ -53,7 +69,7 @@ namespace MDIMonitor_CS
             CurGridForm = new CurGridDataForm(this);
             CurGridForm.MdiParent = this;
             CurGridForm.Location = new Point(0, 0);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < nodeNum; i++)
             {
                 if (CurForm[i] != null)
                     continue;
@@ -104,20 +120,80 @@ namespace MDIMonitor_CS
             //this.UIthread.Kill();
             //this.MeasureThread.Kill();
         }
+
+        public void PostMessage(int msgid, int thread_id,int node_id)
+        {
+            if (thread_id == 0)
+            {
+                if (msgid > 0)
+                {
+                    thread[node_id].PostMessage(msgid);
+                }
+                else if (msgid == -1)
+                {
+
+                    thread[node_id].Stop();
+
+                }
+                else if (msgid == -2)
+                {
+
+                    thread[node_id].Resume();
+
+                }
+                else if (msgid == -3)
+                {
+
+                    thread[node_id].Kill();
+
+                }
+                else if (msgid == -4)
+                {
+
+                    thread[node_id].End();
+
+                }
+            }
+        }
         public void PostMessage(int msgid, int thread_id)
         {
             if (thread_id == 0)
             {
                 if (msgid > 0)
-                    this.thread.PostMessage(msgid);
+                {
+                    for (int i = 0; i < nodeNum; i++)
+                    {
+                        thread[i].PostMessage(msgid);
+                    }
+                }
                 else if (msgid == -1)
-                    this.thread.Stop();
+                {
+                    for (int i = 0; i < nodeNum; i++)
+                    {
+                        thread[i].Stop();
+                    }
+                }
                 else if (msgid == -2)
-                    this.thread.Resume();
+                {
+                    for (int i = 0; i < nodeNum; i++)
+                    {
+                        thread[i].Resume();
+                    }
+                }
                 else if (msgid == -3)
-                    this.thread.Kill();
+                {
+                    for (int i = 0; i < nodeNum; i++)
+                    {
+                        thread[i].Kill();
+                    }
+                }
                 else if (msgid == -4)
-                    this.thread.End();
+                {
+                    for (int i = 0; i < nodeNum; i++)
+                    {
+                        thread[i].End();
+                    }
+                }
             }
             if (thread_id == 1)
             {
@@ -148,6 +224,19 @@ namespace MDIMonitor_CS
 
             }
         }
+        public void PostPhoneMessage(int msgid, string msginfo=null)
+        {     
+            if (msgid > 0)
+                this.phoneThread.PostMessage(msgid, msginfo);
+            else if (msgid == -1)
+                this.phoneThread.Stop();
+            else if (msgid == -2)
+                this.phoneThread.Resume();
+            else if (msgid == -3)
+                this.phoneThread.Kill();
+            else if (msgid == -4)
+                this.phoneThread.End();     
+        }
 
         
 
@@ -162,10 +251,12 @@ namespace MDIMonitor_CS
             //this.StripContainer.ContentPanel.SendToBack();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
-            this.thread.PostMessage(12);//发送消息设置SerialForm窗口控件状态
             SerialForm.Show();
             SerialForm.BringToFront();
             this.Text = FromTitle + " - 串口设置";
+            this.PostMessage(10,1);//发送消息设置SerialForm窗口控件状态
+            this.PostPhoneMessage(3);
+           
             //SerialForm.TopMost = true;
         }
 
@@ -196,7 +287,7 @@ namespace MDIMonitor_CS
         private void menu_ScanPort_Click(object sender, EventArgs e)
         {
             //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
-            this.thread.PostMessage(2);//发送消息测试短信发送功能
+            this.PostMessage(2,0,0);//发送消息测试短信发送功能
             //this.PostMessage(1, 0);
         }
 
@@ -236,10 +327,13 @@ namespace MDIMonitor_CS
 
         private void FrameWin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (thread.portPhone.IsOpen)
-                thread.portPhone.Close();
-            if (thread.portSensor.IsOpen)
-                thread.portSensor.Close();
+            if (portPhone.IsOpen)
+                portPhone.Close();
+            for (int i = 0; i < nodeNum; i++)
+            {
+                if (thread[i].portSensor.IsOpen)
+                    thread[i].portSensor.Close();
+            }
             if (warningThread.portWarn.IsOpen)
                 warningThread.portWarn.Close();
             //thread.portPhone.
@@ -252,8 +346,11 @@ namespace MDIMonitor_CS
         {
             //this.PostMessage(9, 0);
             menu_auto.Checked = !menu_auto.Checked;
-            if(this.thread.auto_measure != menu_auto.Checked)
-                this.thread.auto_measure = menu_auto.Checked;
+            for (int i = 0; i < nodeNum; i++)
+            {
+                if (this.thread[i].auto_measure != menu_auto.Checked)
+                    this.thread[i].auto_measure = menu_auto.Checked;
+            }
             if (menu_auto.Checked == false)
             {
                 this.statusLabel.Text = "自动测量已关闭";

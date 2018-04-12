@@ -87,7 +87,8 @@ namespace MDIMonitor_CS
 
         private void check_PhonePort_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(10, 0);//变更Phone端口开关
+            //this.m_ParentForm.PostMessage(10, 0);//变更Phone端口开关
+            this.m_ParentForm.PostPhoneMessage(1);
         }
 
         private void check_SensorPort_CheckedChanged(object sender, EventArgs e)
@@ -130,7 +131,7 @@ namespace MDIMonitor_CS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(2, 0);
+            this.m_ParentForm.PostPhoneMessage(4);
         }
 
         private void btn_do_warn_Click(object sender, EventArgs e)
@@ -263,6 +264,28 @@ namespace MDIMonitor_CS
         private void btn_test_warn2_Click(object sender, EventArgs e)
         {
             this.m_ParentForm.PostMessage(7, 2);//发送二级报警指令
+        }
+
+        private void radiobtn_node0_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node0串口状态
+        }
+
+        private void radiobtn_node1_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node1串口状态
+        }
+
+        private void radiobtn_node2_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node2串口状态
+
+        }
+
+        private void radiobtn_node3_CheckedChanged(object sender, EventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node3串口状态
+
         }
     }
 }

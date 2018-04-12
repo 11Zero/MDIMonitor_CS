@@ -42,6 +42,7 @@
             this.menu_Userdat = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_auto = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_single_measure = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu_zeros = new System.Windows.Forms.ToolStripMenuItem();
             this.串口设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_SerialForm = new System.Windows.Forms.ToolStripMenuItem();
             this.用户帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +54,6 @@
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_warning = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusLabel_phone = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menu_zeros = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.StripContainer.BottomToolStripPanel.SuspendLayout();
             this.StripContainer.TopToolStripPanel.SuspendLayout();
@@ -97,7 +97,7 @@
             this.MenuItem_monitor3,
             this.MenuItem_monitor4});
             this.menu_CurForm.Name = "menu_CurForm";
-            this.menu_CurForm.Size = new System.Drawing.Size(152, 22);
+            this.menu_CurForm.Size = new System.Drawing.Size(124, 22);
             this.menu_CurForm.Text = "曲线监控";
             this.menu_CurForm.Click += new System.EventHandler(this.menu_CurForm_Click);
             // 
@@ -133,7 +133,7 @@
             // 
             this.menu_CurDataForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_CurDataForm.Name = "menu_CurDataForm";
-            this.menu_CurDataForm.Size = new System.Drawing.Size(152, 22);
+            this.menu_CurDataForm.Size = new System.Drawing.Size(124, 22);
             this.menu_CurDataForm.Text = "表格监控";
             this.menu_CurDataForm.Click += new System.EventHandler(this.menu_CurDataForm_Click);
             // 
@@ -141,7 +141,7 @@
             // 
             this.menu_HisForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_HisForm.Name = "menu_HisForm";
-            this.menu_HisForm.Size = new System.Drawing.Size(152, 22);
+            this.menu_HisForm.Size = new System.Drawing.Size(124, 22);
             this.menu_HisForm.Text = "历史数据";
             this.menu_HisForm.Click += new System.EventHandler(this.menu_HisForm_Click);
             // 
@@ -160,7 +160,7 @@
             // 
             this.menu_Userdat.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_Userdat.Name = "menu_Userdat";
-            this.menu_Userdat.Size = new System.Drawing.Size(152, 22);
+            this.menu_Userdat.Size = new System.Drawing.Size(124, 22);
             this.menu_Userdat.Text = "测量数值";
             this.menu_Userdat.Click += new System.EventHandler(this.menu_Userdat_Click);
             // 
@@ -170,7 +170,7 @@
             this.menu_auto.Checked = true;
             this.menu_auto.CheckState = System.Windows.Forms.CheckState.Checked;
             this.menu_auto.Name = "menu_auto";
-            this.menu_auto.Size = new System.Drawing.Size(152, 22);
+            this.menu_auto.Size = new System.Drawing.Size(124, 22);
             this.menu_auto.Text = "自动测量";
             this.menu_auto.Click += new System.EventHandler(this.menu_auto_Click);
             // 
@@ -178,9 +178,17 @@
             // 
             this.menu_single_measure.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_single_measure.Name = "menu_single_measure";
-            this.menu_single_measure.Size = new System.Drawing.Size(152, 22);
+            this.menu_single_measure.Size = new System.Drawing.Size(124, 22);
             this.menu_single_measure.Text = "单次测量";
             this.menu_single_measure.Click += new System.EventHandler(this.menu_single_measure_Click);
+            // 
+            // menu_zeros
+            // 
+            this.menu_zeros.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.menu_zeros.Name = "menu_zeros";
+            this.menu_zeros.Size = new System.Drawing.Size(124, 22);
+            this.menu_zeros.Text = "监测归零";
+            this.menu_zeros.Click += new System.EventHandler(this.menu_zeros_Click);
             // 
             // 串口设置ToolStripMenuItem
             // 
@@ -194,7 +202,7 @@
             // 
             this.menu_SerialForm.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_SerialForm.Name = "menu_SerialForm";
-            this.menu_SerialForm.Size = new System.Drawing.Size(152, 22);
+            this.menu_SerialForm.Size = new System.Drawing.Size(124, 22);
             this.menu_SerialForm.Text = "串口参数";
             this.menu_SerialForm.Click += new System.EventHandler(this.menu_SerialForm_Click);
             // 
@@ -212,7 +220,7 @@
             // 
             this.menu_Help.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_Help.Name = "menu_Help";
-            this.menu_Help.Size = new System.Drawing.Size(152, 22);
+            this.menu_Help.Size = new System.Drawing.Size(124, 22);
             this.menu_Help.Text = "操作指南";
             this.menu_Help.Click += new System.EventHandler(this.menu_Help_Click);
             // 
@@ -220,7 +228,7 @@
             // 
             this.menu_Registr.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_Registr.Name = "menu_Registr";
-            this.menu_Registr.Size = new System.Drawing.Size(152, 22);
+            this.menu_Registr.Size = new System.Drawing.Size(124, 22);
             this.menu_Registr.Text = "注册管理";
             this.menu_Registr.Click += new System.EventHandler(this.menu_Registr_Click);
             // 
@@ -228,7 +236,7 @@
             // 
             this.menu_About.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.menu_About.Name = "menu_About";
-            this.menu_About.Size = new System.Drawing.Size(152, 22);
+            this.menu_About.Size = new System.Drawing.Size(124, 22);
             this.menu_About.Text = "关于我们";
             this.menu_About.Click += new System.EventHandler(this.menu_About_Click);
             // 
@@ -294,14 +302,6 @@
             this.statusLabel_phone.Size = new System.Drawing.Size(250, 21);
             this.statusLabel_phone.Text = "暂无通信指令";
             this.statusLabel_phone.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            // 
-            // menu_zeros
-            // 
-            this.menu_zeros.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.menu_zeros.Name = "menu_zeros";
-            this.menu_zeros.Size = new System.Drawing.Size(152, 22);
-            this.menu_zeros.Text = "监测归零";
-            this.menu_zeros.Click += new System.EventHandler(this.menu_zeros_Click);
             // 
             // FrameWin
             // 

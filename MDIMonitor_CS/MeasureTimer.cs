@@ -154,8 +154,11 @@ namespace MDIMonitor_CS
         #endregion
         private void msgFunction_1()//扫描测量节点内数据
         {
-            if (this.Parent.thread.auto_measure)
-                this.Parent.PostMessage(1, 0);
+            for (int i = 0; i < Parent.nodeNum; i++)
+            {
+                if (this.Parent.thread[i].auto_measure)
+                    this.Parent.PostMessage(1, 0,i);
+            }
         }
     }
 }

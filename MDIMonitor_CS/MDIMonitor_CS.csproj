@@ -119,6 +119,7 @@
     </Compile>
     <Compile Include="MeasureTimer.cs" />
     <Compile Include="PDUdecoding.cs" />
+    <Compile Include="PhoneThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortForm.cs">

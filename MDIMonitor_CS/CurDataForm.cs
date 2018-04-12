@@ -308,7 +308,7 @@ namespace MDIMonitor_CS
             }
             combox_ch.Items.Clear();
             cur_node = Convert.ToInt16(combox_Node.SelectedItem);
-            int NodeCH = this.m_ParentForm.thread.nodeChNum[cur_node-1];
+            int NodeCH = this.m_ParentForm.thread[cur_node - 1].nodeChNum;
             for (int i = 0; i < NodeCH; i++)
             {
                 combox_ch.Items.Add(i + 1);

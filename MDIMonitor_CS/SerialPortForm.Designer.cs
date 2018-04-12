@@ -54,6 +54,10 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.check_PhonePort = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radiobtn_node3 = new System.Windows.Forms.RadioButton();
+            this.radiobtn_node2 = new System.Windows.Forms.RadioButton();
+            this.radiobtn_node1 = new System.Windows.Forms.RadioButton();
+            this.radiobtn_node0 = new System.Windows.Forms.RadioButton();
             this.check_SensorPort = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.cbox_Sensor_PortName = new System.Windows.Forms.ComboBox();
@@ -339,7 +343,7 @@
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(302, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(225, 184);
             this.groupBox1.TabIndex = 8;
@@ -359,6 +363,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.radiobtn_node3);
+            this.groupBox2.Controls.Add(this.radiobtn_node2);
+            this.groupBox2.Controls.Add(this.radiobtn_node1);
+            this.groupBox2.Controls.Add(this.radiobtn_node0);
             this.groupBox2.Controls.Add(this.check_SensorPort);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.cbox_Sensor_PortName);
@@ -370,17 +378,65 @@
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Location = new System.Drawing.Point(280, 12);
+            this.groupBox2.Location = new System.Drawing.Point(14, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(225, 184);
+            this.groupBox2.Size = new System.Drawing.Size(263, 184);
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "测量端口";
             // 
+            // radiobtn_node3
+            // 
+            this.radiobtn_node3.AutoSize = true;
+            this.radiobtn_node3.Location = new System.Drawing.Point(18, 144);
+            this.radiobtn_node3.Name = "radiobtn_node3";
+            this.radiobtn_node3.Size = new System.Drawing.Size(53, 16);
+            this.radiobtn_node3.TabIndex = 6;
+            this.radiobtn_node3.TabStop = true;
+            this.radiobtn_node3.Text = "节点4";
+            this.radiobtn_node3.UseVisualStyleBackColor = true;
+            this.radiobtn_node3.CheckedChanged += new System.EventHandler(this.radiobtn_node3_CheckedChanged);
+            // 
+            // radiobtn_node2
+            // 
+            this.radiobtn_node2.AutoSize = true;
+            this.radiobtn_node2.Location = new System.Drawing.Point(18, 109);
+            this.radiobtn_node2.Name = "radiobtn_node2";
+            this.radiobtn_node2.Size = new System.Drawing.Size(53, 16);
+            this.radiobtn_node2.TabIndex = 5;
+            this.radiobtn_node2.TabStop = true;
+            this.radiobtn_node2.Text = "节点3";
+            this.radiobtn_node2.UseVisualStyleBackColor = true;
+            this.radiobtn_node2.CheckedChanged += new System.EventHandler(this.radiobtn_node2_CheckedChanged);
+            // 
+            // radiobtn_node1
+            // 
+            this.radiobtn_node1.AutoSize = true;
+            this.radiobtn_node1.Location = new System.Drawing.Point(18, 74);
+            this.radiobtn_node1.Name = "radiobtn_node1";
+            this.radiobtn_node1.Size = new System.Drawing.Size(53, 16);
+            this.radiobtn_node1.TabIndex = 4;
+            this.radiobtn_node1.TabStop = true;
+            this.radiobtn_node1.Text = "节点2";
+            this.radiobtn_node1.UseVisualStyleBackColor = true;
+            this.radiobtn_node1.CheckedChanged += new System.EventHandler(this.radiobtn_node1_CheckedChanged);
+            // 
+            // radiobtn_node0
+            // 
+            this.radiobtn_node0.AutoSize = true;
+            this.radiobtn_node0.Location = new System.Drawing.Point(18, 39);
+            this.radiobtn_node0.Name = "radiobtn_node0";
+            this.radiobtn_node0.Size = new System.Drawing.Size(53, 16);
+            this.radiobtn_node0.TabIndex = 3;
+            this.radiobtn_node0.TabStop = true;
+            this.radiobtn_node0.Text = "节点1";
+            this.radiobtn_node0.UseVisualStyleBackColor = true;
+            this.radiobtn_node0.CheckedChanged += new System.EventHandler(this.radiobtn_node0_CheckedChanged);
+            // 
             // check_SensorPort
             // 
             this.check_SensorPort.AutoSize = true;
-            this.check_SensorPort.Location = new System.Drawing.Point(80, 13);
+            this.check_SensorPort.Location = new System.Drawing.Point(126, 16);
             this.check_SensorPort.Name = "check_SensorPort";
             this.check_SensorPort.Size = new System.Drawing.Size(48, 16);
             this.check_SensorPort.TabIndex = 2;
@@ -391,7 +447,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(33, 38);
+            this.label8.Location = new System.Drawing.Point(79, 41);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 1;
@@ -401,7 +457,7 @@
             // 
             this.cbox_Sensor_PortName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_Sensor_PortName.FormattingEnabled = true;
-            this.cbox_Sensor_PortName.Location = new System.Drawing.Point(80, 35);
+            this.cbox_Sensor_PortName.Location = new System.Drawing.Point(126, 38);
             this.cbox_Sensor_PortName.Name = "cbox_Sensor_PortName";
             this.cbox_Sensor_PortName.Size = new System.Drawing.Size(121, 20);
             this.cbox_Sensor_PortName.TabIndex = 0;
@@ -410,7 +466,7 @@
             // 
             this.cbox_Sensor_Baud.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_Sensor_Baud.FormattingEnabled = true;
-            this.cbox_Sensor_Baud.Location = new System.Drawing.Point(80, 61);
+            this.cbox_Sensor_Baud.Location = new System.Drawing.Point(126, 64);
             this.cbox_Sensor_Baud.Name = "cbox_Sensor_Baud";
             this.cbox_Sensor_Baud.Size = new System.Drawing.Size(121, 20);
             this.cbox_Sensor_Baud.TabIndex = 0;
@@ -419,7 +475,7 @@
             // 
             this.cbox_Sensor_Parity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_Sensor_Parity.FormattingEnabled = true;
-            this.cbox_Sensor_Parity.Location = new System.Drawing.Point(80, 87);
+            this.cbox_Sensor_Parity.Location = new System.Drawing.Point(126, 90);
             this.cbox_Sensor_Parity.Name = "cbox_Sensor_Parity";
             this.cbox_Sensor_Parity.Size = new System.Drawing.Size(121, 20);
             this.cbox_Sensor_Parity.TabIndex = 0;
@@ -428,7 +484,7 @@
             // 
             this.cbox_Sensor_Bits.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_Sensor_Bits.FormattingEnabled = true;
-            this.cbox_Sensor_Bits.Location = new System.Drawing.Point(80, 113);
+            this.cbox_Sensor_Bits.Location = new System.Drawing.Point(126, 116);
             this.cbox_Sensor_Bits.Name = "cbox_Sensor_Bits";
             this.cbox_Sensor_Bits.Size = new System.Drawing.Size(121, 20);
             this.cbox_Sensor_Bits.TabIndex = 0;
@@ -437,7 +493,7 @@
             // 
             this.cbox_Sensor_Stop.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_Sensor_Stop.FormattingEnabled = true;
-            this.cbox_Sensor_Stop.Location = new System.Drawing.Point(80, 139);
+            this.cbox_Sensor_Stop.Location = new System.Drawing.Point(126, 142);
             this.cbox_Sensor_Stop.Name = "cbox_Sensor_Stop";
             this.cbox_Sensor_Stop.Size = new System.Drawing.Size(121, 20);
             this.cbox_Sensor_Stop.TabIndex = 0;
@@ -445,7 +501,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(33, 64);
+            this.label9.Location = new System.Drawing.Point(79, 67);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(41, 12);
             this.label9.TabIndex = 1;
@@ -454,7 +510,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(33, 90);
+            this.label10.Location = new System.Drawing.Point(79, 93);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(41, 12);
             this.label10.TabIndex = 1;
@@ -463,7 +519,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(33, 116);
+            this.label11.Location = new System.Drawing.Point(79, 119);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(41, 12);
             this.label11.TabIndex = 1;
@@ -472,7 +528,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(33, 142);
+            this.label12.Location = new System.Drawing.Point(79, 145);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(41, 12);
             this.label12.TabIndex = 1;
@@ -480,7 +536,7 @@
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(406, 227);
+            this.btn_ok.Location = new System.Drawing.Point(527, 361);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(75, 23);
             this.btn_ok.TabIndex = 9;
@@ -490,7 +546,7 @@
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(406, 277);
+            this.btn_cancel.Location = new System.Drawing.Point(527, 411);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_cancel.TabIndex = 10;
@@ -511,7 +567,7 @@
             // 
             // text_targetphone
             // 
-            this.text_targetphone.Location = new System.Drawing.Point(65, 218);
+            this.text_targetphone.Location = new System.Drawing.Point(215, 355);
             this.text_targetphone.Name = "text_targetphone";
             this.text_targetphone.Size = new System.Drawing.Size(127, 21);
             this.text_targetphone.TabIndex = 11;
@@ -519,7 +575,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(12, 221);
+            this.label13.Location = new System.Drawing.Point(162, 358);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(53, 12);
             this.label13.TabIndex = 12;
@@ -529,7 +585,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.label14.Location = new System.Drawing.Point(12, 248);
+            this.label14.Location = new System.Drawing.Point(162, 385);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 12);
             this.label14.TabIndex = 12;
@@ -538,7 +594,7 @@
             // rich_smstext
             // 
             this.rich_smstext.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rich_smstext.Location = new System.Drawing.Point(65, 245);
+            this.rich_smstext.Location = new System.Drawing.Point(215, 382);
             this.rich_smstext.Name = "rich_smstext";
             this.rich_smstext.Size = new System.Drawing.Size(127, 55);
             this.rich_smstext.TabIndex = 13;
@@ -546,7 +602,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 267);
+            this.button1.Location = new System.Drawing.Point(162, 404);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(47, 33);
             this.button1.TabIndex = 14;
@@ -679,7 +735,7 @@
             // 
             this.cbox_warnlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_warnlist.FormattingEnabled = true;
-            this.cbox_warnlist.Location = new System.Drawing.Point(224, 249);
+            this.cbox_warnlist.Location = new System.Drawing.Point(374, 386);
             this.cbox_warnlist.Name = "cbox_warnlist";
             this.cbox_warnlist.Size = new System.Drawing.Size(121, 20);
             this.cbox_warnlist.TabIndex = 15;
@@ -698,7 +754,7 @@
             // 
             // trackBar_vol
             // 
-            this.trackBar_vol.Location = new System.Drawing.Point(246, 218);
+            this.trackBar_vol.Location = new System.Drawing.Point(396, 355);
             this.trackBar_vol.Name = "trackBar_vol";
             this.trackBar_vol.Size = new System.Drawing.Size(60, 45);
             this.trackBar_vol.TabIndex = 17;
@@ -707,7 +763,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(222, 224);
+            this.label20.Location = new System.Drawing.Point(372, 361);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(29, 12);
             this.label20.TabIndex = 18;
@@ -716,7 +772,7 @@
             // check_circulate
             // 
             this.check_circulate.AutoSize = true;
-            this.check_circulate.Location = new System.Drawing.Point(302, 223);
+            this.check_circulate.Location = new System.Drawing.Point(452, 360);
             this.check_circulate.Name = "check_circulate";
             this.check_circulate.Size = new System.Drawing.Size(48, 16);
             this.check_circulate.TabIndex = 19;
@@ -727,7 +783,7 @@
             // check_light
             // 
             this.check_light.AutoSize = true;
-            this.check_light.Location = new System.Drawing.Point(297, 282);
+            this.check_light.Location = new System.Drawing.Point(447, 419);
             this.check_light.Name = "check_light";
             this.check_light.Size = new System.Drawing.Size(48, 16);
             this.check_light.TabIndex = 20;
@@ -738,7 +794,7 @@
             // 
             // btn_test_warn1
             // 
-            this.btn_test_warn1.Location = new System.Drawing.Point(233, 278);
+            this.btn_test_warn1.Location = new System.Drawing.Point(383, 415);
             this.btn_test_warn1.Name = "btn_test_warn1";
             this.btn_test_warn1.Size = new System.Drawing.Size(97, 23);
             this.btn_test_warn1.TabIndex = 21;
@@ -748,7 +804,7 @@
             // 
             // btn_test_warn2
             // 
-            this.btn_test_warn2.Location = new System.Drawing.Point(233, 307);
+            this.btn_test_warn2.Location = new System.Drawing.Point(383, 444);
             this.btn_test_warn2.Name = "btn_test_warn2";
             this.btn_test_warn2.Size = new System.Drawing.Size(97, 23);
             this.btn_test_warn2.TabIndex = 22;
@@ -773,9 +829,9 @@
             this.panel1.Controls.Add(this.btn_stopthread);
             this.panel1.Controls.Add(this.btn_resumethread);
             this.panel1.Controls.Add(this.btn_killthread);
-            this.panel1.Location = new System.Drawing.Point(551, 245);
+            this.panel1.Location = new System.Drawing.Point(720, 282);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(391, 213);
+            this.panel1.Size = new System.Drawing.Size(394, 227);
             this.panel1.TabIndex = 23;
             // 
             // SerialPortForm
@@ -887,6 +943,9 @@
         private System.Windows.Forms.Button btn_test_warn1;
         private System.Windows.Forms.Button btn_test_warn2;
         private System.Windows.Forms.Panel panel1;
-
+        public System.Windows.Forms.RadioButton radiobtn_node0;
+        public System.Windows.Forms.RadioButton radiobtn_node3;
+        public System.Windows.Forms.RadioButton radiobtn_node2;
+        public System.Windows.Forms.RadioButton radiobtn_node1;
     }
 }
