@@ -2,20 +2,19 @@
 <Soft>
   <COM id="1" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
   </COM>
-<COM id="2" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM2">
+  <COM id="2" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM2">
   </COM>
-<COM id="3" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
+  <COM id="3" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
   </COM>
-<COM id="0" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
+  <COM id="0" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
   </COM>
-
-  <COM id="Warn" Baud="5" Parity="2" Bits="3" Stop="0" Last_id="COM1">
+  <COM id="Warn" Baud="5" Parity="2" Bits="2" Stop="0" Last_id="COM1">
   </COM>
   <COM id="Phone" Baud="11" Parity="2" Bits="2" Stop="0" Last_id="COM1">
   </COM>
-  <NODE id="0" Count="1">
+  <NODE id="0" Count="8">
   </NODE>
-  <NODE id="1" Count="4">
+  <NODE id="1" Count="8">
   </NODE>
   <NODE id="2" Count="2">
   </NODE>

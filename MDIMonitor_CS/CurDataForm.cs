@@ -13,21 +13,23 @@ namespace MDIMonitor_CS
     public partial class CurDataForm : Form
     {
         FrameWin m_ParentForm = null;
-        public DataTable dataTable = new DataTable();
-        public DataSet dataSet = new DataSet();
+        public DataTable dataTable = null;
+        public DataSet dataSet = null;
         public DataSet ForcestdataSet = new DataSet();
         private bool IsZoomed = false;
         private DateTime nowtime = new DateTime();
         public int cur_node = -1;
         public int cur_ch = -1;
         public int Form_id = -1;
-        public string[] unit = new string[4];
+        public string[] unit = new string[8];
         //public delegate void ChartDelegate(Chart _Chart, DataTable _dataTable);
         //private object[] invokeChartData = new object[2];
         public CurDataForm(FrameWin parent)
         {
             InitializeComponent();
             m_ParentForm = parent;
+            dataTable = new DataTable();
+            dataSet = new DataSet();
             MainFrame_Load();
             InitChart();
             //Form.CheckForIllegalCrossThreadCalls = false;
@@ -182,13 +184,13 @@ namespace MDIMonitor_CS
         { 
             if (combox_Node.Items.Count < 1)
             {
-                for (int i = 0; i < this.m_ParentForm.UIthread.totalNode; i++)
+                for (int i = 0; i < this.m_ParentForm.nodeNum; i++)
                 {
                     combox_Node.Items.Add(i+1);
                 }
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 dataSet.Tables.Add(new DataTable(String.Format("table{0}", i)));
                 dataSet.Tables[i].Columns.Add("时间", typeof(string));
@@ -197,7 +199,7 @@ namespace MDIMonitor_CS
                 ForcestdataSet.Tables[i].Columns.Add("时间", typeof(string));
                 ForcestdataSet.Tables[i].Columns.Add("数据", typeof(double));
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 this.CurChart.ChartAreas.Add(new ChartArea());
                 this.CurChart.ChartAreas[i].BorderDashStyle = ChartDashStyle.Solid;
@@ -217,7 +219,7 @@ namespace MDIMonitor_CS
             }
 
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 Series serie = new Series();
                 serie.Name = String.Format("曲线{0}", i);
@@ -231,13 +233,21 @@ namespace MDIMonitor_CS
                     serie.Color = Color.DarkGreen;
                 if (i == 3)
                     serie.Color = Color.BlueViolet;
+                if (i == 4)
+                    serie.Color = Color.AliceBlue;
+                if (i == 5)
+                    serie.Color = Color.Beige;
+                if (i == 6)
+                    serie.Color = Color.Coral;
+                if (i == 7)
+                    serie.Color = Color.DarkBlue;
                 serie.ChartArea = this.CurChart.ChartAreas[i].Name;
                 this.CurChart.Series.Add(serie);
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 Series serie = new Series();
-                serie.Name = String.Format("曲线{0}", 4 + i);
+                serie.Name = String.Format("曲线{0}", 8 + i);
                 serie.ChartType = SeriesChartType.Line;
                 serie.BorderWidth = 1;
                 if (i == 0)
@@ -248,6 +258,14 @@ namespace MDIMonitor_CS
                     serie.Color = Color.DarkGreen;
                 if (i == 3)
                     serie.Color = Color.BlueViolet;
+                if (i == 4)
+                    serie.Color = Color.AliceBlue;
+                if (i == 5)
+                    serie.Color = Color.Beige;
+                if (i == 6)
+                    serie.Color = Color.Coral;
+                if (i == 7)
+                    serie.Color = Color.DarkBlue;
                 serie.ChartArea = this.CurChart.ChartAreas[i].Name;
                 this.CurChart.Series.Add(serie);
             }
@@ -257,7 +275,7 @@ namespace MDIMonitor_CS
             DateTime etime = new DateTime(2014, 1, 1, 0, 0, 1);
             TimeSpan step = etime - stime;
             DateTime nowtime = DateTime.Now;
-            for (int k = 0; k < 4; k++)
+            for (int k = 0; k < 8; k++)
             {
                 for (int i = 0; i < 200; i++)
                 {
@@ -271,11 +289,11 @@ namespace MDIMonitor_CS
                 DataTable dt = dataSet.Tables[k].Copy();
                 dt.Merge(ForcestdataSet.Tables[k].Copy());
                 this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
-                this.CurChart.Series[k + 4].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
+                this.CurChart.Series[k + 8].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
                 this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
                 nowtime = nowtime.AddSeconds(-50);
             }
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 CurChart.ChartAreas[i].AxisX.ScrollBar.Enabled = true;
                 CurChart.ChartAreas[i].AxisX.ScrollBar.Size = 10;
@@ -334,7 +352,7 @@ namespace MDIMonitor_CS
             {
                 int x = e.X;
                 int y = e.Y;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if (x > CurChart.ChartAreas[i].Position.X * CurChart.Width / 100 &&
                         x < (CurChart.ChartAreas[i].Position.X + CurChart.ChartAreas[i].Position.Width) * CurChart.Width / 100 &&
@@ -342,7 +360,7 @@ namespace MDIMonitor_CS
                         y < (CurChart.ChartAreas[i].Position.Y + CurChart.ChartAreas[i].Position.Height) * CurChart.Height / 100)
                     {
                         //CurChart.ChartAreas[i].
-                        for (int j = 0; j < 4; j++)
+                        for (int j = 0; j < 8; j++)
                         {
                             if (i != j)
                                 CurChart.ChartAreas[j].Visible = false;
@@ -359,13 +377,13 @@ namespace MDIMonitor_CS
             }
             else
             {
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     CurChart.ChartAreas[i].Visible = true;
-                    CurChart.ChartAreas[i].Position.X = (i/2 ) * 50;
-                    CurChart.ChartAreas[i].Position.Y = (i % 2) * 50;
+                    CurChart.ChartAreas[i].Position.X = (i/4 ) * 50;
+                    CurChart.ChartAreas[i].Position.Y = (i % 4) * 25;
                     CurChart.ChartAreas[i].Position.Width = 50;
-                    CurChart.ChartAreas[i].Position.Height = 50;
+                    CurChart.ChartAreas[i].Position.Height = 25;
                 }
             }
         }
@@ -376,7 +394,7 @@ namespace MDIMonitor_CS
             {
                 int x = e.X;
                 int y = e.Y;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if (x > CurChart.ChartAreas[i].Position.X * CurChart.Width / 100 &&
                         x < (CurChart.ChartAreas[i].Position.X + CurChart.ChartAreas[i].Position.Width) * CurChart.Width / 100 &&

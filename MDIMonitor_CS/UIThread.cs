@@ -213,50 +213,50 @@ namespace MDIMonitor_CS
         private bool CreateDataSQL(int node, int ch)
         {
             return true;
-            //string fileName = String.Format("NODE{0}CH{1}", node, ch);
-            //string path = "Database";
-            //if (Directory.Exists(path) == false)
-            //    Directory.CreateDirectory(path);
-            //path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
-            //if (Directory.Exists(path) == false)
-            //    Directory.CreateDirectory(path);
-            //try
-            //{
+            string fileName = String.Format("NODE{0}CH{1}", node, ch);
+            string path = "Database";
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
+            if (Directory.Exists(path) == false)
+                Directory.CreateDirectory(path);
+            try
+            {
 
-            //    FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
-            //    if (!DatabaseFile.Exists)
-            //    {
-            //        //if (!DatabaseFile.Directory.Exists)
-            //        //{
-            //        //    DatabaseFile.Directory.Create();
-            //        //}
-            //        SQLiteConnection.CreateFile(DatabaseFile.FullName);
-            //    }
-            //    dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
-            //    dataBase.Open();
-            //    sqlCommand.Connection = dataBase;
-            //    string sqlcmd = null;
-            //    sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
-            //    sqlCommand.CommandText = sqlcmd;
-            //    sqlCommand.ExecuteNonQuery();
-            //    for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
-            //    {
-            //        string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
-            //        sqlcmd = "create table if not exists " + tableName +
-            //            "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
-            //        sqlCommand.CommandText = sqlcmd;
-            //        sqlCommand.ExecuteNonQuery();
-            //        sqlcmd = "insert into TableRows (Count) values (0)";
-            //        sqlCommand.CommandText = sqlcmd;
-            //        sqlCommand.ExecuteNonQuery();
-            //    }
-            //    dataBase.Close();
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show(e.ToString());
-            //}
-            //return File.Exists(path + "\\" + fileName);
+                FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
+                if (!DatabaseFile.Exists)
+                {
+                    //if (!DatabaseFile.Directory.Exists)
+                    //{
+                    //    DatabaseFile.Directory.Create();
+                    //}
+                    SQLiteConnection.CreateFile(DatabaseFile.FullName);
+                }
+                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+                dataBase.Open();
+                sqlCommand.Connection = dataBase;
+                string sqlcmd = null;
+                sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
+                sqlCommand.CommandText = sqlcmd;
+                sqlCommand.ExecuteNonQuery();
+                for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
+                {
+                    string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
+                    sqlcmd = "create table if not exists " + tableName +
+                        "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
+                    sqlCommand.CommandText = sqlcmd;
+                    sqlCommand.ExecuteNonQuery();
+                    sqlcmd = "insert into TableRows (Count) values (0)";
+                    sqlCommand.CommandText = sqlcmd;
+                    sqlCommand.ExecuteNonQuery();
+                }
+                dataBase.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            return File.Exists(path + "\\" + fileName);
         }
         /// <summary>
         /// 将扫描到的节点数据写入数据库
@@ -372,7 +372,7 @@ namespace MDIMonitor_CS
                 dt = SQLHelper.ExecuteDataTable(sqlcmd, null);
                 return dt;
             }
-            for (int i = 0; i < totalNode; i++)
+            for (int i = 0; i < Parent.nodeNum; i++)
             {
                 string sqlcmd = String.Format("select * from {0} where NUM='{1}';)", tableName, i + 1);
                 dt.Merge(SQLHelper.ExecuteDataTable(sqlcmd, null));
@@ -423,14 +423,14 @@ namespace MDIMonitor_CS
             {
                 for (int j = 0; j < userDataTable[i].Rows.Count; j++)
                 {
-                    sqlcmd = String.Format("update {0}_{8} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}' where NUM={7}",
+                    sqlcmd = String.Format("update {0}_{9} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}',CH6='{7}',CH6='{8}' where NUM={10}",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
-                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][7], userDataTable[i].Rows[j][8], stage, userDataTable[i].Rows[j][0]);
                     if (j + 1 > totalNode)
                     {
-                        sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
+                        sqlcmd = String.Format("insert into {0}_{9} (CH1,CH2,CH3,CH4,CH5,CH6,CH7,CH8) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
-                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][7], userDataTable[i].Rows[j][8],stage);
                     }
                     SQLHelper.ExecuteNonQuery(sqlcmd, null);
                 }
@@ -568,14 +568,14 @@ namespace MDIMonitor_CS
                     DataTable dt = _dataTable.Copy();
                     dt.Merge(dataForecast[_node - 1, _ch - 1].MakeForecast(0).Copy());
                     //this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
-                    Parent.CurForm[Form_id].CurChart.Series[_ch + 3].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
+                    Parent.CurForm[Form_id].CurChart.Series[_ch + 7].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
                     Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
                     //this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
                 }
                 else
                 {
                     Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
-                    Parent.CurForm[Form_id].CurChart.Series[_ch + 3].Points.Clear();
+                    Parent.CurForm[Form_id].CurChart.Series[_ch + 7].Points.Clear();
                 }
             }
             catch (Exception ex)
@@ -673,7 +673,7 @@ namespace MDIMonitor_CS
             //{
             //    string str = "";
             //}
-            data_of_all_node[ch - 1, node - 1] = data[5] + data[6];
+            data_of_all_node[node - 1,  ch- 1] = data[5] + data[6];
             dataForecast[node - 1, ch - 1].AddDataToSource(double.Parse(data[5]));
             //if (smssended == false)
             //{
@@ -989,68 +989,68 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_10()//更新显示手机和警报端口参数
         {
-            Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
-            //循环该计算机上所有串行端口的集合
-            Parent.SerialForm.cbox_Warn_PortName.Items.Clear();
+            //Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
+            ////循环该计算机上所有串行端口的集合
+            //Parent.SerialForm.cbox_Warn_PortName.Items.Clear();
 
-            Parent.SerialForm.cbox_Sensor_PortName.Items.Clear();
-            Parent.SerialForm.cbox_Sensor_Bits.Items.Clear();
-            Parent.SerialForm.cbox_Sensor_Parity.Items.Clear();
-            Parent.SerialForm.cbox_Sensor_Stop.Items.Clear();
-            Parent.SerialForm.cbox_Sensor_Baud.Items.Clear();
+            //Parent.SerialForm.cbox_Sensor_PortName.Items.Clear();
+            //Parent.SerialForm.cbox_Sensor_Bits.Items.Clear();
+            //Parent.SerialForm.cbox_Sensor_Parity.Items.Clear();
+            //Parent.SerialForm.cbox_Sensor_Stop.Items.Clear();
+            //Parent.SerialForm.cbox_Sensor_Baud.Items.Clear();
 
-            foreach (string s in pc.Ports.SerialPortNames)
-            {
-                Parent.SerialForm.cbox_Sensor_PortName.Items.Add(s);
-                Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
-            }
-            //if (pc.Ports.SerialPortNames.Count > 0)
+            //foreach (string s in pc.Ports.SerialPortNames)
             //{
-            //    //Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = 0;
+            //    Parent.SerialForm.cbox_Sensor_PortName.Items.Add(s);
+            //    Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
             //}
-            //if(Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName)>=0)
+            ////if (pc.Ports.SerialPortNames.Count > 0)
+            ////{
+            ////    //Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = 0;
+            ////}
+            ////if(Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName)>=0)
+            ////{
+            ////    Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
+            ////}
+            //if (Parent.SerialForm.cbox_Phone_PortName.FindString(Parent.portPhone.PortName) >= 0)
             //{
-            //    Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
+            //    Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(Parent.portPhone.PortName);
             //}
-            if (Parent.SerialForm.cbox_Phone_PortName.FindString(Parent.portPhone.PortName) >= 0)
-            {
-                Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(Parent.portPhone.PortName);
-            }
-            if (Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName) >= 0)
-            {
-                Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName);
-            }
+            //if (Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName) >= 0)
+            //{
+            //    Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(this.Parent.warningThread.portWarn.PortName);
+            //}
 
 
 
-            Parent.SerialForm.cbox_Sensor_Bits.Items.Add("5");
-            Parent.SerialForm.cbox_Sensor_Bits.Items.Add("7");
-            Parent.SerialForm.cbox_Sensor_Bits.Items.Add("8");
+            //Parent.SerialForm.cbox_Sensor_Bits.Items.Add("5");
+            //Parent.SerialForm.cbox_Sensor_Bits.Items.Add("7");
+            //Parent.SerialForm.cbox_Sensor_Bits.Items.Add("8");
 
-            Parent.SerialForm.cbox_Sensor_Baud.Items.AddRange(new object[] {
-            "300",
-            "600",
-            "1200",
-            "2400",
-            "4800",
-            "9600",
-            "19200",
-            "38400",
-            "43000",
-            "56000",
-            "57600",
-            "115200"});
+            //Parent.SerialForm.cbox_Sensor_Baud.Items.AddRange(new object[] {
+            //"300",
+            //"600",
+            //"1200",
+            //"2400",
+            //"4800",
+            //"9600",
+            //"19200",
+            //"38400",
+            //"43000",
+            //"56000",
+            //"57600",
+            //"115200"});
 
-            Parent.SerialForm.cbox_Sensor_Parity.Items.AddRange(new object[] {
-            "Even",
-            "Mark",
-            "None",
-            "Odd",
-            "Space"});
+            //Parent.SerialForm.cbox_Sensor_Parity.Items.AddRange(new object[] {
+            //"Even",
+            //"Mark",
+            //"None",
+            //"Odd",
+            //"Space"});
 
-            Parent.SerialForm.cbox_Sensor_Stop.Items.Add("1");
-            Parent.SerialForm.cbox_Sensor_Stop.Items.Add("1.5");
-            Parent.SerialForm.cbox_Sensor_Stop.Items.Add("2");
+            //Parent.SerialForm.cbox_Sensor_Stop.Items.Add("1");
+            //Parent.SerialForm.cbox_Sensor_Stop.Items.Add("1.5");
+            //Parent.SerialForm.cbox_Sensor_Stop.Items.Add("2");
 
 
             //if (pc.Ports.SerialPortNames.Count > 0)

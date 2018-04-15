@@ -234,8 +234,8 @@ namespace MDIMonitor_CS
                 {
                     this.m_ParentForm.thread[(int)(numeric_cur_node.Value)-1].nodeChNum = (int)(numeric_ch_of_curnode.Value);
                     this.m_ParentForm.nodeNum = (int)(numeric_node_num.Value);
-                    UserThread.setXmlValue("NODE", "id", "0", "Count", String.Format("{0}", (int)(numeric_node_num.Value)));
-                    UserThread.setXmlValue("NODE", "id", String.Format("{0}", (int)(numeric_cur_node.Value)), "Count", String.Format("{0}", (int)(numeric_ch_of_curnode.Value)));
+                    //UserThread.setXmlValue("NODE", "id", "0", "Count", String.Format("{0}", (int)(numeric_node_num.Value)));
+                    UserThread.setXmlValue("NODE", "id", String.Format("{0}", (int)(numeric_cur_node.Value-1)), "Count", String.Format("{0}", (int)(numeric_ch_of_curnode.Value)));
                     this.m_ParentForm.statusLabel.Text = String.Format("节点{0}通道数已更改", (int)(numeric_cur_node.Value));
                      //this.m_ParentForm.thread.UpdateXml();
                }

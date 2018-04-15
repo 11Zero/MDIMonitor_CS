@@ -37,7 +37,7 @@ namespace MDIMonitor_CS
 
 
             this.Size = new Size(1039, 561);
-            portPhone = new System.IO.Ports.SerialPort();
+            //portPhone = new System.IO.Ports.SerialPort();
             thread = new UserThread[nodeNum];
             for (int i = 0; i < nodeNum; i++)
             {
@@ -55,10 +55,10 @@ namespace MDIMonitor_CS
                 thread[i].Start();
             }
             //thread.Start();
-            UIthread.Start();
-            warningThread.Start();
+            //UIthread.Start();
+            //warningThread.Start();
 
-            menu_auto.Enabled = false;
+            //menu_auto.Enabled = false;
             menu_auto.Checked = false;
             SerialForm = new SerialPortForm(this);
             SerialForm.MdiParent = this;
@@ -78,6 +78,8 @@ namespace MDIMonitor_CS
                 CurForm[i].Location = new Point(0, 0);
                 CurForm[i].Size = this.StripContainer.ContentPanel.Size;
                 CurForm[i].Parent = this.StripContainer.ContentPanel;
+                CurForm[i].Show();
+                CurForm[i].Visible = false;
                 CurForm[i].cur_node = i+1;
             }
 
@@ -92,6 +94,9 @@ namespace MDIMonitor_CS
             this.StripContainer.ContentPanel.Controls.Clear();
             SerialForm.Size = this.StripContainer.ContentPanel.Size;
             SerialForm.Parent = this.StripContainer.ContentPanel;
+            SerialForm.Show();
+            SerialForm.Visible = false;
+
             //this.PostMessage(6, 0);
             //SerialForm.Show();
             //SerialForm.Visible = false;
@@ -360,7 +365,6 @@ namespace MDIMonitor_CS
                 MeasureThread.Start();
                 this.statusLabel.Text = "自动测量已开启";
             }
-
         }
 
         private void menu_measure_step_Click(object sender, EventArgs e)

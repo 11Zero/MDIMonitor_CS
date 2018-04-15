@@ -11,7 +11,7 @@ namespace MDIMonitor_CS
     public class WarningThread
     {
         public SerialPort portWarn = null;
-        private bool portWarn_ShouldOpen = false;
+        public bool portWarn_ShouldOpen = false;
         private bool WarnDataRecFuncSetted = false;
         private int[] portWarnAttribute = new int[4];
         public cmd_buffer Warn_cmd_buffer = new cmd_buffer();
@@ -38,6 +38,8 @@ namespace MDIMonitor_CS
             Warn_cmd_Queue = new Queue<cmd_buffer>();
             thread = new Thread(new ThreadStart(Run));//真正定义线程
             thread.IsBackground = true;
+            portWarn = new SerialPort();
+
         }
 
         ~WarningThread()
@@ -523,51 +525,52 @@ namespace MDIMonitor_CS
         private void msgFunction_5()//初始化端口及相关UI
         {
             #region Warn控件初始化
-            portWarn = new SerialPort();
+            if(portWarn == null)
+                portWarn = new SerialPort();
             this.Parent.SerialForm.check_WarnPort.Checked = portWarn_ShouldOpen;
             //Parent.SerialForm.cbox_Warn_PortName.Enabled = false;
             //Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
-            foreach (string s in SerialPort.GetPortNames())
-            {
-                Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
-            }
+            //foreach (string s in SerialPort.GetPortNames())
+            //{
+            //    Parent.SerialForm.cbox_Warn_PortName.Items.Add(s);
+            //}
             if (SerialPort.GetPortNames().Contains(UserThread.getXmlValue("COM", "id", "Warn", "Last_id")))
             {
                 Parent.SerialForm.cbox_Warn_PortName.SelectedIndex = Parent.SerialForm.cbox_Warn_PortName.FindString(UserThread.getXmlValue("COM", "id", "Warn", "Last_id"));
             }
             //Parent.SerialForm.cbox_Warn_Bits.Items.Add("1");
-            Parent.SerialForm.cbox_Warn_Bits.Items.Add("5");
-            Parent.SerialForm.cbox_Warn_Bits.Items.Add("6");
-            Parent.SerialForm.cbox_Warn_Bits.Items.Add("7");
-            Parent.SerialForm.cbox_Warn_Bits.Items.Add("8");
+            //Parent.SerialForm.cbox_Warn_Bits.Items.Add("5");
+            //Parent.SerialForm.cbox_Warn_Bits.Items.Add("6");
+            //Parent.SerialForm.cbox_Warn_Bits.Items.Add("7");
+            //Parent.SerialForm.cbox_Warn_Bits.Items.Add("8");
             Parent.SerialForm.cbox_Warn_Bits.SelectedIndex = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Bits"));//读取xml参数
 
-            Parent.SerialForm.cbox_Warn_Baud.Items.AddRange(new object[] {
-            "300",
-            "600",
-            "1200",
-            "2400",
-            "4800",
-            "9600",
-            "19200",
-            "38400",
-            "43000",
-            "56000",
-            "57600",
-            "115200"});
+            //Parent.SerialForm.cbox_Warn_Baud.Items.AddRange(new object[] {
+            //"300",
+            //"600",
+            //"1200",
+            //"2400",
+            //"4800",
+            //"9600",
+            //"19200",
+            //"38400",
+            //"43000",
+            //"56000",
+            //"57600",
+            //"115200"});
             Parent.SerialForm.cbox_Warn_Baud.SelectedIndex = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Baud"));//读取xml参数
 
-            Parent.SerialForm.cbox_Warn_Parity.Items.AddRange(new object[] {
-            "Even",
-            "Mark",
-            "None",
-            "Odd",
-            "Space"});
+            //Parent.SerialForm.cbox_Warn_Parity.Items.AddRange(new object[] {
+            //"Even",
+            //"Mark",
+            //"None",
+            //"Odd",
+            //"Space"});
             Parent.SerialForm.cbox_Warn_Parity.SelectedIndex = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Parity"));//读取xml参数
 
-            Parent.SerialForm.cbox_Warn_Stop.Items.Add("1");
-            Parent.SerialForm.cbox_Warn_Stop.Items.Add("1.5");
-            Parent.SerialForm.cbox_Warn_Stop.Items.Add("2");
+            //Parent.SerialForm.cbox_Warn_Stop.Items.Add("1");
+            //Parent.SerialForm.cbox_Warn_Stop.Items.Add("1.5");
+            //Parent.SerialForm.cbox_Warn_Stop.Items.Add("2");
             Parent.SerialForm.cbox_Warn_Stop.SelectedIndex = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Stop"));//读取xml参数
 
             portWarnAttribute[0] = Convert.ToInt32(UserThread.getXmlValue("COM", "id", "Warn", "Baud"));//比特率

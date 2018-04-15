@@ -15,6 +15,8 @@ namespace MDIMonitor_CS
     {
         FrameWin m_ParentForm = null;
         public bool WarnOpen = false;
+        int curNode_id = -1;
+        public bool ui_flag = true;//true表示只改变ui，false表示改变ui并处罚开关函数
         public SerialPortForm(FrameWin parent)
         {
             InitializeComponent();
@@ -24,7 +26,9 @@ namespace MDIMonitor_CS
         }
         private void MainFrame_Load()
         {
-            this.m_ParentForm.PostMessage(6, 0);
+
+            //this.m_ParentForm.PostMessage(6, 0,0);
+            updateUI();
             this.m_ParentForm.PostMessage(5, 2);
             cbox_warnlist.Items.AddRange(new object[] {
             "音乐1",
@@ -42,6 +46,155 @@ namespace MDIMonitor_CS
 
         }
 
+        private void updateUI()
+        {
+            Microsoft.VisualBasic.Devices.Computer pc = new Microsoft.VisualBasic.Devices.Computer();
+            //循环该计算机上所有串行端口的集合
+            cbox_Warn_PortName.Items.Clear();
+            cbox_Warn_Bits.Items.Clear();
+            cbox_Warn_Parity.Items.Clear();
+            cbox_Warn_Stop.Items.Clear();
+            cbox_Warn_Baud.Items.Clear();
+
+            cbox_Phone_PortName.Items.Clear();
+            cbox_Phone_Bits.Items.Clear();
+            cbox_Phone_Parity.Items.Clear();
+            cbox_Phone_Stop.Items.Clear();
+            cbox_Phone_Baud.Items.Clear();
+
+            cbox_Sensor_PortName.Items.Clear();
+            cbox_Sensor_Bits.Items.Clear();
+            cbox_Sensor_Parity.Items.Clear();
+            cbox_Sensor_Stop.Items.Clear();
+            cbox_Sensor_Baud.Items.Clear();
+
+            foreach (string s in pc.Ports.SerialPortNames)
+            {
+                cbox_Sensor_PortName.Items.Add(s);
+                cbox_Warn_PortName.Items.Add(s);
+                cbox_Phone_PortName.Items.Add(s);
+
+            }
+            //if (pc.Ports.SerialPortNames.Count > 0)
+            //{
+            //    //Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = 0;
+            //}
+            //if(Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName)>=0)
+            //{
+            //    Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
+            //}
+            if (cbox_Phone_PortName.FindString(m_ParentForm.phoneThread.portPhone.PortName) >= 0)
+            {
+                cbox_Phone_PortName.SelectedIndex = cbox_Phone_PortName.FindString(m_ParentForm.phoneThread.portPhone.PortName);
+            }
+            if (cbox_Warn_PortName.FindString(this.m_ParentForm.warningThread.portWarn.PortName) >= 0)
+            {
+                cbox_Warn_PortName.SelectedIndex = cbox_Warn_PortName.FindString(this.m_ParentForm.warningThread.portWarn.PortName);
+            }
+            int selNodeid = -1;
+            if (radiobtn_node0.Checked)
+                selNodeid = 0;
+            else if (radiobtn_node1.Checked)
+                selNodeid = 1;
+            else if (radiobtn_node2.Checked)
+                selNodeid = 2;
+            else if (radiobtn_node3.Checked)
+                selNodeid = 3;
+            if (selNodeid!=-1)
+            {
+                cbox_Warn_PortName.SelectedIndex = cbox_Warn_PortName.FindString(this.m_ParentForm.thread[selNodeid].portSensor.PortName);
+            }
+
+
+
+            cbox_Sensor_Bits.Items.Add("5");
+            cbox_Sensor_Bits.Items.Add("7");
+            cbox_Sensor_Bits.Items.Add("8");
+
+            cbox_Sensor_Baud.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "43000",
+            "56000",
+            "57600",
+            "115200"});
+
+            cbox_Sensor_Parity.Items.AddRange(new object[] {
+            "Even",
+            "Mark",
+            "None",
+            "Odd",
+            "Space"});
+
+            cbox_Sensor_Stop.Items.Add("1");
+            cbox_Sensor_Stop.Items.Add("1.5");
+            cbox_Sensor_Stop.Items.Add("2");
+
+            cbox_Phone_Bits.Items.Add("5");
+            cbox_Phone_Bits.Items.Add("7");
+            cbox_Phone_Bits.Items.Add("8");
+
+            cbox_Phone_Baud.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "43000",
+            "56000",
+            "57600",
+            "115200"});
+
+            cbox_Phone_Parity.Items.AddRange(new object[] {
+            "Even",
+            "Mark",
+            "None",
+            "Odd",
+            "Space"});
+
+            cbox_Phone_Stop.Items.Add("1");
+            cbox_Phone_Stop.Items.Add("1.5");
+            cbox_Phone_Stop.Items.Add("2");
+
+            cbox_Warn_Bits.Items.Add("5");
+            cbox_Warn_Bits.Items.Add("7");
+            cbox_Warn_Bits.Items.Add("8");
+
+            cbox_Warn_Baud.Items.AddRange(new object[] {
+            "300",
+            "600",
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "43000",
+            "56000",
+            "57600",
+            "115200"});
+
+            cbox_Warn_Parity.Items.AddRange(new object[] {
+            "Even",
+            "Mark",
+            "None",
+            "Odd",
+            "Space"});
+
+            cbox_Warn_Stop.Items.Add("1");
+            cbox_Warn_Stop.Items.Add("1.5");
+            cbox_Warn_Stop.Items.Add("2");
+
+        }
 
 
 
@@ -93,11 +246,15 @@ namespace MDIMonitor_CS
 
         private void check_SensorPort_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(9, 0);//变更Sensor端口开关
+            //if (check_SensorPort.Checked == true)
+            //{ }
+            this.m_ParentForm.PostMessage(9, 0,curNode_id);//变更Sensor端口开关
+
         }
 
         private void check_WarnPort_CheckedChanged(object sender, EventArgs e)
         {
+            //m_ParentForm.warningThread.portWarn_ShouldOpen = check_WarnPort.Checked;
             this.m_ParentForm.PostMessage(2, 2);//变更Warn端口开关
             check_circulate.Checked = true;
             check_light.Checked = false;
@@ -268,23 +425,161 @@ namespace MDIMonitor_CS
 
         private void radiobtn_node0_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node0串口状态
+            if (!radiobtn_node0.Checked)
+                return;
+            if (curNode_id != 0)
+                ui_flag = true;
+            else
+                ui_flag = false;
+            curNode_id = 0;
+            this.cbox_Sensor_PortName.SelectedIndex = this.cbox_Sensor_PortName.FindString(this.m_ParentForm.thread[curNode_id].portSensor.PortName);
+            this.cbox_Sensor_Baud.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[0];//比特率
+            this.cbox_Sensor_Parity.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[1];//校验位
+            this.cbox_Sensor_Bits.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[2];//数据位
+            this.cbox_Sensor_Stop.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[3];//停止位
+            if (this.m_ParentForm.thread[curNode_id].portSensor.IsOpen)
+            {
+                this.check_SensorPort.Checked = true;
+                this.cbox_Sensor_PortName.Enabled = false;
+                this.cbox_Sensor_Baud.Enabled = false;
+                this.cbox_Sensor_Parity.Enabled = false;
+                this.cbox_Sensor_Bits.Enabled = false;
+                this.cbox_Sensor_Stop.Enabled = false;
+            }
+            else
+            {
+                this.check_SensorPort.Checked = false;
+
+                this.cbox_Sensor_PortName.Enabled = true;
+                this.cbox_Sensor_Baud.Enabled =     true;
+                this.cbox_Sensor_Parity.Enabled =   true;
+                this.cbox_Sensor_Bits.Enabled =     true;
+                this.cbox_Sensor_Stop.Enabled =     true;
+
+            }
+            ui_flag = false;
+            //this.m_ParentForm.PostMessage(9, 1,0);//发送指令显示或改变node0串口状态
         }
 
         private void radiobtn_node1_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node1串口状态
+            if (!radiobtn_node1.Checked)
+                return;
+            if (curNode_id != 1)
+                ui_flag = true;
+            else
+                ui_flag = false;
+            curNode_id = 1;
+
+            this.cbox_Sensor_PortName.SelectedIndex = this.cbox_Sensor_PortName.FindString(this.m_ParentForm.thread[curNode_id].portSensor.PortName);
+            this.cbox_Sensor_Baud.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[0];//比特率
+            this.cbox_Sensor_Parity.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[1];//校验位
+            this.cbox_Sensor_Bits.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[2];//数据位
+            this.cbox_Sensor_Stop.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[3];//停止位
+            if (this.m_ParentForm.thread[curNode_id].portSensor.IsOpen)
+            {
+                this.check_SensorPort.Checked = true;
+                this.cbox_Sensor_PortName.Enabled = false;
+                this.cbox_Sensor_Baud.Enabled = false;
+                this.cbox_Sensor_Parity.Enabled = false;
+                this.cbox_Sensor_Bits.Enabled = false;
+                this.cbox_Sensor_Stop.Enabled = false;
+            }
+            else
+            {
+                this.check_SensorPort.Checked = false;
+
+                this.cbox_Sensor_PortName.Enabled = true;
+                this.cbox_Sensor_Baud.Enabled = true;
+                this.cbox_Sensor_Parity.Enabled = true;
+                this.cbox_Sensor_Bits.Enabled = true;
+                this.cbox_Sensor_Stop.Enabled = true;
+
+            }
+            ui_flag = false;
+
+            //this.m_ParentForm.PostMessage(9, 1,1);//发送指令显示或改变node1串口状态
         }
 
         private void radiobtn_node2_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node2串口状态
+            if (!radiobtn_node2.Checked)
+                return;
+            if (curNode_id != 2)
+                ui_flag = true;
+            else
+                ui_flag = false;
+
+            curNode_id = 2;
+            this.cbox_Sensor_PortName.SelectedIndex = this.cbox_Sensor_PortName.FindString(this.m_ParentForm.thread[curNode_id].portSensor.PortName);
+            this.cbox_Sensor_Baud.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[0];//比特率
+            this.cbox_Sensor_Parity.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[1];//校验位
+            this.cbox_Sensor_Bits.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[2];//数据位
+            this.cbox_Sensor_Stop.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[3];//停止位
+            if (this.m_ParentForm.thread[curNode_id].portSensor.IsOpen)
+            {
+                this.check_SensorPort.Checked = true;
+                this.cbox_Sensor_PortName.Enabled = false;
+                this.cbox_Sensor_Baud.Enabled = false;
+                this.cbox_Sensor_Parity.Enabled = false;
+                this.cbox_Sensor_Bits.Enabled = false;
+                this.cbox_Sensor_Stop.Enabled = false;
+            }
+            else
+            {
+                this.check_SensorPort.Checked = false;
+
+                this.cbox_Sensor_PortName.Enabled = true;
+                this.cbox_Sensor_Baud.Enabled = true;
+                this.cbox_Sensor_Parity.Enabled = true;
+                this.cbox_Sensor_Bits.Enabled = true;
+                this.cbox_Sensor_Stop.Enabled = true;
+
+            }
+            ui_flag = false;
+
+            //this.m_ParentForm.PostMessage(9, 1,2);//发送指令显示或改变node2串口状态
 
         }
 
         private void radiobtn_node3_CheckedChanged(object sender, EventArgs e)
         {
-            this.m_ParentForm.PostMessage(9, 1);//发送指令显示或改变node3串口状态
+            if (!radiobtn_node3.Checked)
+                return;
+            if (curNode_id != 3)
+                ui_flag = true;
+            else
+                ui_flag = false;
+
+            curNode_id = 3;
+            this.cbox_Sensor_PortName.SelectedIndex = this.cbox_Sensor_PortName.FindString(this.m_ParentForm.thread[curNode_id].portSensor.PortName);
+            this.cbox_Sensor_Baud.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[0];//比特率
+            this.cbox_Sensor_Parity.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[1];//校验位
+            this.cbox_Sensor_Bits.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[2];//数据位
+            this.cbox_Sensor_Stop.SelectedIndex = this.m_ParentForm.thread[curNode_id].portSensorAttribute[3];//停止位
+            if (this.m_ParentForm.thread[curNode_id].portSensor.IsOpen)
+            {
+                //this.check_SensorPort.Checked = true;
+                this.cbox_Sensor_PortName.Enabled = false;
+                this.cbox_Sensor_Baud.Enabled = false;
+                this.cbox_Sensor_Parity.Enabled = false;
+                this.cbox_Sensor_Bits.Enabled = false;
+                this.cbox_Sensor_Stop.Enabled = false;
+            }
+            else
+            {
+                this.check_SensorPort.Checked = false;
+
+                this.cbox_Sensor_PortName.Enabled = true;
+                this.cbox_Sensor_Baud.Enabled = true;
+                this.cbox_Sensor_Parity.Enabled = true;
+                this.cbox_Sensor_Bits.Enabled = true;
+                this.cbox_Sensor_Stop.Enabled = true;
+
+            }
+            ui_flag = false;
+
+            //this.m_ParentForm.PostMessage(9, 1,3);//发送指令显示或改变node3串口状态
 
         }
     }

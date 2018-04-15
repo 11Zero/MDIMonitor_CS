@@ -226,12 +226,33 @@ namespace MDIMonitor_CS
             else
             {
                 Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex = Parent.SerialForm.cbox_Sensor_PortName.FindString(portSensor.PortName);
-                if (Parent.SerialForm.cbox_Phone_PortName.Text == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                if (Parent.phoneThread.portPhone.PortName == Parent.SerialForm.cbox_Sensor_PortName.Text)
                 {
-                    if (portPhone.IsOpen)
+                    if (Parent.phoneThread.portPhone.IsOpen)
                     {
                         Parent.statusLabel.Text = "手机端口与测量端口不能相同";
                         return false;
+                    }
+                }
+                if (Parent.warningThread.portWarn.PortName == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                {
+                    if (Parent.warningThread.portWarn.IsOpen)
+                    {
+                        Parent.statusLabel.Text = "警报端口与测量端口不能相同";
+                        return false;
+                    }
+                }
+                for (int i = 0; i < Parent.nodeNum; i++)
+                {
+                    if (i == portSensorId)
+                        continue;
+                    if (Parent.thread[i].portSensor.PortName == Parent.SerialForm.cbox_Sensor_PortName.Text)
+                    {
+                        if (Parent.thread[i].portSensor.IsOpen)
+                        {
+                            Parent.statusLabel.Text = "当前节点端口与已开启节点端口不能相同";
+                            return false;
+                        }
                     }
                 }
             }
@@ -241,7 +262,8 @@ namespace MDIMonitor_CS
             tempPortSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
             tempPortSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
             tempPortSensorAttribute[3] = Parent.SerialForm.cbox_Sensor_Stop.SelectedIndex;//停止位
-            tempPortSensorAttribute[4] = Convert.ToInt32(Parent.SerialForm.cbox_Sensor_PortName.SelectedText.Replace("COM",""));//停止位
+            string temp = Parent.SerialForm.cbox_Sensor_PortName.Items[Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex].ToString().Replace("COM", "");
+            tempPortSensorAttribute[4] = Convert.ToInt32(temp);//停止位
 
             for (int i = 0; i < 5; i++)
             {
@@ -944,11 +966,11 @@ namespace MDIMonitor_CS
             //    Parent.statusLabel.Text = String.Format("自动测量未选中");
             //    return;
             //}
-            if (!portSensor.IsOpen)
-            {
-                Parent.statusLabel.Text = String.Format("测量端口未开启");
-                return;
-            }
+            //if (!portSensor.IsOpen)
+            //{
+            //    Parent.statusLabel.Text = String.Format("测量端口未开启");
+            //    return;
+            //}
             try
             {
                 //for (int i = 0; i < totalNodeCount; i++)
@@ -975,8 +997,8 @@ namespace MDIMonitor_CS
                         for (int j = 0; j < nodeChNum; j++)
                         {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                             //System.Threading.Thread.Sleep(2000);//测量时间间隔
-                            System.Threading.Thread.Sleep(delayTime / nodeChNum);//测量时间间隔
-                            Parent.statusLabel.Text = String.Format("测量{0}", j);
+                            //System.Threading.Thread.Sleep(delayTime / nodeChNum);//测量时间间隔
+                            Parent.statusLabel.Text = String.Format("扫描节点{0}通道{1}", portSensorId+1,j+1);
                             string[] dataUnit = new string[9];
                                 double InitVal = 0.0;
                             double LMD = 0.0;
@@ -1354,7 +1376,7 @@ namespace MDIMonitor_CS
             {
                 for (int i = 0; i < Parent.CurGridForm.curGridData.Rows.Count; i++)
                 {
-                    //    curGridData.Columns.Add("节点");
+                    //curGridData.Columns.Add("节点");
                     //curGridData.Columns.Add("通道");
                     //curGridData.Columns.Add("时间");
                     //curGridData.Columns.Add("名称");
@@ -1548,16 +1570,23 @@ namespace MDIMonitor_CS
         {
             if (portSensor.IsOpen)
             {
+                Console.WriteLine("0");
                 SensorRecFun();
+                Console.WriteLine("1");
+
                 if (!auto_measure)
-                    Parent.statusLabel.Text = "单次扫描测量端口成功";
+                    Parent.statusLabel.Text = string.Format("单次扫描测量节点{0}成功",portSensorId+1);
                 else
-                    Parent.statusLabel.Text = "自动扫描测量端口中...";
+                    Parent.statusLabel.Text = string.Format("自动扫描测量节点{0}中...",portSensorId + 1);
             }
-            else
-            {
-                Parent.statusLabel.Text = "测量端口未开启";
-            }
+            //else
+            //{
+            //    Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
+
+            //    Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
+            //    Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
+
+            //}
         }
         private void msgFunction_2()//人工发送短信
         {
@@ -1603,7 +1632,7 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_6()//初始化Serial窗口UI
         {
-            if (!Parent.SerialForm.IsHandleCreated)
+            if (Parent.SerialForm == null)
                 return;
             ////让壮态栏控件的宽度与显示器的分辨率宽度一致
             ////this.Parent.this.m_ParentForm.statusLabel.Text = "就绪";
@@ -1653,6 +1682,8 @@ namespace MDIMonitor_CS
         {
             try
             {
+                if (this.Parent.SerialForm.ui_flag)
+                    return;
                 //portSensor_ShouldOpen = !portSensor_ShouldOpen;
                 if (portSensor.IsOpen)// && !portSensor_ShouldOpen
                 {
@@ -1663,7 +1694,7 @@ namespace MDIMonitor_CS
                     if (!portSensor.IsOpen)
                     {
                         auto_measure = false;
-                        this.Parent.menu_auto.Checked = false;
+                        //this.Parent.menu_auto.Checked = false;
                     }
                 }
                 else
@@ -1674,20 +1705,33 @@ namespace MDIMonitor_CS
                 //        portSensor_ShouldOpen = !portSensor_ShouldOpen;
                 //}
                 //this.Parent.SerialForm.check_SensorPort.Checked = portSensor.IsOpen;// portSensor_ShouldOpen;
-                Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor.IsOpen;// portSensor_ShouldOpen;
+                //Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor.IsOpen;// portSensor_ShouldOpen;
                 if (!portSensor.IsOpen)
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已关闭");
-                    this.Parent.menu_auto.Checked = false;
-                    this.Parent.menu_auto.Enabled = false;
-                    this.Parent.menu_single_measure.Enabled = false;
+                    //this.Parent.menu_auto.Checked = false;
+                    //this.Parent.menu_auto.Enabled = false;
+                    //this.Parent.menu_single_measure.Enabled = false;
+                    
+                        this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = true;
+                        this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = true;
+                        this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = true;
+                        this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = true;
+                        this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = true;
+
+
                 }
                 else
                 {
                     Parent.statusLabel.Text = String.Format("测量端口已开启");
-                    this.Parent.menu_auto.Checked = false;
-                    this.Parent.menu_auto.Enabled = true;
-                    this.Parent.menu_single_measure.Enabled = true;
+                    //this.Parent.menu_auto.Checked = false;
+                    //this.Parent.menu_auto.Enabled = true;
+                    //this.Parent.menu_single_measure.Enabled = true;
+                    //this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
+                    this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = false;
+                    this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = false;
+                    this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = false;
+                    this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = false;
                 }
                 //this.Parent.menu_auto.Enabled = false;
                 return;
