@@ -204,7 +204,7 @@ namespace MDIMonitor_CS
                 //    //Parent.statusLabel.Text = String.Format("自动测量未选中");
                 //    //return;
                 //}
-                System.Threading.Thread.Sleep(1);//每次循环间隔1ms，我还不知道到底有没有必要
+                System.Threading.Thread.Sleep(5);//每次循环间隔1ms，我还不知道到底有没有必要
             }
         }
         #endregion
@@ -983,7 +983,10 @@ namespace MDIMonitor_CS
                 int bufferSize = portSensor.ReadBufferSize;
                 byte[] readBuffer = new byte[bufferSize];
                 if (portSensor.BytesToRead <= 0)
+                {
+                    Console.WriteLine("bitestoread=0");
                     return;
+                }
                 int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
                 if (bufferLength == 21)//
                 {
@@ -998,9 +1001,9 @@ namespace MDIMonitor_CS
                         {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                             //System.Threading.Thread.Sleep(2000);//测量时间间隔
                             //System.Threading.Thread.Sleep(delayTime / nodeChNum);//测量时间间隔
-                            Parent.statusLabel.Text = String.Format("扫描节点{0}通道{1}", portSensorId+1,j+1);
+                            Parent.statusLabel.Text = String.Format("扫描节点{0}通道{1}", portSensorId + 1, j + 1);
                             string[] dataUnit = new string[9];
-                                double InitVal = 0.0;
+                            double InitVal = 0.0;
                             double LMD = 0.0;
                             string unit = "未设置";
                             string name = "未设置";
@@ -1054,6 +1057,11 @@ namespace MDIMonitor_CS
                             //MessageBox.Show(strview);
                         }
                     }
+                }
+                else
+                {
+                    Console.WriteLine("bitestoread!=21");
+
                 }
                 //}
                 return;
@@ -1493,6 +1501,7 @@ namespace MDIMonitor_CS
         /// <returns>是否写入成功</returns>
         public bool WriteDataToSQL(string[] datastr)//
         {
+            //return true;
             string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
             string path = "Database";
             if (Directory.Exists(path) == false)
@@ -1570,23 +1579,23 @@ namespace MDIMonitor_CS
         {
             if (portSensor.IsOpen)
             {
-                Console.WriteLine("0");
+                //Console.WriteLine("0");
                 SensorRecFun();
-                Console.WriteLine("1");
+                //Console.WriteLine("1");
 
                 if (!auto_measure)
                     Parent.statusLabel.Text = string.Format("单次扫描测量节点{0}成功",portSensorId+1);
                 else
                     Parent.statusLabel.Text = string.Format("自动扫描测量节点{0}中...",portSensorId + 1);
             }
-            //else
-            //{
-            //    Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
+            else
+            {
+                Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
 
-            //    Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
-            //    Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
+                //Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
+                Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
 
-            //}
+            }
         }
         private void msgFunction_2()//人工发送短信
         {
@@ -1699,6 +1708,7 @@ namespace MDIMonitor_CS
                 }
                 else
                     SetSensorPort();
+                this.Parent.SerialForm.ui_flag = false;
                 //if (!portSensor.IsOpen && portSensor_ShouldOpen)
                 //{
                 //    if (!SetSensorPort())
