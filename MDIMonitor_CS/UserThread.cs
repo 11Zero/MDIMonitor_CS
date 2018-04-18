@@ -25,7 +25,10 @@ namespace MDIMonitor_CS
         private bool portPhone_ShouldOpen = false;
         //private bool portWarn_ShouldOpen = false;
         private bool PhoneDataRecFuncSetted = false;
-        //private bool WarnDataRecFuncSetted = false;
+        private bool SensorDataRecFuncSetted = false;
+
+        private byte[] SensorReadBuffer = new byte[2048];
+        
         //private int[] portPhoneAttribute = new int[4];
         public int[] portSensorAttribute = new int[5];
         //private int[] portWarnAttribute = new int[4];
@@ -339,11 +342,11 @@ namespace MDIMonitor_CS
             //根据选择的数据，设置奇偶校验位
 
             //此委托应该是异步获取数据的触发事件，即是：当有串口有数据传过来时触发
-            //if (!SensorDataRecFuncSetted)
-            //{
-            //    portSensor.DataReceived += new SerialDataReceivedEventHandler(SensorRecFun);//DataPhoneeived事件委托
-            //    SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
-            //}
+            if (!SensorDataRecFuncSetted)
+            {
+                portSensor.DataReceived += new SerialDataReceivedEventHandler(SensorRecFun);//DataPhoneeived事件委托
+                SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
+            }
             //打开串口的方法
             try
             {
@@ -784,6 +787,32 @@ namespace MDIMonitor_CS
         //    }
         //    //return false;
         //}
+        private void SensorRecFun(object Sensorer, SerialDataReceivedEventArgs e)
+        {
+            if (portSensor.IsOpen == false)
+            {
+                Parent.statusLabel.Text = "测量端口未开启";
+                return;
+            }
+            try
+            {
+                int bufferSize = portSensor.ReadBufferSize;
+                //Console.Write(SensorReadBuffer);
+                if (portSensor.BytesToRead == 21)
+                {
+                    portSensor.Read(SensorReadBuffer, 0, bufferSize);
+                    //Console.WriteLine("bitestoread=0");
+                    //System.Threading.Thread.Sleep(5);//时间间隔
+                    //continue;
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Parent.statusLabel.Text = ex.Message;
+                return;
+            }
+        }
 
         private void PhoneRecFun(object Sensorer, SerialDataReceivedEventArgs e)
         {
@@ -959,7 +988,7 @@ namespace MDIMonitor_CS
         /// <summary>
         /// 扫描测量端口
         /// </summary>
-        private void SensorRecFun()//测量端口需主动扫描，因此不委托接收事件
+        private void AnalyseSensorPortData()//测量端口需主动扫描，因此不委托接收事件
         {
             //if (auto_measure == false)
             //{
@@ -978,16 +1007,23 @@ namespace MDIMonitor_CS
                 if (nodeChNum <= 0)
                     return;
                 TakeMeasure485((byte)(0 + 1));
-                //System.Threading.Thread.Sleep(delayTime);//测量时间间隔
+                System.Threading.Thread.Sleep(5);//时间间隔
 
+                //int bufferSize = portSensor.ReadBufferSize;
+                //byte[] readBuffer = new byte[bufferSize];
+                //if (portSensor.BytesToRead == 0)
+                //{
+                //    //Console.WriteLine("bitestoread=0");
+                //    //System.Threading.Thread.Sleep(5);//时间间隔
+                //    //continue;
+                //    return;
+                //}
+                //int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
+                byte[] readBuffer = (byte[])SensorReadBuffer.Clone();
                 int bufferSize = portSensor.ReadBufferSize;
-                byte[] readBuffer = new byte[bufferSize];
-                if (portSensor.BytesToRead <= 0)
-                {
-                    Console.WriteLine("bitestoread=0");
-                    return;
-                }
-                int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
+                int bufferLength = 0;
+                if (SensorReadBuffer[20] != 0 && SensorReadBuffer[21] == 0)
+                    bufferLength = 21;
                 if (bufferLength == 21)//
                 {
                     //MessageBox.Show("ok");
@@ -1580,7 +1616,7 @@ namespace MDIMonitor_CS
             if (portSensor.IsOpen)
             {
                 //Console.WriteLine("0");
-                SensorRecFun();
+                AnalyseSensorPortData();
                 //Console.WriteLine("1");
 
                 if (!auto_measure)
