@@ -457,6 +457,7 @@ namespace MDIMonitor_CS
                 this.cbox_Sensor_Stop.Enabled =     true;
 
             }
+            Thread.Sleep(10);
             ui_flag = false;
             //this.m_ParentForm.PostMessage(9, 1,0);//发送指令显示或改变node0串口状态
         }
@@ -496,6 +497,7 @@ namespace MDIMonitor_CS
                 this.cbox_Sensor_Stop.Enabled = true;
 
             }
+            Thread.Sleep(10);
             ui_flag = false;
 
             //this.m_ParentForm.PostMessage(9, 1,1);//发送指令显示或改变node1串口状态
@@ -536,6 +538,7 @@ namespace MDIMonitor_CS
                 this.cbox_Sensor_Stop.Enabled = true;
 
             }
+            Thread.Sleep(10);
             ui_flag = false;
 
             //this.m_ParentForm.PostMessage(9, 1,2);//发送指令显示或改变node2串口状态
@@ -577,6 +580,8 @@ namespace MDIMonitor_CS
                 this.cbox_Sensor_Stop.Enabled = true;
 
             }
+            Thread.Sleep(10);
+
             ui_flag = false;
 
             //this.m_ParentForm.PostMessage(9, 1,3);//发送指令显示或改变node3串口状态

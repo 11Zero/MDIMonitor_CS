@@ -792,20 +792,31 @@ namespace MDIMonitor_CS
             if (portSensor.IsOpen == false)
             {
                 Parent.statusLabel.Text = "测量端口未开启";
+                Console.WriteLine("port未开启");
                 return;
             }
             try
             {
-                int bufferSize = portSensor.ReadBufferSize;
-                //Console.Write(SensorReadBuffer);
-                if (portSensor.BytesToRead == 21)
-                {
-                    portSensor.Read(SensorReadBuffer, 0, bufferSize);
-                    //Console.WriteLine("bitestoread=0");
-                    //System.Threading.Thread.Sleep(5);//时间间隔
-                    //continue;
-                    return;
-                }
+                Thread _readThread;
+                _readThread = new Thread(threadReadPort);
+                _readThread.Start();
+                //int bufferSize = portSensor.ReadBufferSize;
+                ////Console.WriteLine("ReadBufferSize!=21");
+
+                ////Console.Write(SensorReadBuffer);
+                //if (portSensor.BytesToRead == 21)
+                //{
+                //    Console.WriteLine("ReadBufferSize==21");
+
+                //    portSensor.Read(SensorReadBuffer, 0, bufferSize);
+                //    //Console.WriteLine("bitestoread=0");
+                //    //System.Threading.Thread.Sleep(5);//时间间隔
+                //    //continue;
+                //    return;
+                //}
+                //else
+                //    Console.WriteLine("ReadBufferSize!=21");
+
             }
             catch (Exception ex)
             {
@@ -814,6 +825,26 @@ namespace MDIMonitor_CS
             }
         }
 
+        public void threadReadPort()
+        {
+            int bufferSize = portSensor.ReadBufferSize;
+            //Console.WriteLine("ReadBufferSize!=21");
+
+            //Console.Write(SensorReadBuffer);
+            if (portSensor.BytesToRead == 21)
+            {
+                Console.WriteLine("ReadBufferSize==21");
+
+                portSensor.Read(SensorReadBuffer, 0, bufferSize);
+                //Console.WriteLine("bitestoread=0");
+                //System.Threading.Thread.Sleep(5);//时间间隔
+                //continue;
+                return;
+            }
+            else
+                Console.WriteLine("ReadBufferSize!=21");
+
+        }
         private void PhoneRecFun(object Sensorer, SerialDataReceivedEventArgs e)
         {
             if (portPhone.IsOpen == false)
@@ -874,46 +905,6 @@ namespace MDIMonitor_CS
                 return;
 
 
-                //PhoneCommand(currentline, "18326077303");
-                //ASCIIEncoding AE2 = new ASCIIEncoding();
-                //char[] CharArray = AE2.GetChars(getbuffer);
-                //foreach (var item in CharArray)
-                //{
-                //    currentline = currentline + item;
-                //}
-                //"+CISMS:+8618326077303,17-2-16-20:57:16,ÌÚÑ¶QQ\r\n"腾讯QQ
-                //\ucc\uda\ud1\ub6//\u817e\u8baf
-                //currentline = Encoding.ASCII.GetString(getbuffer);
-                //MessageBox.Show(number + "~" + time + "~" + cmd);
-                //char[] trimChars = new char[] { '\r', '\t', '\n' };
-                //currentline = currentline.Trim(trimChars).ToString();
-                //string unicode_sms = currentline.Substring(currentline.LastIndexOf(',') + 1);
-                //UnicodeEncoding.
-                //    Parent.statusLabel.Text = ;
-
-                //string sms = "";
-                //int length = 0;
-                //MessageBox.Show(sms);
-
-                //for (int i = 0; ; i++)
-                //{
-                //    if (length == -1)
-                //        break;
-                //    length = currentline.IndexOf(',');
-                //    sms = sms + currentline.Substring(0, length) + "_";
-                //    currentline.Remove(0, length + 1);
-                //}
-                //MessageBox.Show(sms);
-                //if (currentline.IndexOf("+CISMS") != -1)
-                //{
-                //}
-                //+CISMS:+8613866120701,15-12-29-19:35,Cb15_1Ce
-                //接收到的信息模板13855170145
-                //portPhone.DiscardInBuffer();
-                //MessageBox.Show(currentline);
-                //在这里对接收到的数据进行显示
-                //如果不在窗体加载的事件里写上：Form.CheckForIllegalCrossThreadCalls = false; 就会报错）
-                //Parent.CurForm.richText_DataRec.AppendText("[" + DateTime.Now.TimeOfDay.ToString() + "]:" + currentline + "\n");
             }
             catch (Exception ex)
             {
@@ -1008,7 +999,7 @@ namespace MDIMonitor_CS
                     return;
                 TakeMeasure485((byte)(0 + 1));
                 System.Threading.Thread.Sleep(5);//时间间隔
-
+                Console.WriteLine("takemeasure485");
                 //int bufferSize = portSensor.ReadBufferSize;
                 //byte[] readBuffer = new byte[bufferSize];
                 //if (portSensor.BytesToRead == 0)
@@ -1096,7 +1087,7 @@ namespace MDIMonitor_CS
                 }
                 else
                 {
-                    Console.WriteLine("bitestoread!=21");
+                    //Console.WriteLine("bitestoread!=21");
 
                 }
                 //}
@@ -1626,10 +1617,10 @@ namespace MDIMonitor_CS
             }
             else
             {
-                Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
+                //Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
 
-                //Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
-                Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
+                ////Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
+                //Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
 
             }
         }
@@ -1765,7 +1756,6 @@ namespace MDIMonitor_CS
                         this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = true;
                         this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = true;
 
-
                 }
                 else
                 {
@@ -1773,7 +1763,7 @@ namespace MDIMonitor_CS
                     //this.Parent.menu_auto.Checked = false;
                     //this.Parent.menu_auto.Enabled = true;
                     //this.Parent.menu_single_measure.Enabled = true;
-                    //this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
+                    this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
                     this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = false;
                     this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = false;
                     this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = false;
