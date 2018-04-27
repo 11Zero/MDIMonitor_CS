@@ -28,7 +28,7 @@ namespace MDIMonitor_CS
         private bool SensorDataRecFuncSetted = false;
 
         private byte[] SensorReadBuffer = new byte[2048];
-        
+        public bool reach_21 = false;
         //private int[] portPhoneAttribute = new int[4];
         public int[] portSensorAttribute = new int[5];
         //private int[] portWarnAttribute = new int[4];
@@ -795,9 +795,7 @@ namespace MDIMonitor_CS
                 Console.WriteLine("port未开启");
                 return;
             }
-            try
-            {
-                Thread _readThread;
+             Thread _readThread;
                 _readThread = new Thread(threadReadPort);
                 _readThread.Start();
                 //int bufferSize = portSensor.ReadBufferSize;
@@ -817,12 +815,12 @@ namespace MDIMonitor_CS
                 //else
                 //    Console.WriteLine("ReadBufferSize!=21");
 
-            }
-            catch (Exception ex)
-            {
-                this.Parent.statusLabel.Text = ex.Message;
-                return;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    this.Parent.statusLabel.Text = ex.Message;
+            //    return;
+            //}
         }
 
         public void threadReadPort()
@@ -831,18 +829,27 @@ namespace MDIMonitor_CS
             //Console.WriteLine("ReadBufferSize!=21");
 
             //Console.Write(SensorReadBuffer);
-            if (portSensor.BytesToRead == 21)
+            //portSensor.Read(SensorReadBuffer, 0, bufferSize);
+            int byte_readytoread = portSensor.BytesToRead;
+            if (byte_readytoread == 21)
             {
+                
                 Console.WriteLine("ReadBufferSize==21");
 
                 portSensor.Read(SensorReadBuffer, 0, bufferSize);
-                //Console.WriteLine("bitestoread=0");
-                //System.Threading.Thread.Sleep(5);//时间间隔
-                //continue;
-                return;
             }
             else
-                Console.WriteLine("ReadBufferSize!=21");
+            {
+                reach_21 = false;
+                byte[] tempReadBuffer = new byte[2048];
+                portSensor.Read(tempReadBuffer, 0, bufferSize);
+                if (byte_readytoread > 21)
+                {
+                    Array.Copy(tempReadBuffer, 0, SensorReadBuffer, byte_readytoread - 21, 21);
+                    //SensorReadBuffer = SensorReadBuffer
+                }
+                Console.WriteLine("ReadBufferSize!=21,={0}", byte_readytoread);
+            }
 
         }
         private void PhoneRecFun(object Sensorer, SerialDataReceivedEventArgs e)
@@ -998,7 +1005,7 @@ namespace MDIMonitor_CS
                 if (nodeChNum <= 0)
                     return;
                 TakeMeasure485((byte)(0 + 1));
-                System.Threading.Thread.Sleep(5);//时间间隔
+                //System.Threading.Thread.Sleep(5);//时间间隔
                 Console.WriteLine("takemeasure485");
                 //int bufferSize = portSensor.ReadBufferSize;
                 //byte[] readBuffer = new byte[bufferSize];
@@ -1022,8 +1029,12 @@ namespace MDIMonitor_CS
                     uint rcCRC = (uint)readBuffer[bufferLength - 1];
                     rcCRC = (rcCRC << 8) & 0x0ff00;
                     rcCRC += (uint)readBuffer[bufferLength - 2];
+                    Console.WriteLine("judge CRC");
+
                     if (rcCRC == CRC16Code)
                     {
+                        Console.WriteLine("CRC pass");
+
                         for (int j = 0; j < nodeChNum; j++)
                         {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
                             //System.Threading.Thread.Sleep(2000);//测量时间间隔
@@ -1073,6 +1084,7 @@ namespace MDIMonitor_CS
                             dataUnit[5] = String.Format("{0:0.000}", dValue - InitVal);//测量值
                             dataUnit[6] = unit;//String.Format("单位");
                             dataUnit[7] = pos;//String.Format("位置");
+                            Console.WriteLine(dataUnit[5]);
                             SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
                             WarningFunc(dataUnit);
                             //string strview = "";

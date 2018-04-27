@@ -20,6 +20,8 @@ namespace MDIMonitor_CS
         public UserThread[] thread = null;
         public System.IO.Ports.SerialPort portPhone = null;
         public int[] portPhoneAttribute = new int[4];
+        public int[] portWarnAttribute = new int[4];
+
         public UIThread UIthread = null;
         public PhoneThread phoneThread = null;
         public WarningThread warningThread = null;
@@ -332,8 +334,8 @@ namespace MDIMonitor_CS
 
         private void FrameWin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (portPhone.IsOpen)
-                portPhone.Close();
+            if (phoneThread.portPhone.IsOpen)
+                phoneThread.portPhone.Close();
             for (int i = 0; i < nodeNum; i++)
             {
                 if (thread[i].portSensor.IsOpen)

@@ -98,6 +98,7 @@
             this.btn_test_warn1 = new System.Windows.Forms.Button();
             this.btn_test_warn2 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -360,6 +361,7 @@
             this.check_PhonePort.Text = "打开";
             this.check_PhonePort.UseVisualStyleBackColor = true;
             this.check_PhonePort.CheckedChanged += new System.EventHandler(this.check_PhonePort_CheckedChanged);
+            this.check_PhonePort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.check_PhonePort_MouseClick);
             // 
             // groupBox2
             // 
@@ -536,7 +538,7 @@
             // 
             // btn_ok
             // 
-            this.btn_ok.Location = new System.Drawing.Point(527, 361);
+            this.btn_ok.Location = new System.Drawing.Point(398, 232);
             this.btn_ok.Name = "btn_ok";
             this.btn_ok.Size = new System.Drawing.Size(75, 23);
             this.btn_ok.TabIndex = 9;
@@ -546,7 +548,7 @@
             // 
             // btn_cancel
             // 
-            this.btn_cancel.Location = new System.Drawing.Point(527, 411);
+            this.btn_cancel.Location = new System.Drawing.Point(398, 282);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_cancel.TabIndex = 10;
@@ -567,7 +569,7 @@
             // 
             // text_targetphone
             // 
-            this.text_targetphone.Location = new System.Drawing.Point(215, 355);
+            this.text_targetphone.Location = new System.Drawing.Point(86, 226);
             this.text_targetphone.Name = "text_targetphone";
             this.text_targetphone.Size = new System.Drawing.Size(127, 21);
             this.text_targetphone.TabIndex = 11;
@@ -575,7 +577,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(162, 358);
+            this.label13.Location = new System.Drawing.Point(33, 229);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(53, 12);
             this.label13.TabIndex = 12;
@@ -585,7 +587,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.label14.Location = new System.Drawing.Point(162, 385);
+            this.label14.Location = new System.Drawing.Point(33, 256);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 12);
             this.label14.TabIndex = 12;
@@ -594,7 +596,7 @@
             // rich_smstext
             // 
             this.rich_smstext.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rich_smstext.Location = new System.Drawing.Point(215, 382);
+            this.rich_smstext.Location = new System.Drawing.Point(86, 253);
             this.rich_smstext.Name = "rich_smstext";
             this.rich_smstext.Size = new System.Drawing.Size(127, 55);
             this.rich_smstext.TabIndex = 13;
@@ -602,7 +604,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(162, 404);
+            this.button1.Location = new System.Drawing.Point(33, 275);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(47, 33);
             this.button1.TabIndex = 14;
@@ -640,6 +642,7 @@
             this.check_WarnPort.Text = "打开";
             this.check_WarnPort.UseVisualStyleBackColor = true;
             this.check_WarnPort.CheckedChanged += new System.EventHandler(this.check_WarnPort_CheckedChanged);
+            this.check_WarnPort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.check_WarnPort_MouseClick);
             // 
             // label15
             // 
@@ -735,7 +738,7 @@
             // 
             this.cbox_warnlist.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbox_warnlist.FormattingEnabled = true;
-            this.cbox_warnlist.Location = new System.Drawing.Point(374, 386);
+            this.cbox_warnlist.Location = new System.Drawing.Point(245, 257);
             this.cbox_warnlist.Name = "cbox_warnlist";
             this.cbox_warnlist.Size = new System.Drawing.Size(121, 20);
             this.cbox_warnlist.TabIndex = 15;
@@ -754,7 +757,7 @@
             // 
             // trackBar_vol
             // 
-            this.trackBar_vol.Location = new System.Drawing.Point(396, 355);
+            this.trackBar_vol.Location = new System.Drawing.Point(267, 226);
             this.trackBar_vol.Name = "trackBar_vol";
             this.trackBar_vol.Size = new System.Drawing.Size(60, 45);
             this.trackBar_vol.TabIndex = 17;
@@ -763,7 +766,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(372, 361);
+            this.label20.Location = new System.Drawing.Point(243, 232);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(29, 12);
             this.label20.TabIndex = 18;
@@ -772,7 +775,7 @@
             // check_circulate
             // 
             this.check_circulate.AutoSize = true;
-            this.check_circulate.Location = new System.Drawing.Point(452, 360);
+            this.check_circulate.Location = new System.Drawing.Point(323, 231);
             this.check_circulate.Name = "check_circulate";
             this.check_circulate.Size = new System.Drawing.Size(48, 16);
             this.check_circulate.TabIndex = 19;
@@ -783,7 +786,7 @@
             // check_light
             // 
             this.check_light.AutoSize = true;
-            this.check_light.Location = new System.Drawing.Point(447, 419);
+            this.check_light.Location = new System.Drawing.Point(357, 308);
             this.check_light.Name = "check_light";
             this.check_light.Size = new System.Drawing.Size(48, 16);
             this.check_light.TabIndex = 20;
@@ -794,7 +797,7 @@
             // 
             // btn_test_warn1
             // 
-            this.btn_test_warn1.Location = new System.Drawing.Point(383, 415);
+            this.btn_test_warn1.Location = new System.Drawing.Point(254, 286);
             this.btn_test_warn1.Name = "btn_test_warn1";
             this.btn_test_warn1.Size = new System.Drawing.Size(97, 23);
             this.btn_test_warn1.TabIndex = 21;
@@ -804,7 +807,7 @@
             // 
             // btn_test_warn2
             // 
-            this.btn_test_warn2.Location = new System.Drawing.Point(383, 444);
+            this.btn_test_warn2.Location = new System.Drawing.Point(254, 315);
             this.btn_test_warn2.Name = "btn_test_warn2";
             this.btn_test_warn2.Size = new System.Drawing.Size(97, 23);
             this.btn_test_warn2.TabIndex = 22;
@@ -834,11 +837,22 @@
             this.panel1.Size = new System.Drawing.Size(394, 227);
             this.panel1.TabIndex = 23;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(524, 319);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 24;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // SerialPortForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 521);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_test_warn2);
             this.Controls.Add(this.btn_test_warn1);
@@ -947,5 +961,6 @@
         public System.Windows.Forms.RadioButton radiobtn_node3;
         public System.Windows.Forms.RadioButton radiobtn_node2;
         public System.Windows.Forms.RadioButton radiobtn_node1;
+        private System.Windows.Forms.Button button2;
     }
 }

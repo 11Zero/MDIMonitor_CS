@@ -36,8 +36,8 @@ namespace MDIMonitor_CS
             "音乐3",
             "音乐4",
             "音乐5",
-            "音乐6",
-            "静音"});
+            "静音",
+            "步步高"});
             trackBar_vol.Minimum = 1;
             trackBar_vol.Maximum = 30;
             check_circulate.Checked = false;
@@ -241,6 +241,10 @@ namespace MDIMonitor_CS
         private void check_PhonePort_CheckedChanged(object sender, EventArgs e)
         {
             //this.m_ParentForm.PostMessage(10, 0);//变更Phone端口开关
+            //this.m_ParentForm.PostPhoneMessage(1);
+        }
+        private void check_PhonePort_MouseClick(object sender, MouseEventArgs e)
+        {
             this.m_ParentForm.PostPhoneMessage(1);
         }
 
@@ -255,6 +259,11 @@ namespace MDIMonitor_CS
         private void check_WarnPort_CheckedChanged(object sender, EventArgs e)
         {
             //m_ParentForm.warningThread.portWarn_ShouldOpen = check_WarnPort.Checked;
+            
+        }
+
+        private void check_WarnPort_MouseClick(object sender, MouseEventArgs e)
+        {
             this.m_ParentForm.PostMessage(2, 2);//变更Warn端口开关
             check_circulate.Checked = true;
             check_light.Checked = false;
@@ -302,7 +311,7 @@ namespace MDIMonitor_CS
 
         private void trackBar_vol_Scroll(object sender, EventArgs e)
         {
-            if (!WarnOpen)
+            if (!this.m_ParentForm.warningThread.portWarn.IsOpen)
                 return;
             //byte[] tempWarn_cmd = this.m_ParentForm.thread.Warn_cmd_buffer;
             //byte buffer3 = this.m_ParentForm.warningThread.Warn_cmd_buffer[3];
@@ -366,7 +375,7 @@ namespace MDIMonitor_CS
 
         private void check_circulate_CheckedChanged(object sender, EventArgs e)
         {
-            return;
+            //return;
             if (!WarnOpen)
                 return;
             byte[] Warn_cmd_buffer = this.m_ParentForm.warningThread.Warn_cmd_buffer.buffer;//{ 0x7E, 0xFF, 0x06, 0x3A, 0x00, 0x80, 0x01, 0xEF };
@@ -395,7 +404,7 @@ namespace MDIMonitor_CS
 
         private void check_light_CheckedChanged(object sender, EventArgs e)
         {
-            return;
+            //return;
             if (!WarnOpen)
                 return;
             byte[] Warn_cmd_buffer = this.m_ParentForm.warningThread.Warn_cmd_buffer.buffer;
@@ -587,5 +596,12 @@ namespace MDIMonitor_CS
             //this.m_ParentForm.PostMessage(9, 1,3);//发送指令显示或改变node3串口状态
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.check_PhonePort.Checked = true;
+        }
+
+
     }
 }

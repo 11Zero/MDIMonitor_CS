@@ -155,13 +155,20 @@ namespace MDIMonitor_CS
         #region 设置手机端口
         private bool SetPhonePort()
         {
-            if (!portPhone.IsOpen)
+            bool need_states = false;
+            //this.Parent.SerialForm.check_PhonePort.Checked = false;
+            if (this.Parent.SerialForm!=null)
+                need_states = this.Parent.SerialForm.check_PhonePort.Checked;
+            if (need_states && !portPhone.IsOpen)
             {
                 if (Parent.SerialForm.cbox_Phone_PortName.SelectedIndex == -1)
+                {
+                    //this.Parent.SerialForm.check_PhonePort.Checked = false;
                     return false;
+                }
                 portPhone.PortName = Parent.SerialForm.cbox_Phone_PortName.Text;
             }
-            else
+            else if(portPhone.IsOpen)
             {
                 Parent.SerialForm.cbox_Phone_PortName.SelectedIndex = Parent.SerialForm.cbox_Phone_PortName.FindString(portPhone.PortName);
                 //if (Parent.SerialForm.cbox_Phone_PortName.SelectedText == Parent.SerialForm.cbox_Sensor_PortName.SelectedText)
@@ -259,14 +266,16 @@ namespace MDIMonitor_CS
             //打开串口的方法
             try
             {
-                if (portPhone_ShouldOpen)
+                if (need_states)
                 {
                     if (!portPhone.IsOpen)
+                    {
                         portPhone.Open();
+                    }
                 }
                 else
                 {
-                    this.Parent.statusLabel.Text = "设置已生效";
+                    //this.Parent.statusLabel.Text = "设置已生效";
                     Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
                     Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
                     Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
@@ -277,12 +286,18 @@ namespace MDIMonitor_CS
                     setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
                     setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
                     setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
-                    return true;
+                    if (portPhone.IsOpen)
+                        portPhone.Close();
+                    this.Parent.statusLabel.Text = "通讯端口已关闭";
+                    this.Parent.SerialForm.check_PhonePort.Checked = false;
+                    return false;
                 }
-                if (portPhone_ShouldOpen && portPhone.IsOpen)
+                if (need_states && portPhone.IsOpen)
                 {
                     //MessageBox.Show("the port is opened!");
                     this.Parent.statusLabel.Text = "通讯端口已开启";
+                    this.Parent.SerialForm.check_PhonePort.Checked = true;
+
                     Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
                     Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
                     Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
@@ -293,14 +308,12 @@ namespace MDIMonitor_CS
                     setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
                     setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
                     setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
+                    this.Parent.SerialForm.check_PhonePort.Checked = true;
 
                     return true;
                 }
-                else
-                {
-                    this.Parent.statusLabel.Text = "通讯端口开启失败";
-                    return false;
-                }
+                return false;
+               
             }
             catch (Exception ex)
             {
@@ -450,11 +463,12 @@ namespace MDIMonitor_CS
                 //getbuffer[i]=0;
                 //byte[] getbuffer = Encoding.UTF8.GetBytes(currentline);
                 currentline = Encoding.Default.GetString((getbuffer));
-                currentline.Replace("\n", "");
-                currentline.Replace(" ", "");
-                currentline.Replace("\r", "");
-                currentline.Replace("\t", "");
-                currentline.Replace("\0", "");
+                currentline = currentline.Replace("\n", "");
+                currentline = currentline.Replace(" ", "");
+                currentline = currentline.Replace("\r", "");
+                currentline = currentline.Replace("\t", "");
+                //currentline = currentline.Replace("\0", "");
+                //currentline = currentline = currentline.Substring(0, currentline.IndexOf("\0"));
                 if (currentline == "" || currentline.IndexOf("OK") != -1)
                     return;
                 if (currentline.IndexOf("+EAIC") >= 0 || currentline.IndexOf("RING") >= 0 || currentline.IndexOf("+CLIP") >= 0)
@@ -522,7 +536,7 @@ namespace MDIMonitor_CS
                 Parent.statusLabel.Text = "手机通讯端口未开启";
                 return;
             }
-            string phonenumber = msginfo.Substring(11);
+            string phonenumber = msginfo.Substring(0,11);
             string gsmmsg = msginfo.Substring(11, msginfo.Length - 11);
             if (phonenumber.Length == 11 && gsmmsg.Replace(" ", "") != "")
                 this.PhoneCommand(gsmmsg, phonenumber);
