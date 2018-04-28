@@ -215,15 +215,21 @@ namespace MDIMonitor_CS
         #region 设置测量端口
         private bool SetSensorPort()
         {
+            portSensor_ShouldOpen = this.Parent.SerialForm.check_SensorPort.Checked;
             if (portSensorId == -1)
             {
                 Parent.statusLabel.Text = "测量端口所属节点未选择";
+                this.Parent.SerialForm.check_SensorPort.Checked = false;
                 return false;
             }
             if (!portSensor.IsOpen)
             {
                 if (Parent.SerialForm.cbox_Sensor_PortName.SelectedIndex == -1)
+                {
+                    this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                     return false;
+                }
                 portSensor.PortName = Parent.SerialForm.cbox_Sensor_PortName.Text;
             }
             else
@@ -234,6 +240,8 @@ namespace MDIMonitor_CS
                     if (Parent.phoneThread.portPhone.IsOpen)
                     {
                         Parent.statusLabel.Text = "手机端口与测量端口不能相同";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                 }
@@ -242,6 +250,8 @@ namespace MDIMonitor_CS
                     if (Parent.warningThread.portWarn.IsOpen)
                     {
                         Parent.statusLabel.Text = "警报端口与测量端口不能相同";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                 }
@@ -254,6 +264,8 @@ namespace MDIMonitor_CS
                         if (Parent.thread[i].portSensor.IsOpen)
                         {
                             Parent.statusLabel.Text = "当前节点端口与已开启节点端口不能相同";
+                            this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                             return false;
                         }
                     }
@@ -275,26 +287,36 @@ namespace MDIMonitor_CS
                     if (i == 0)
                     {
                         Parent.statusLabel.Text = "请确认测量端口比特率";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                     if (i == 1)
                     {
                         Parent.statusLabel.Text = "请确认测量端口奇偶校验位";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                     if (i == 2)
                     {
                         Parent.statusLabel.Text = "请确认测量端口数据位";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                     if (i == 3)
                     {
                         Parent.statusLabel.Text = "请确认测量端口停止位";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                     if (i == 4)
                     {
                         Parent.statusLabel.Text = "请确认测量端口号";
+                        this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                         return false;
                     }
                 }
@@ -337,6 +359,7 @@ namespace MDIMonitor_CS
                 portSensor.ReceivedBytesThreshold = 1;
                 portSensor.ReadBufferSize = 2048;
                 portSensor.WriteBufferSize = 2048;
+                portSensor.ReceivedBytesThreshold = 1;
             }
 
             //根据选择的数据，设置奇偶校验位
@@ -353,10 +376,15 @@ namespace MDIMonitor_CS
                 //if (portSensor_ShouldOpen)
                 //{
                 if (!portSensor.IsOpen)
+                {
                     portSensor.Open();
+                    this.Parent.SerialForm.check_SensorPort.Checked = true;
+
+                }
                 //}
                 else
                 {
+
                     this.Parent.statusLabel.Text = "设置已生效";
                     portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
                     portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
@@ -370,6 +398,8 @@ namespace MDIMonitor_CS
                     setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
                     setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
                     setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
+                    this.Parent.SerialForm.check_SensorPort.Checked = true;
+
                     return true;
                 }
                 if (portSensor_ShouldOpen && portSensor.IsOpen)
@@ -386,17 +416,27 @@ namespace MDIMonitor_CS
                     setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
                     setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
                     setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
+                    this.Parent.SerialForm.check_SensorPort.Checked = true;
+
                     return true;
                 }
                 else
                 {
                     this.Parent.statusLabel.Text = "测量端口"+portSensorId.ToString()+"开启失败";
+                    this.Parent.SerialForm.check_SensorPort.Checked = false;
+
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("测量端口开启失败：" + ex.ToString());
+                Console.WriteLine("SetSensorPort" + ex.Message);
+
+                this.Parent.SerialForm.check_SensorPort.Checked = false;
+                //Console.WriteLine(ex.Message);
+
+                //MessageBox.Show("测量端口开启失败：" + ex.ToString());
+
                 return false;
             }
 
@@ -555,7 +595,9 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
-                MessageBox.Show("通讯端口开启失败：" + ex.ToString());
+                Console.WriteLine("SetPhonePort" + ex.Message);
+
+                //MessageBox.Show("通讯端口开启失败：" + ex.ToString());
                 return false;
             }
 
@@ -795,33 +837,56 @@ namespace MDIMonitor_CS
                 Console.WriteLine("port未开启");
                 return;
             }
-             Thread _readThread;
-                _readThread = new Thread(threadReadPort);
-                _readThread.Start();
-                //int bufferSize = portSensor.ReadBufferSize;
-                ////Console.WriteLine("ReadBufferSize!=21");
+            //Thread _readThread;
+            //   _readThread = new Thread(threadReadPort);
+            //   _readThread.Start();
+            int bufferSize = portSensor.ReadBufferSize;
+            //Console.WriteLine("ReadBufferSize!=21");
 
-                ////Console.Write(SensorReadBuffer);
-                //if (portSensor.BytesToRead == 21)
-                //{
-                //    Console.WriteLine("ReadBufferSize==21");
+            //Console.Write(SensorReadBuffer);
+            int readLen = portSensor.BytesToRead;
+            if (readLen == 21)
+            {
+                Console.WriteLine("ReadBufferSize==21");
 
-                //    portSensor.Read(SensorReadBuffer, 0, bufferSize);
-                //    //Console.WriteLine("bitestoread=0");
-                //    //System.Threading.Thread.Sleep(5);//时间间隔
-                //    //continue;
-                //    return;
-                //}
-                //else
-                //    Console.WriteLine("ReadBufferSize!=21");
+                portSensor.Read(SensorReadBuffer, 0, bufferSize);
+                StringBuilder ret = new StringBuilder();
+                for (int i = 0; i < readLen; i++)
+                {
+                    //{0:X2} 大写
+                    ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
+                }
+                var hex = ret.ToString();
+                Console.WriteLine(hex);
+                //Console.WriteLine("bitestoread=0");
+                //System.Threading.Thread.Sleep(5);//时间间隔
+                //continue;
+                return;
+            }
+            else
+            {
+                byte[] tempSensorReadBuffer = new byte[bufferSize];
+                portSensor.Read(tempSensorReadBuffer, 0, bufferSize);
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    this.Parent.statusLabel.Text = ex.Message;
-            //    return;
-            //}
-        }
+                StringBuilder ret = new StringBuilder();
+                for (int i = 0; i < readLen; i++)
+                {
+                    //{0:X2} 大写
+                    ret.AppendFormat("{0:x2}", tempSensorReadBuffer[i]);
+                }
+                var hex = ret.ToString();
+                Console.WriteLine(string.Format("ReadBufferSize={0}", readLen));
+
+                Console.WriteLine(hex);
+            }
+
+        //}
+        //    catch (Exception ex)
+        //    {
+        //        this.Parent.statusLabel.Text = ex.Message;
+        //        return;
+        //    }
+}
 
         public void threadReadPort()
         {
@@ -834,15 +899,31 @@ namespace MDIMonitor_CS
             if (byte_readytoread == 21)
             {
                 
-                Console.WriteLine("ReadBufferSize==21");
+                Console.WriteLine("1ReadBufferSize==21");
 
                 portSensor.Read(SensorReadBuffer, 0, bufferSize);
+                StringBuilder ret = new StringBuilder();
+                for (int i=0;i< byte_readytoread;i++)
+                {
+                    //{0:X2} 大写
+                    ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
+                }
+                var hex = ret.ToString();
+                Console.WriteLine(hex);
             }
             else
             {
                 reach_21 = false;
                 byte[] tempReadBuffer = new byte[2048];
                 portSensor.Read(tempReadBuffer, 0, bufferSize);
+                StringBuilder ret = new StringBuilder();
+                for (int i = 0; i < byte_readytoread; i++)
+                {
+                    //{0:X2} 大写
+                    ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
+                }
+                var hex = ret.ToString();
+                Console.WriteLine(hex);
                 if (byte_readytoread > 21)
                 {
                     Array.Copy(tempReadBuffer, 0, SensorReadBuffer, byte_readytoread - 21, 21);
@@ -915,7 +996,9 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
-                this.Parent.statusLabel.Text = ex.Message;
+                Console.WriteLine("PhoneRecFun"+ex.Message);
+
+                //this.Parent.statusLabel.Text = ex.Message;
                 return;
             }
         }
@@ -1085,8 +1168,10 @@ namespace MDIMonitor_CS
                             dataUnit[6] = unit;//String.Format("单位");
                             dataUnit[7] = pos;//String.Format("位置");
                             Console.WriteLine(dataUnit[5]);
+
                             SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
                             WarningFunc(dataUnit);
+
                             //string strview = "";
                             //for (int k = 0; k < 8; k++)
                             //{
@@ -1095,6 +1180,8 @@ namespace MDIMonitor_CS
                             //}
                             //MessageBox.Show(strview);
                         }
+                        Console.WriteLine("扫描结束");
+
                     }
                 }
                 else
@@ -1102,13 +1189,15 @@ namespace MDIMonitor_CS
                     //Console.WriteLine("bitestoread!=21");
 
                 }
+                Console.WriteLine("takemeasure485 end");
+
                 //}
                 return;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                Console.WriteLine(ex.Message.ToString());
+                //MessageBox.Show(ex.Message);
+                Console.WriteLine("AnalyseSensorPortData"+ex.Message);
                 return;
             }
         }
@@ -1203,7 +1292,7 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message.ToString());
+                Console.WriteLine("SensorCommand" + ex.Message);
             }
         }
 
@@ -1394,7 +1483,16 @@ namespace MDIMonitor_CS
 
         public void GridDelegateMethod(DataTable dt)
         {
-            Parent.CurGridForm.dataGrid_curdata.DataSource = dt;
+            try
+            {
+                Parent.CurGridForm.dataGrid_curdata.DataSource = dt;
+
+            }
+            catch (Exception e)
+            {
+
+                Console.WriteLine("GridDelegateMethod" + e.Message);
+            }
         }
 
         /// <summary>
@@ -1434,6 +1532,8 @@ namespace MDIMonitor_CS
                     //curGridData.Columns.Add("地点");
                     if (Parent.CurGridForm.curGridData.Rows[i][0].ToString() == datastr[0] && Parent.CurGridForm.curGridData.Rows[i][1].ToString() == datastr[1])
                     {
+                        此处出现异常信息，SendDataToChartSQL索引超出范围。必须为非负值并小于集合大小。SendDataToChartSQL未将对象引用设置到对象的实例。
+                        可能是在委托修改控件的dataTable时导致的实例问题
                         Parent.CurGridForm.curGridData.Rows[i][2] = datastr[2];
                         Parent.CurGridForm.curGridData.Rows[i][3] = datastr[3];
                         Parent.CurGridForm.curGridData.Rows[i][4] = datastr[5];
@@ -1460,8 +1560,9 @@ namespace MDIMonitor_CS
             }
             catch (Exception ex)
             {
+                Console.WriteLine("SendDataToChartSQL" + ex.Message);
 
-                MessageBox.Show(ex.Message);
+                //MessageBox.Show(ex.Message);
             }
             //Parent.CurGridForm.ScanData = datastr;
             WriteDataToSQL(datastr);
@@ -1520,9 +1621,11 @@ namespace MDIMonitor_CS
                 }
                 dataBase.Close();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.ToString());
+                Console.WriteLine("CreateDataSQL" + ex.Message);
+
+                //MessageBox.Show(e.ToString());
             }
             return File.Exists(path + "\\" + fileName);
         }
@@ -1582,8 +1685,10 @@ namespace MDIMonitor_CS
                 return true;
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("WriteDataToSQL" + ex.Message);
+
                 Parent.statusLabel.Text = String.Format("数据写入失败");
                 return false;
             }
@@ -1784,8 +1889,10 @@ namespace MDIMonitor_CS
                 //this.Parent.menu_auto.Enabled = false;
                 return;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine("msgFunction_9" + ex.Message);
+
                 Parent.statusLabel.Text = String.Format("测量端口变更失败");
                 throw;
             }

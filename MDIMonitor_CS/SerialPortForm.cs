@@ -252,7 +252,13 @@ namespace MDIMonitor_CS
         {
             //if (check_SensorPort.Checked == true)
             //{ }
-            this.m_ParentForm.PostMessage(9, 0,curNode_id);//变更Sensor端口开关
+            //this.m_ParentForm.PostMessage(9, 0,curNode_id);//变更Sensor端口开关
+
+        }
+
+        private void check_SensorPort_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.m_ParentForm.PostMessage(9, 0, curNode_id);//变更Sensor端口开关
 
         }
 

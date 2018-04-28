@@ -445,6 +445,7 @@
             this.check_SensorPort.Text = "打开";
             this.check_SensorPort.UseVisualStyleBackColor = true;
             this.check_SensorPort.CheckedChanged += new System.EventHandler(this.check_SensorPort_CheckedChanged);
+            this.check_SensorPort.MouseClick += new System.Windows.Forms.MouseEventHandler(this.check_SensorPort_MouseClick);
             // 
             // label8
             // 
