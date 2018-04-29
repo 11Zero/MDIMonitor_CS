@@ -1,0 +1,98 @@
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.IndexOutOfRangeException”(位于 ClassForecast.dll 中)
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - end
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+ReadBufferSize=0
+
+ReadBufferSize=20
+0410002e00390034006100b8006d004100276d67
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+SendDataToChartSQL - start
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - end
+SendDataToChartSQL - end
+
+WriteDataToSQL - end
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - start
+
+WriteDataToSQL - 4
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 5
+
+WriteDataToSQL - 6
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 7
+
+WriteDataToSQL - 4
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 5
+
+WriteDataToSQL - 6
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 7
+
+WriteDataToSQL - 6
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 7
+
+WriteDataToSQL - 6
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 7
+
+WriteDataToSQL - end
+WriteDataT引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+oSQL - start
+
+WriteDataToSQL - 1
+WriteD引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+ataToSQL - 2
+
+WriteDataToSQL - 6
+update TableRows set Count=324 w引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+here NUM=9
+WriteDataToSQL - 6.5
+
+WriteDataToSQL - start
+引发的异常:“System.ArgumentOutOfRangeException”(位于 System.Core.dll 中)
+WriteDataToSQL - 4
+insert into _16_00_00 (DataTime,LMD,SensorVal,Unit,Pos) values ('16:24:32','102.5','-102.237','με','位置1')
+WriteDataToSQL - 4.5
+
+WriteDataToSQL - 4
+insert into _16_00_00 (DataTime,LMD,SensorVal,Unit,Pos) values ('16:27:12','102.5','-102.139','με','位置1')
+引发的异常:“System.IndexOutOfRangeException”(位于 ClassForecast.dll 中)
+WriteDataToSQL - 4.5

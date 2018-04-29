@@ -43,7 +43,7 @@ namespace MDIMonitor_CS
         private static string xmlName;
         public int totalNodeCount = 0;
         public int nodeChNum = 0;
-        public DateTime warn_time_1 = new DateTime(1970,1,1,0,0,0);
+        public DateTime warn_time_1 = new DateTime(1970, 1, 1, 0, 0, 0);
         public DateTime warn_time_2 = new DateTime(1970, 1, 1, 0, 0, 0);
         public int ScanTimeStep = 2000;//默认延时2s间隔遍历节点一次
         public string[] phone_sms_send = new string[2];
@@ -57,7 +57,7 @@ namespace MDIMonitor_CS
         public bool auto_measure = false;
         FrameWin Parent = null;//用于传入其他线程句柄，一般通过线程刷新某个窗口UI,FrameWin是需要控制的窗口类，自行修改
 
-        public UserThread(Form parent,int id)
+        public UserThread(Form parent, int id)
         {
             Parent = (FrameWin)parent;//强制转换
             xmlName = "config.xml";
@@ -137,63 +137,78 @@ namespace MDIMonitor_CS
                         case 1:
                             {
                                 msgFunction_1();//例如消息码为1是，执行msgFunction_1()函数
-                            } break;
+                            }
+                            break;
                         case 2:
                             {
                                 msgFunction_2();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 3:
                             {
                                 msgFunction_3();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 4:
                             {
                                 msgFunction_4();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 5:
                             {
                                 msgFunction_5();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 6:
                             {
                                 msgFunction_6();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 7:
                             {
                                 msgFunction_7();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 8:
                             {
                                 msgFunction_8();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 9:
                             {
                                 msgFunction_9();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 10:
                             {
                                 msgFunction_10();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 11:
                             {
                                 msgFunction_11();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 12:
                             {
                                 msgFunction_12();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 13:
                             {
                                 msgFunction_13();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 14:
                             {
                                 msgFunction_14();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                         case 15:
                             {
                                 msgFunction_15();//例如消息码为2是，执行msgFunction_2()函数
-                            } break;
+                            }
+                            break;
                     }
                     msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
                 }
@@ -371,74 +386,74 @@ namespace MDIMonitor_CS
                 SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
             }
             //打开串口的方法
-            try
+            //try
+            //{
+            //if (portSensor_ShouldOpen)
+            //{
+            if (!portSensor.IsOpen)
             {
-                //if (portSensor_ShouldOpen)
-                //{
-                if (!portSensor.IsOpen)
-                {
-                    portSensor.Open();
-                    this.Parent.SerialForm.check_SensorPort.Checked = true;
+                portSensor.Open();
+                this.Parent.SerialForm.check_SensorPort.Checked = true;
 
-                }
-                //}
-                else
-                {
-
-                    this.Parent.statusLabel.Text = "设置已生效";
-                    portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
-                    portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
-                    portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
-                    portSensorAttribute[3] = Parent.SerialForm.cbox_Sensor_Stop.SelectedIndex;//停止位
-                    portSensorAttribute[4] = Convert.ToInt32(Parent.SerialForm.cbox_Sensor_PortName.SelectedText.Replace("COM", ""));
-
-                    string COM_id = portSensorId.ToString();
-                    setXmlValue("COM", "id", COM_id, "Last_id", portSensor.PortName);
-                    setXmlValue("COM", "id", COM_id, "Baud", tempPortSensorAttribute[0].ToString());
-                    setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
-                    setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
-                    setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
-                    this.Parent.SerialForm.check_SensorPort.Checked = true;
-
-                    return true;
-                }
-                if (portSensor_ShouldOpen && portSensor.IsOpen)
-                {
-                    //MessageBox.Show("the port is opened!");
-                    this.Parent.statusLabel.Text = "测量端口已开启";
-                    portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
-                    portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
-                    portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
-                    portSensorAttribute[3] = Parent.SerialForm.cbox_Sensor_Stop.SelectedIndex;//停止位
-                    string COM_id = portSensorId.ToString(); 
-                    setXmlValue("COM", "id", COM_id, "Last_id", portSensor.PortName);
-                    setXmlValue("COM", "id", COM_id, "Baud", tempPortSensorAttribute[0].ToString());
-                    setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
-                    setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
-                    setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
-                    this.Parent.SerialForm.check_SensorPort.Checked = true;
-
-                    return true;
-                }
-                else
-                {
-                    this.Parent.statusLabel.Text = "测量端口"+portSensorId.ToString()+"开启失败";
-                    this.Parent.SerialForm.check_SensorPort.Checked = false;
-
-                    return false;
-                }
             }
-            catch (Exception ex)
+            //}
+            else
             {
-                Console.WriteLine("SetSensorPort" + ex.Message);
 
+                this.Parent.statusLabel.Text = "设置已生效";
+                portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
+                portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
+                portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
+                portSensorAttribute[3] = Parent.SerialForm.cbox_Sensor_Stop.SelectedIndex;//停止位
+                portSensorAttribute[4] = Convert.ToInt32(Parent.SerialForm.cbox_Sensor_PortName.SelectedText.Replace("COM", ""));
+
+                string COM_id = portSensorId.ToString();
+                setXmlValue("COM", "id", COM_id, "Last_id", portSensor.PortName);
+                setXmlValue("COM", "id", COM_id, "Baud", tempPortSensorAttribute[0].ToString());
+                setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
+                setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
+                setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
+                this.Parent.SerialForm.check_SensorPort.Checked = true;
+
+                return true;
+            }
+            if (portSensor_ShouldOpen && portSensor.IsOpen)
+            {
+                //MessageBox.Show("the port is opened!");
+                this.Parent.statusLabel.Text = "测量端口已开启";
+                portSensorAttribute[0] = Parent.SerialForm.cbox_Sensor_Baud.SelectedIndex;//比特率
+                portSensorAttribute[1] = Parent.SerialForm.cbox_Sensor_Parity.SelectedIndex;//校验位
+                portSensorAttribute[2] = Parent.SerialForm.cbox_Sensor_Bits.SelectedIndex;//数据位
+                portSensorAttribute[3] = Parent.SerialForm.cbox_Sensor_Stop.SelectedIndex;//停止位
+                string COM_id = portSensorId.ToString();
+                setXmlValue("COM", "id", COM_id, "Last_id", portSensor.PortName);
+                setXmlValue("COM", "id", COM_id, "Baud", tempPortSensorAttribute[0].ToString());
+                setXmlValue("COM", "id", COM_id, "Parity", tempPortSensorAttribute[1].ToString());
+                setXmlValue("COM", "id", COM_id, "Bits", tempPortSensorAttribute[2].ToString());
+                setXmlValue("COM", "id", COM_id, "Stop", tempPortSensorAttribute[3].ToString());
+                this.Parent.SerialForm.check_SensorPort.Checked = true;
+
+                return true;
+            }
+            else
+            {
+                this.Parent.statusLabel.Text = "测量端口" + portSensorId.ToString() + "开启失败";
                 this.Parent.SerialForm.check_SensorPort.Checked = false;
-                //Console.WriteLine(ex.Message);
-
-                //MessageBox.Show("测量端口开启失败：" + ex.ToString());
 
                 return false;
             }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("SetSensorPort" + ex.Message);
+
+            //    this.Parent.SerialForm.check_SensorPort.Checked = false;
+            //    ////Console.WriteLine(ex.Message);
+
+            //    //MessageBox.Show("测量端口开启失败：" + ex.ToString());
+
+            //    return false;
+            //}
 
         }
         #endregion
@@ -548,58 +563,58 @@ namespace MDIMonitor_CS
                 PhoneDataRecFuncSetted = !PhoneDataRecFuncSetted;
             }
             //打开串口的方法
-            try
+            //try
+            //{
+            if (portPhone_ShouldOpen)
             {
-                if (portPhone_ShouldOpen)
-                {
-                    if (!portPhone.IsOpen)
-                        portPhone.Open();
-                }
-                else
-                {
-                    this.Parent.statusLabel.Text = "设置已生效";
-                    Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
-                    Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
-                    Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
-                    Parent.portPhoneAttribute[3] = Parent.SerialForm.cbox_Phone_Stop.SelectedIndex;//停止位
-                    string COM_id = "Phone";
-                    setXmlValue("COM", "id", COM_id, "Last_id", portPhone.PortName);
-                    setXmlValue("COM", "id", COM_id, "Baud", tempPortPhoneAttribute[0].ToString());
-                    setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
-                    setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
-                    setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
-                    return true;
-                }
-                if (portPhone_ShouldOpen && portPhone.IsOpen)
-                {
-                    //MessageBox.Show("the port is opened!");
-                    this.Parent.statusLabel.Text = "通讯端口已开启";
-                    Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
-                    Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
-                    Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
-                    Parent.portPhoneAttribute[3] = Parent.SerialForm.cbox_Phone_Stop.SelectedIndex;//停止位
-                    string COM_id = "Phone";
-                    setXmlValue("COM", "id", COM_id, "Last_id", portPhone.PortName);
-                    setXmlValue("COM", "id", COM_id, "Baud", tempPortPhoneAttribute[0].ToString());
-                    setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
-                    setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
-                    setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
-
-                    return true;
-                }
-                else
-                {
-                    this.Parent.statusLabel.Text = "通讯端口开启失败";
-                    return false;
-                }
+                if (!portPhone.IsOpen)
+                    portPhone.Open();
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("SetPhonePort" + ex.Message);
+                this.Parent.statusLabel.Text = "设置已生效";
+                Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
+                Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
+                Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
+                Parent.portPhoneAttribute[3] = Parent.SerialForm.cbox_Phone_Stop.SelectedIndex;//停止位
+                string COM_id = "Phone";
+                setXmlValue("COM", "id", COM_id, "Last_id", portPhone.PortName);
+                setXmlValue("COM", "id", COM_id, "Baud", tempPortPhoneAttribute[0].ToString());
+                setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
+                setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
+                setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
+                return true;
+            }
+            if (portPhone_ShouldOpen && portPhone.IsOpen)
+            {
+                //MessageBox.Show("the port is opened!");
+                this.Parent.statusLabel.Text = "通讯端口已开启";
+                Parent.portPhoneAttribute[0] = Parent.SerialForm.cbox_Phone_Baud.SelectedIndex;//比特率
+                Parent.portPhoneAttribute[1] = Parent.SerialForm.cbox_Phone_Parity.SelectedIndex;//校验位
+                Parent.portPhoneAttribute[2] = Parent.SerialForm.cbox_Phone_Bits.SelectedIndex;//数据位
+                Parent.portPhoneAttribute[3] = Parent.SerialForm.cbox_Phone_Stop.SelectedIndex;//停止位
+                string COM_id = "Phone";
+                setXmlValue("COM", "id", COM_id, "Last_id", portPhone.PortName);
+                setXmlValue("COM", "id", COM_id, "Baud", tempPortPhoneAttribute[0].ToString());
+                setXmlValue("COM", "id", COM_id, "Parity", tempPortPhoneAttribute[1].ToString());
+                setXmlValue("COM", "id", COM_id, "Bits", tempPortPhoneAttribute[2].ToString());
+                setXmlValue("COM", "id", COM_id, "Stop", tempPortPhoneAttribute[3].ToString());
 
-                //MessageBox.Show("通讯端口开启失败：" + ex.ToString());
+                return true;
+            }
+            else
+            {
+                this.Parent.statusLabel.Text = "通讯端口开启失败";
                 return false;
             }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("SetPhonePort" + ex.Message);
+
+            //    //MessageBox.Show("通讯端口开启失败：" + ex.ToString());
+            //    return false;
+            //}
 
         }
         #endregion
@@ -834,20 +849,20 @@ namespace MDIMonitor_CS
             if (portSensor.IsOpen == false)
             {
                 Parent.statusLabel.Text = "测量端口未开启";
-                Console.WriteLine("port未开启");
+                //Console.WriteLine("port未开启");
                 return;
             }
             //Thread _readThread;
             //   _readThread = new Thread(threadReadPort);
             //   _readThread.Start();
             int bufferSize = portSensor.ReadBufferSize;
-            //Console.WriteLine("ReadBufferSize!=21");
+            ////Console.WriteLine("ReadBufferSize!=21");
 
             //Console.Write(SensorReadBuffer);
             int readLen = portSensor.BytesToRead;
             if (readLen == 21)
             {
-                Console.WriteLine("ReadBufferSize==21");
+                //Console.WriteLine("ReadBufferSize==21");
 
                 portSensor.Read(SensorReadBuffer, 0, bufferSize);
                 StringBuilder ret = new StringBuilder();
@@ -857,8 +872,8 @@ namespace MDIMonitor_CS
                     ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
                 }
                 var hex = ret.ToString();
-                Console.WriteLine(hex);
-                //Console.WriteLine("bitestoread=0");
+                //Console.WriteLine(hex);
+                ////Console.WriteLine("bitestoread=0");
                 //System.Threading.Thread.Sleep(5);//时间间隔
                 //continue;
                 return;
@@ -875,41 +890,41 @@ namespace MDIMonitor_CS
                     ret.AppendFormat("{0:x2}", tempSensorReadBuffer[i]);
                 }
                 var hex = ret.ToString();
-                Console.WriteLine(string.Format("ReadBufferSize={0}", readLen));
+                //Console.WriteLine(string.Format("ReadBufferSize={0}", readLen));
 
-                Console.WriteLine(hex);
+                //Console.WriteLine(hex);
             }
 
-        //}
-        //    catch (Exception ex)
-        //    {
-        //        this.Parent.statusLabel.Text = ex.Message;
-        //        return;
-        //    }
-}
+            //}
+            //    catch (Exception ex)
+            //    {
+            //        this.Parent.statusLabel.Text = ex.Message;
+            //        return;
+            //    }
+        }
 
         public void threadReadPort()
         {
             int bufferSize = portSensor.ReadBufferSize;
-            //Console.WriteLine("ReadBufferSize!=21");
+            ////Console.WriteLine("ReadBufferSize!=21");
 
             //Console.Write(SensorReadBuffer);
             //portSensor.Read(SensorReadBuffer, 0, bufferSize);
             int byte_readytoread = portSensor.BytesToRead;
             if (byte_readytoread == 21)
             {
-                
-                Console.WriteLine("1ReadBufferSize==21");
+
+                //Console.WriteLine("1ReadBufferSize==21");
 
                 portSensor.Read(SensorReadBuffer, 0, bufferSize);
                 StringBuilder ret = new StringBuilder();
-                for (int i=0;i< byte_readytoread;i++)
+                for (int i = 0; i < byte_readytoread; i++)
                 {
                     //{0:X2} 大写
                     ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
                 }
                 var hex = ret.ToString();
-                Console.WriteLine(hex);
+                //Console.WriteLine(hex);
             }
             else
             {
@@ -923,13 +938,13 @@ namespace MDIMonitor_CS
                     ret.AppendFormat("{0:x2}", SensorReadBuffer[i]);
                 }
                 var hex = ret.ToString();
-                Console.WriteLine(hex);
+                //Console.WriteLine(hex);
                 if (byte_readytoread > 21)
                 {
                     Array.Copy(tempReadBuffer, 0, SensorReadBuffer, byte_readytoread - 21, 21);
                     //SensorReadBuffer = SensorReadBuffer
                 }
-                Console.WriteLine("ReadBufferSize!=21,={0}", byte_readytoread);
+                //Console.WriteLine("ReadBufferSize!=21,={0}", byte_readytoread);
             }
 
         }
@@ -940,67 +955,67 @@ namespace MDIMonitor_CS
                 Parent.statusLabel.Text = "手机通讯端口未开启";
                 return;
             }
-            try
+            //try
+            //{
+            string currentline = "";
+            //循环接收串口中的数据
+            byte[] getbuffer = new byte[200];
+            int i = 0;
+            while (portPhone.BytesToRead > 0)
             {
-                string currentline = "";
-                //循环接收串口中的数据
-                byte[] getbuffer = new byte[200];
-                int i = 0;
-                while (portPhone.BytesToRead > 0)
-                {
-                    getbuffer[i++] = (byte)portPhone.ReadByte();
-                }
-                //getbuffer.
-                //getbuffer[i]=0;
-                //byte[] getbuffer = Encoding.UTF8.GetBytes(currentline);
-                currentline = Encoding.Default.GetString((getbuffer));
-                currentline.Replace("\n", "");
-                currentline.Replace(" ", "");
-                currentline.Replace("\r", "");
-                currentline.Replace("\t", "");
-                currentline.Replace("\0", "");
-                if (currentline == "" || currentline.IndexOf("OK") != -1)
-                    return;
-                //if (currentline.IndexOf("设置施工阶段") >= 0)
-                //{
-                //    string stage= currentline.Substring(currentline.IndexOf("设置施工阶段")+6,1);//.IndexOf("设置施工阶段")
-                //    this.Parent.statusLabel_phone.Text = String.Format("短信指令设置施工阶段为{0}",stage);
-                //    return;
-                //}
-                if (currentline.IndexOf("+EAIC") >= 0 || currentline.IndexOf("RING") >= 0 || currentline.IndexOf("+CLIP") >= 0)
-                {
-                    this.Parent.statusLabel_phone.Text = "手机收到来电";
-                    return;
-                }
-                if (currentline.IndexOf("CARRIER") >= 0)
-                {
-                    this.Parent.statusLabel_phone.Text = "手机来电已挂断";
-                    return;
-                }
-                if (currentline.Substring(0, 6) != "+CISMS")
-                {
-                    this.Parent.statusLabel_phone.Text = "手机收到非短信指令";
-                    return;
-                }
-                string number = currentline.Substring(10, 11);
-                string time = currentline.Substring(currentline.IndexOf(",") + 1, currentline.LastIndexOf(",") - currentline.IndexOf(",") - 1);
-                string cmd = currentline.Substring(currentline.LastIndexOf(",") + 1, currentline.LastIndexOf("\0") - currentline.LastIndexOf(",") - 1);
-                this.Parent.UIthread.phone_cmd[0] = number;
-                this.Parent.UIthread.phone_cmd[1] = time;
-                this.Parent.UIthread.phone_cmd[2] = cmd;
-                this.Parent.statusLabel_phone.Text = string.Format("[{0}]{1}>>{2}", time, number, cmd);
-                this.Parent.PostMessage(6, 1);//能进行到这一行证明接到短信指令，若能解析，将执行解析并返回信息
-                return;
-
-
+                getbuffer[i++] = (byte)portPhone.ReadByte();
             }
-            catch (Exception ex)
+            //getbuffer.
+            //getbuffer[i]=0;
+            //byte[] getbuffer = Encoding.UTF8.GetBytes(currentline);
+            currentline = Encoding.Default.GetString((getbuffer));
+            currentline.Replace("\n", "");
+            currentline.Replace(" ", "");
+            currentline.Replace("\r", "");
+            currentline.Replace("\t", "");
+            currentline.Replace("\0", "");
+            if (currentline == "" || currentline.IndexOf("OK") != -1)
+                return;
+            //if (currentline.IndexOf("设置施工阶段") >= 0)
+            //{
+            //    string stage= currentline.Substring(currentline.IndexOf("设置施工阶段")+6,1);//.IndexOf("设置施工阶段")
+            //    this.Parent.statusLabel_phone.Text = String.Format("短信指令设置施工阶段为{0}",stage);
+            //    return;
+            //}
+            if (currentline.IndexOf("+EAIC") >= 0 || currentline.IndexOf("RING") >= 0 || currentline.IndexOf("+CLIP") >= 0)
             {
-                Console.WriteLine("PhoneRecFun"+ex.Message);
-
-                //this.Parent.statusLabel.Text = ex.Message;
+                this.Parent.statusLabel_phone.Text = "手机收到来电";
                 return;
             }
+            if (currentline.IndexOf("CARRIER") >= 0)
+            {
+                this.Parent.statusLabel_phone.Text = "手机来电已挂断";
+                return;
+            }
+            if (currentline.Substring(0, 6) != "+CISMS")
+            {
+                this.Parent.statusLabel_phone.Text = "手机收到非短信指令";
+                return;
+            }
+            string number = currentline.Substring(10, 11);
+            string time = currentline.Substring(currentline.IndexOf(",") + 1, currentline.LastIndexOf(",") - currentline.IndexOf(",") - 1);
+            string cmd = currentline.Substring(currentline.LastIndexOf(",") + 1, currentline.LastIndexOf("\0") - currentline.LastIndexOf(",") - 1);
+            this.Parent.UIthread.phone_cmd[0] = number;
+            this.Parent.UIthread.phone_cmd[1] = time;
+            this.Parent.UIthread.phone_cmd[2] = cmd;
+            this.Parent.statusLabel_phone.Text = string.Format("[{0}]{1}>>{2}", time, number, cmd);
+            this.Parent.PostMessage(6, 1);//能进行到这一行证明接到短信指令，若能解析，将执行解析并返回信息
+            return;
+
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("PhoneRecFun"+ex.Message);
+
+            //    //this.Parent.statusLabel.Text = ex.Message;
+            //    return;
+            //}
         }
         /// <summary>
         /// 向手机发送短信
@@ -1081,125 +1096,125 @@ namespace MDIMonitor_CS
             //    Parent.statusLabel.Text = String.Format("测量端口未开启");
             //    return;
             //}
-            try
+            //try
+            //{
+            //for (int i = 0; i < totalNodeCount; i++)
+            //{
+            if (nodeChNum <= 0)
+                return;
+            TakeMeasure485((byte)(0 + 1));
+            //System.Threading.Thread.Sleep(5);//时间间隔
+            //Console.WriteLine("takemeasure485");
+            //int bufferSize = portSensor.ReadBufferSize;
+            //byte[] readBuffer = new byte[bufferSize];
+            //if (portSensor.BytesToRead == 0)
+            //{
+            //    ////Console.WriteLine("bitestoread=0");
+            //    //System.Threading.Thread.Sleep(5);//时间间隔
+            //    //continue;
+            //    return;
+            //}
+            //int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
+            byte[] readBuffer = (byte[])SensorReadBuffer.Clone();
+            int bufferSize = portSensor.ReadBufferSize;
+            int bufferLength = 0;
+            if (SensorReadBuffer[20] != 0 && SensorReadBuffer[21] == 0)
+                bufferLength = 21;
+            if (bufferLength == 21)//
             {
-                //for (int i = 0; i < totalNodeCount; i++)
-                //{
-                if (nodeChNum <= 0)
-                    return;
-                TakeMeasure485((byte)(0 + 1));
-                //System.Threading.Thread.Sleep(5);//时间间隔
-                Console.WriteLine("takemeasure485");
-                //int bufferSize = portSensor.ReadBufferSize;
-                //byte[] readBuffer = new byte[bufferSize];
-                //if (portSensor.BytesToRead == 0)
-                //{
-                //    //Console.WriteLine("bitestoread=0");
-                //    //System.Threading.Thread.Sleep(5);//时间间隔
-                //    //continue;
-                //    return;
-                //}
-                //int bufferLength = portSensor.Read(readBuffer, 0, bufferSize);
-                byte[] readBuffer = (byte[])SensorReadBuffer.Clone();
-                int bufferSize = portSensor.ReadBufferSize;
-                int bufferLength = 0;
-                if (SensorReadBuffer[20] != 0 && SensorReadBuffer[21] == 0)
-                    bufferLength = 21;
-                if (bufferLength == 21)//
+                //MessageBox.Show("ok");
+                uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
+                uint rcCRC = (uint)readBuffer[bufferLength - 1];
+                rcCRC = (rcCRC << 8) & 0x0ff00;
+                rcCRC += (uint)readBuffer[bufferLength - 2];
+                //Console.WriteLine("judge CRC");
+
+                if (rcCRC == CRC16Code)
                 {
-                    //MessageBox.Show("ok");
-                    uint CRC16Code = CRC16Caclu(readBuffer, bufferLength - 2);
-                    uint rcCRC = (uint)readBuffer[bufferLength - 1];
-                    rcCRC = (rcCRC << 8) & 0x0ff00;
-                    rcCRC += (uint)readBuffer[bufferLength - 2];
-                    Console.WriteLine("judge CRC");
+                    //Console.WriteLine("CRC pass");
 
-                    if (rcCRC == CRC16Code)
-                    {
-                        Console.WriteLine("CRC pass");
+                    for (int j = 0; j < nodeChNum; j++)
+                    {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
+                     //System.Threading.Thread.Sleep(2000);//测量时间间隔
+                     //System.Threading.Thread.Sleep(delayTime / nodeChNum);//测量时间间隔
+                        Parent.statusLabel.Text = String.Format("扫描节点{0}通道{1}", portSensorId + 1, j + 1);
+                        string[] dataUnit = new string[9];
+                        double InitVal = 0.0;
+                        double LMD = 0.0;
+                        string unit = "未设置";
+                        string name = "未设置";
+                        string pos = "未设置";
 
-                        for (int j = 0; j < nodeChNum; j++)
-                        {//节点 通道 感应器名称 时间 灵敏度 测量值 单位 位置
-                            //System.Threading.Thread.Sleep(2000);//测量时间间隔
-                            //System.Threading.Thread.Sleep(delayTime / nodeChNum);//测量时间间隔
-                            Parent.statusLabel.Text = String.Format("扫描节点{0}通道{1}", portSensorId + 1, j + 1);
-                            string[] dataUnit = new string[9];
-                            double InitVal = 0.0;
-                            double LMD = 0.0;
-                            string unit = "未设置";
-                            string name = "未设置";
-                            string pos = "未设置";
-
-                            if (this.Parent.UIthread.userDataTable[0].Rows.Count > portSensorId && this.Parent.UIthread.userDataTable[0].Columns.Count > j + 1)
-                            {
-                                InitVal = Convert.ToDouble(this.Parent.UIthread.userDataTable[0].Rows[portSensorId][j + 1]);
-                                LMD = Convert.ToDouble(this.Parent.UIthread.userDataTable[1].Rows[portSensorId][j + 1]);
-                                unit = this.Parent.UIthread.userDataTable[2].Rows[portSensorId][j + 1].ToString();
-                                pos = this.Parent.UIthread.userDataTable[5].Rows[portSensorId][j + 1].ToString();
-                                name = this.Parent.UIthread.userDataTable[6].Rows[portSensorId][j + 1].ToString();
-                            }
-                            else
-                                this.Parent.statusLabel.Text = "测量配置文件数据不足，按默认值0.0计算，请及时检查";
-                            //if(LMD<=0.0)
-                            dataUnit[0] = String.Format("{0}", portSensorId + 1);//节点
-                            dataUnit[1] = String.Format("{0}", j + 1);//通道
-                            dataUnit[2] = name;//String.Format("名称");//名称
-                            dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
-                            dataUnit[4] = String.Format("{0}", LMD);//灵敏度
-                            dataUnit[8] = String.Format("{0}", InitVal);//初始值
-                            if (j * 2 + 3 >= bufferSize)
-                            {
-                                Parent.statusLabel.Text = String.Format("配置文件通道数多于总线通道数，请更正配置文件");
-                                break;
-                            }
-
-                            uint dataValue = readBuffer[j * 2 + 3];
-                            dataValue = (dataValue << 8) & 0x0ff00;
-                            dataValue = dataValue + readBuffer[j * 2 + 4];
-                            //Random ran = new Random();
-                            int value = (int)dataValue;
-                            double dValue = value;
-                            if (LMD > 0)
-                                dValue = dValue / LMD;
-                            //else
-                            //    dValue = 0.0;
-                            origin_val[j] = dValue;
-                            dataUnit[5] = String.Format("{0:0.000}", dValue - InitVal);//测量值
-                            dataUnit[6] = unit;//String.Format("单位");
-                            dataUnit[7] = pos;//String.Format("位置");
-                            Console.WriteLine(dataUnit[5]);
-
-                            SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
-                            WarningFunc(dataUnit);
-
-                            //string strview = "";
-                            //for (int k = 0; k < 8; k++)
-                            //{
-                            //    strview += dataUnit[k];
-                            //    strview += ",";
-                            //}
-                            //MessageBox.Show(strview);
+                        if (this.Parent.UIthread.userDataTable[0].Rows.Count > portSensorId && this.Parent.UIthread.userDataTable[0].Columns.Count > j + 1)
+                        {
+                            InitVal = Convert.ToDouble(this.Parent.UIthread.userDataTable[0].Rows[portSensorId][j + 1]);
+                            LMD = Convert.ToDouble(this.Parent.UIthread.userDataTable[1].Rows[portSensorId][j + 1]);
+                            unit = this.Parent.UIthread.userDataTable[2].Rows[portSensorId][j + 1].ToString();
+                            pos = this.Parent.UIthread.userDataTable[5].Rows[portSensorId][j + 1].ToString();
+                            name = this.Parent.UIthread.userDataTable[6].Rows[portSensorId][j + 1].ToString();
                         }
-                        Console.WriteLine("扫描结束");
+                        else
+                            this.Parent.statusLabel.Text = "测量配置文件数据不足，按默认值0.0计算，请及时检查";
+                        //if(LMD<=0.0)
+                        dataUnit[0] = String.Format("{0}", portSensorId + 1);//节点
+                        dataUnit[1] = String.Format("{0}", j + 1);//通道
+                        dataUnit[2] = name;//String.Format("名称");//名称
+                        dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
+                        dataUnit[4] = String.Format("{0}", LMD);//灵敏度
+                        dataUnit[8] = String.Format("{0}", InitVal);//初始值
+                        if (j * 2 + 3 >= bufferSize)
+                        {
+                            Parent.statusLabel.Text = String.Format("配置文件通道数多于总线通道数，请更正配置文件");
+                            break;
+                        }
 
+                        uint dataValue = readBuffer[j * 2 + 3];
+                        dataValue = (dataValue << 8) & 0x0ff00;
+                        dataValue = dataValue + readBuffer[j * 2 + 4];
+                        //Random ran = new Random();
+                        int value = (int)dataValue;
+                        double dValue = value;
+                        if (LMD > 0)
+                            dValue = dValue / LMD;
+                        //else
+                        //    dValue = 0.0;
+                        origin_val[j] = dValue;
+                        dataUnit[5] = String.Format("{0:0.000}", dValue - InitVal);//测量值
+                        dataUnit[6] = unit;//String.Format("单位");
+                        dataUnit[7] = pos;//String.Format("位置");
+                                          //Console.WriteLine(dataUnit[5]);
+
+                        SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
+                                                     //WarningFunc(dataUnit);
+
+                        //string strview = "";
+                        //for (int k = 0; k < 8; k++)
+                        //{
+                        //    strview += dataUnit[k];
+                        //    strview += ",";
+                        //}
+                        //MessageBox.Show(strview);
                     }
-                }
-                else
-                {
-                    //Console.WriteLine("bitestoread!=21");
+                    //Console.WriteLine("扫描结束");
 
                 }
-                Console.WriteLine("takemeasure485 end");
-
-                //}
-                return;
             }
-            catch (Exception ex)
+            else
             {
-                //MessageBox.Show(ex.Message);
-                Console.WriteLine("AnalyseSensorPortData"+ex.Message);
-                return;
+                ////Console.WriteLine("bitestoread!=21");
+
             }
+            //Console.WriteLine("takemeasure485 end");
+
+            //}
+            return;
+            //}
+            //catch (Exception ex)
+            //{
+            //    //MessageBox.Show(ex.Message);
+            //    //Console.WriteLine("AnalyseSensorPortData"+ex.Message);
+            //    return;
+            //}
         }
 
         private bool WarningFunc(string[] dataUnit)
@@ -1226,10 +1241,10 @@ namespace MDIMonitor_CS
                 for (int i = 0; i < Parent.UIthread.AdminDataTable.Rows.Count; i++)
                 {
                     if ((bool)(Parent.UIthread.AdminDataTable.Rows[i][3]) == false)
-	                {
+                    {
                         continue;
-	                }
-                    this.Parent.PostPhoneMessage(2, Parent.UIthread.AdminDataTable.Rows[i][2].ToString()+ warninfo);
+                    }
+                    this.Parent.PostPhoneMessage(2, Parent.UIthread.AdminDataTable.Rows[i][2].ToString() + warninfo);
                     //PhoneCommand(warninfo, Parent.UIthread.AdminDataTable.Rows[i][2].ToString());
                     this.Parent.statusLabel_phone.Text = String.Format("向管理员{0}发送报警信息", Parent.UIthread.AdminDataTable.Rows[i][1].ToString());
                     Thread.Sleep(100);
@@ -1283,17 +1298,17 @@ namespace MDIMonitor_CS
 
             //转换
             //串口只能读取ASCII码或者进制数（1，2，3.....的进制，一般是16进制）
-            try
-            {
-                byte[] WriteBuffer = new byte[2048];
-                WriteBuffer = Encoding.Default.GetBytes(CommandString);
-                //将数据缓冲区的数据写入到串口端口
-                portSensor.Write(WriteBuffer, 0, WriteBuffer.Length);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("SensorCommand" + ex.Message);
-            }
+            //try
+            //{
+            byte[] WriteBuffer = new byte[2048];
+            WriteBuffer = Encoding.Default.GetBytes(CommandString);
+            //将数据缓冲区的数据写入到串口端口
+            portSensor.Write(WriteBuffer, 0, WriteBuffer.Length);
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("SensorCommand" + ex.Message);
+            //}
         }
 
         ///// <summary>
@@ -1463,13 +1478,13 @@ namespace MDIMonitor_CS
 
             //for (int i = 0; i < 4; i++)
             //{
-            //Console.WriteLine(String.Format("{0}", portSensorId));
+            ////Console.WriteLine(String.Format("{0}", portSensorId));
             nodeChNum = Convert.ToInt16(getXmlValue("NODE", "id", String.Format("{0}", portSensorId), "Count"));
             portSensorAttribute[0] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Baud"));//比特率
             portSensorAttribute[1] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Parity"));//校验位
             portSensorAttribute[2] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Bits"));//数据位
             portSensorAttribute[3] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Stop"));//停止位
-            portSensorAttribute[4] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Last_id").Replace("COM",""));//停止位
+            portSensorAttribute[4] = Convert.ToInt32(getXmlValue("COM", "id", String.Format("{0}", portSensorId), "Last_id").Replace("COM", ""));//停止位
 
             //}
 
@@ -1483,16 +1498,16 @@ namespace MDIMonitor_CS
 
         public void GridDelegateMethod(DataTable dt)
         {
-            try
-            {
-                Parent.CurGridForm.dataGrid_curdata.DataSource = dt;
+            //try
+            //{
+            Parent.CurGridForm.dataGrid_curdata.DataSource = dt;
 
-            }
-            catch (Exception e)
-            {
+            //}
+            //catch (Exception e)
+            //{
 
-                Console.WriteLine("GridDelegateMethod" + e.Message);
-            }
+            //    //Console.WriteLine("GridDelegateMethod" + e.Message);
+            //}
         }
 
         /// <summary>
@@ -1501,6 +1516,8 @@ namespace MDIMonitor_CS
         /// <param name="datastr">扫描到的节点数据集合</param>
         private void SendDataToChartSQL(string[] datastr)
         {
+            //Console.WriteLine("SendDataToChartSQL - start");
+
             Parent.curDataValue = datastr;
             //int node = Convert.ToInt16(datastr[0]);
             //int ch = Convert.ToInt16(datastr[1]);
@@ -1517,58 +1534,68 @@ namespace MDIMonitor_CS
                 Parent.CurGridForm.curGridData.Columns.Add("初始值", typeof(string));
                 Parent.CurGridForm.curGridData.Columns.Add("位置", typeof(string));
             }
-            try
+            //try
+            //{
+            for (int i = 0; i < Parent.CurGridForm.curGridData.Rows.Count; i++)
             {
-                for (int i = 0; i < Parent.CurGridForm.curGridData.Rows.Count; i++)
+                //curGridData.Columns.Add("节点");
+                //curGridData.Columns.Add("通道");
+                //curGridData.Columns.Add("时间");
+                //curGridData.Columns.Add("名称");
+                //curGridData.Columns.Add("测量值");
+                //curGridData.Columns.Add("单位");
+                //curGridData.Columns.Add("灵敏度");
+                //curGridData.Columns.Add("初始值");
+                //curGridData.Columns.Add("地点");
+                if (Parent.CurGridForm.curGridData.Rows[i][0].ToString() == datastr[0] && Parent.CurGridForm.curGridData.Rows[i][1].ToString() == datastr[1])
                 {
-                    //curGridData.Columns.Add("节点");
-                    //curGridData.Columns.Add("通道");
-                    //curGridData.Columns.Add("时间");
-                    //curGridData.Columns.Add("名称");
-                    //curGridData.Columns.Add("测量值");
-                    //curGridData.Columns.Add("单位");
-                    //curGridData.Columns.Add("灵敏度");
-                    //curGridData.Columns.Add("初始值");
-                    //curGridData.Columns.Add("地点");
-                    if (Parent.CurGridForm.curGridData.Rows[i][0].ToString() == datastr[0] && Parent.CurGridForm.curGridData.Rows[i][1].ToString() == datastr[1])
+                    //此处出现异常信息，SendDataToChartSQL索引超出范围。必须为非负值并小于集合大小。SendDataToChartSQL未将对象引用设置到对象的实例。
+                    //可能是在委托修改控件的dataTable时导致的实例问题
+                    if (Parent.CurGridForm.curGridData.Columns.Count < datastr.Length)
                     {
-                        此处出现异常信息，SendDataToChartSQL索引超出范围。必须为非负值并小于集合大小。SendDataToChartSQL未将对象引用设置到对象的实例。
-                        可能是在委托修改控件的dataTable时导致的实例问题
-                        Parent.CurGridForm.curGridData.Rows[i][2] = datastr[2];
-                        Parent.CurGridForm.curGridData.Rows[i][3] = datastr[3];
-                        Parent.CurGridForm.curGridData.Rows[i][4] = datastr[5];
-                        Parent.CurGridForm.curGridData.Rows[i][5] = datastr[6];
-                        Parent.CurGridForm.curGridData.Rows[i][6] = datastr[4];
-                        Parent.CurGridForm.curGridData.Rows[i][7] = datastr[8];
-                        Parent.CurGridForm.curGridData.Rows[i][8] = datastr[7];
-                        flag = true;
-                        break;
-                    }
-                    if (Parent.CurGridForm.curGridData.Columns.Count > 0)
-                    {
-                        Parent.CurGridForm.dataGrid_curdata.Columns[0].Width = 40;
-                        Parent.CurGridForm.dataGrid_curdata.Columns[1].Width = 40;
-                    }
+                        //Console.WriteLine("Parent.CurGridForm.curGridData.Columns.Count < datastr.Length");
 
+                        continue;
+                    }
+                    Parent.CurGridForm.curGridData.Rows[i][2] = datastr[2];
+                    Parent.CurGridForm.curGridData.Rows[i][3] = datastr[3];
+                    Parent.CurGridForm.curGridData.Rows[i][4] = datastr[5];
+                    Parent.CurGridForm.curGridData.Rows[i][5] = datastr[6];
+                    Parent.CurGridForm.curGridData.Rows[i][6] = datastr[4];
+                    Parent.CurGridForm.curGridData.Rows[i][7] = datastr[8];
+                    Parent.CurGridForm.curGridData.Rows[i][8] = datastr[7];
+                    flag = true;
+                    break;
                 }
-                if (flag == false)
+                //if (Parent.CurGridForm.curGridData.Columns.Count > 0)
+                //{
+                //    Parent.CurGridForm.dataGrid_curdata.Columns[0].Width = 40;
+                //    Parent.CurGridForm.dataGrid_curdata.Columns[1].Width = 40;
+                //}
+
+            }
+            if (flag == false)
+            {
+                if (Parent.CurGridForm.curGridData.Columns.Count == datastr.Length)
                 {
                     Parent.CurGridForm.curGridData.Rows.Add(datastr[0], datastr[1], datastr[2], datastr[3], datastr[5], datastr[6], datastr[4], datastr[8], datastr[7]);
                 }
-                UpdateGrid();
-
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("SendDataToChartSQL" + ex.Message);
-
-                //MessageBox.Show(ex.Message);
-            }
-            //Parent.CurGridForm.ScanData = datastr;
+            UpdateGrid();
             WriteDataToSQL(datastr);
             //
             //Parent.PostMessage(3, 1);//向UI线程发送消息存储数据
             Parent.PostMessage(2, 1);//向UI线程发送消息刷新chart
+            //Console.WriteLine("SendDataToChartSQL - end");
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("SendDataToChartSQL" + ex.Message);
+
+            //    //MessageBox.Show(ex.Message);
+            //}
+            //Parent.CurGridForm.ScanData = datastr;
 
         }
 
@@ -1589,44 +1616,44 @@ namespace MDIMonitor_CS
             path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
             if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
-            try
-            {
+            //try
+            //{
 
-                FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
-                if (!DatabaseFile.Exists)
-                {
-                    //if (!DatabaseFile.Directory.Exists)
-                    //{
-                    //    DatabaseFile.Directory.Create();
-                    //}
-                    SQLiteConnection.CreateFile(DatabaseFile.FullName);
-                }
-                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
-                dataBase.Open();
-                sqlCommand.Connection = dataBase;
-                string sqlcmd = null;
-                sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
+            FileInfo DatabaseFile = new FileInfo(path + "\\" + fileName);
+            if (!DatabaseFile.Exists)
+            {
+                //if (!DatabaseFile.Directory.Exists)
+                //{
+                //    DatabaseFile.Directory.Create();
+                //}
+                SQLiteConnection.CreateFile(DatabaseFile.FullName);
+            }
+            dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+            dataBase.Open();
+            sqlCommand.Connection = dataBase;
+            string sqlcmd = null;
+            sqlcmd = String.Format("create table if not exists {0} (NUM integer primary key autoincrement, Count integer)", "TableRows");
+            sqlCommand.CommandText = sqlcmd;
+            sqlCommand.ExecuteNonQuery();
+            for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
+            {
+                string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
+                sqlcmd = "create table if not exists " + tableName +
+                    "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
                 sqlCommand.CommandText = sqlcmd;
                 sqlCommand.ExecuteNonQuery();
-                for (int i = 0; i < 12; i++)//表名字数据对应当天的时间段,每两小时为一个表
-                {
-                    string tableName = String.Format("_{0}_00_00", (i * 2).ToString().PadLeft(2, '0'));
-                    sqlcmd = "create table if not exists " + tableName +
-                        "(NUM integer primary key autoincrement, DataTime varchar(50),LMD varchar(20),SensorVal varchar(20),Unit varchar(20),Pos varchar(50))";
-                    sqlCommand.CommandText = sqlcmd;
-                    sqlCommand.ExecuteNonQuery();
-                    sqlcmd = "insert into TableRows (Count) values (0)";
-                    sqlCommand.CommandText = sqlcmd;
-                    sqlCommand.ExecuteNonQuery();
-                }
-                dataBase.Close();
+                sqlcmd = "insert into TableRows (Count) values (0)";
+                sqlCommand.CommandText = sqlcmd;
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("CreateDataSQL" + ex.Message);
+            dataBase.Close();
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("CreateDataSQL" + ex.Message);
 
-                //MessageBox.Show(e.ToString());
-            }
+            //    //MessageBox.Show(e.ToString());
+            //}
             return File.Exists(path + "\\" + fileName);
         }
 
@@ -1644,6 +1671,8 @@ namespace MDIMonitor_CS
         public bool WriteDataToSQL(string[] datastr)//
         {
             //return true;
+            //Console.WriteLine("WriteDataToSQL - start");
+            Console.WriteLine("WriteDataToSQL - start");
             string fileName = String.Format("NODE{0}CH{1}", datastr[0], datastr[1]);
             string path = "Database";
             if (Directory.Exists(path) == false)
@@ -1651,47 +1680,68 @@ namespace MDIMonitor_CS
             path = path + "\\" + DateTime.Now.Date.ToString("yyyy-MM-dd");
             if (Directory.Exists(path) == false)
                 Directory.CreateDirectory(path);
+            //Console.WriteLine("WriteDataToSQL - 1");
             if (!File.Exists(path + "\\" + fileName))
             {
                 if (!CreateDataSQL(Convert.ToInt16(datastr[0]), Convert.ToInt16(datastr[1])))
                     return false;
             }
-            try
+            //Console.WriteLine("WriteDataToSQL - 2");
+
+            //try
+            //{
+            dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
+            dataBase.Open();
+            sqlCommand.Connection = dataBase;
+            string tableName = String.Format("_{0}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
+            //Console.WriteLine("WriteDataToSQL - 3");
+
+            string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
+            Console.WriteLine("WriteDataToSQL - 4");
+
+            sqlCommand.CommandText = sqlcmd;
+            Console.WriteLine(sqlcmd);
+
+            sqlCommand.ExecuteNonQuery();
+            Console.WriteLine("WriteDataToSQL - 4.5");
+
+            sqlcmd = String.Format("select Count from TableRows where NUM={0}", ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
+            Console.WriteLine("WriteDataToSQL - 5");
+
+            sqlCommand.CommandText = sqlcmd;
+            SQLiteDataReader sqlReader = sqlCommand.ExecuteReader();
+            string count = null;
+            while (sqlReader.Read())
             {
-                dataBase = new SQLiteConnection("Data Source=" + path + "\\" + fileName + ";Version=3;");
-                dataBase.Open();
-                sqlCommand.Connection = dataBase;
-                string tableName = String.Format("_{0}_00_00", (Convert.ToInt16(datastr[3].Substring(0, 2)) - (Convert.ToInt16(datastr[3].Substring(0, 2))) % 2).ToString().PadLeft(2, '0'));
-                string sqlcmd = String.Format("insert into {0} (DataTime,LMD,SensorVal,Unit,Pos) values ('{1}','{2}','{3}','{4}','{5}')", tableName, datastr[3], datastr[4], datastr[5], datastr[6], datastr[7]);
+                count = String.Format("{0}", sqlReader[0]);
+            }
+            sqlReader.Close();
+            Console.WriteLine("WriteDataToSQL - 6");
+
+            if (count != null)
+            {
+                sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count) + 1, ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
                 sqlCommand.CommandText = sqlcmd;
+                Console.WriteLine(sqlcmd);
                 sqlCommand.ExecuteNonQuery();
-                sqlcmd = String.Format("select Count from TableRows where NUM={0}", ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
-                sqlCommand.CommandText = sqlcmd;
-                SQLiteDataReader sqlReader = sqlCommand.ExecuteReader();
-                string count = null;
-                while (sqlReader.Read())
-                {
-                    count = String.Format("{0}", sqlReader[0]);
-                }
-                sqlReader.Close();
-                if (count != null)
-                {
-                    sqlcmd = String.Format("update TableRows set Count={0} where NUM={1}", Convert.ToInt16(count) + 1, ((Convert.ToInt16(datastr[3].Substring(0, 2)) / 2) + 1));
-                    sqlCommand.CommandText = sqlcmd;
-                    sqlCommand.ExecuteNonQuery();
-                }
-                dataBase.Close();
-                Parent.statusLabel.Text = String.Format("数据已写入");
-                return true;
+                Console.WriteLine("WriteDataToSQL - 6.5");
 
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("WriteDataToSQL" + ex.Message);
+            Console.WriteLine("WriteDataToSQL - 7");
 
-                Parent.statusLabel.Text = String.Format("数据写入失败");
-                return false;
-            }
+            dataBase.Close();
+            Parent.statusLabel.Text = String.Format("数据已写入");
+            Console.WriteLine("WriteDataToSQL - end");
+            return true;
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("WriteDataToSQL" + ex.Message);
+
+            //    Parent.statusLabel.Text = String.Format("数据写入失败");
+            //    return false;
+            //}
         }
 
         //public string GetText(object target)//delegate
@@ -1723,21 +1773,21 @@ namespace MDIMonitor_CS
         {
             if (portSensor.IsOpen)
             {
-                //Console.WriteLine("0");
+                ////Console.WriteLine("0");
                 AnalyseSensorPortData();
-                //Console.WriteLine("1");
+                ////Console.WriteLine("1");
 
                 if (!auto_measure)
-                    Parent.statusLabel.Text = string.Format("单次扫描测量节点{0}成功",portSensorId+1);
+                    Parent.statusLabel.Text = string.Format("单次扫描测量节点{0}成功", portSensorId + 1);
                 else
-                    Parent.statusLabel.Text = string.Format("自动扫描测量节点{0}中...",portSensorId + 1);
+                    Parent.statusLabel.Text = string.Format("自动扫描测量节点{0}中...", portSensorId + 1);
             }
             else
             {
-                //Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
+                ////Console.WriteLine(string.Format("测量节点{0}端口未开启0", portSensorId + 1));
 
                 ////Parent.statusLabel.Text = string.Format("测量节点{0}端口未开启", portSensorId + 1);
-                //Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
+                ////Console.WriteLine(string.Format("测量节点{0}端口未开启1", portSensorId + 1));
 
             }
         }
@@ -1833,69 +1883,69 @@ namespace MDIMonitor_CS
         { }
         private void msgFunction_9()//变更Sensor端口开关
         {
-            try
+            //try
+            //{
+            if (this.Parent.SerialForm.ui_flag)
+                return;
+            //portSensor_ShouldOpen = !portSensor_ShouldOpen;
+            if (portSensor.IsOpen)// && !portSensor_ShouldOpen
             {
-                if (this.Parent.SerialForm.ui_flag)
-                    return;
-                //portSensor_ShouldOpen = !portSensor_ShouldOpen;
-                if (portSensor.IsOpen)// && !portSensor_ShouldOpen
-                {
-                    //portSensor.DataReceived -= new SerialDataReceivedEventHandler(SensorRecFun);
-                    //SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
-                    portSensor.ReadExisting();
-                    portSensor.Close();
-                    if (!portSensor.IsOpen)
-                    {
-                        auto_measure = false;
-                        //this.Parent.menu_auto.Checked = false;
-                    }
-                }
-                else
-                    SetSensorPort();
-                this.Parent.SerialForm.ui_flag = false;
-                //if (!portSensor.IsOpen && portSensor_ShouldOpen)
-                //{
-                //    if (!SetSensorPort())
-                //        portSensor_ShouldOpen = !portSensor_ShouldOpen;
-                //}
-                //this.Parent.SerialForm.check_SensorPort.Checked = portSensor.IsOpen;// portSensor_ShouldOpen;
-                //Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor.IsOpen;// portSensor_ShouldOpen;
+                //portSensor.DataReceived -= new SerialDataReceivedEventHandler(SensorRecFun);
+                //SensorDataRecFuncSetted = !SensorDataRecFuncSetted;
+                portSensor.ReadExisting();
+                portSensor.Close();
                 if (!portSensor.IsOpen)
                 {
-                    Parent.statusLabel.Text = String.Format("测量端口已关闭");
+                    auto_measure = false;
                     //this.Parent.menu_auto.Checked = false;
-                    //this.Parent.menu_auto.Enabled = false;
-                    //this.Parent.menu_single_measure.Enabled = false;
-                    
-                        this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = true;
-                        this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = true;
-                        this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = true;
-                        this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = true;
-                        this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = true;
-
                 }
-                else
-                {
-                    Parent.statusLabel.Text = String.Format("测量端口已开启");
-                    //this.Parent.menu_auto.Checked = false;
-                    //this.Parent.menu_auto.Enabled = true;
-                    //this.Parent.menu_single_measure.Enabled = true;
-                    this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
-                    this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = false;
-                    this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = false;
-                    this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = false;
-                    this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = false;
-                }
-                //this.Parent.menu_auto.Enabled = false;
-                return;
             }
-            catch (Exception ex)
+            else
+                SetSensorPort();
+            this.Parent.SerialForm.ui_flag = false;
+            //if (!portSensor.IsOpen && portSensor_ShouldOpen)
+            //{
+            //    if (!SetSensorPort())
+            //        portSensor_ShouldOpen = !portSensor_ShouldOpen;
+            //}
+            //this.Parent.SerialForm.check_SensorPort.Checked = portSensor.IsOpen;// portSensor_ShouldOpen;
+            //Parent.SerialForm.cbox_Sensor_PortName.Enabled = !portSensor.IsOpen;// portSensor_ShouldOpen;
+            if (!portSensor.IsOpen)
             {
-                Console.WriteLine("msgFunction_9" + ex.Message);
+                Parent.statusLabel.Text = String.Format("测量端口已关闭");
+                //this.Parent.menu_auto.Checked = false;
+                //this.Parent.menu_auto.Enabled = false;
+                //this.Parent.menu_single_measure.Enabled = false;
 
-                Parent.statusLabel.Text = String.Format("测量端口变更失败");
-                throw;
+                this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = true;
+                this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = true;
+                this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = true;
+                this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = true;
+                this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = true;
+
             }
+            else
+            {
+                Parent.statusLabel.Text = String.Format("测量端口已开启");
+                //this.Parent.menu_auto.Checked = false;
+                //this.Parent.menu_auto.Enabled = true;
+                //this.Parent.menu_single_measure.Enabled = true;
+                this.Parent.SerialForm.cbox_Sensor_PortName.Enabled = false;
+                this.Parent.SerialForm.cbox_Sensor_Baud.Enabled = false;
+                this.Parent.SerialForm.cbox_Sensor_Parity.Enabled = false;
+                this.Parent.SerialForm.cbox_Sensor_Bits.Enabled = false;
+                this.Parent.SerialForm.cbox_Sensor_Stop.Enabled = false;
+            }
+            //this.Parent.menu_auto.Enabled = false;
+            return;
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Console.WriteLine("msgFunction_9" + ex.Message);
+
+            //    Parent.statusLabel.Text = String.Format("测量端口变更失败");
+            //    throw;
+            //}
         }
         private void msgFunction_10()//变更Phone端口开关
         {
@@ -1958,7 +2008,7 @@ namespace MDIMonitor_CS
             //    Parent.SerialForm.cbox_Warn_PortName.Enabled = !portWarn_ShouldOpen;
             //    if (!portWarn.IsOpen)
             //    {
-                    
+
             //        Parent.statusLabel.Text = String.Format("警报端口开关已关闭");
             //        this.Parent.menu_auto.Enabled = false;
             //        //this.Parent.menu_auto.Checked = false;
