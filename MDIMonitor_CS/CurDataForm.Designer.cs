@@ -39,7 +39,7 @@
             // 
             this.CurChart.Location = new System.Drawing.Point(1, 1);
             this.CurChart.Name = "CurChart";
-            this.CurChart.Size = new System.Drawing.Size(762, 831);
+            this.CurChart.Size = new System.Drawing.Size(0, 0);
             this.CurChart.TabIndex = 4;
             this.CurChart.Text = "chart1";
             this.CurChart.MouseClick += new System.Windows.Forms.MouseEventHandler(this.CurChart_MouseClick);

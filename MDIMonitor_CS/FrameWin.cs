@@ -26,9 +26,10 @@ namespace MDIMonitor_CS
         public PhoneThread phoneThread = null;
         public WarningThread warningThread = null;
         public MeasureTimer MeasureThread = null;
-        public string[] curDataValue = new string[8];
+        public string[] curDataValue = new string[9];
         public int CurFormCount = 0;
         public int nodeNum = 4;
+        Thread _readThread;
         public FrameWin()
         {
             WelcomeForm welcome = new WelcomeForm();
@@ -43,7 +44,7 @@ namespace MDIMonitor_CS
             thread = new UserThread[nodeNum];
             for (int i = 0; i < nodeNum; i++)
             {
-                thread[i] = new UserThread(this,i);
+                thread[i] = new UserThread(this, i);
                 //thread[i].portPhone = portPhone;
             }
             //thread[4] = { new UserThread(this), new UserThread(this), new UserThread(this), new UserThread(this) };
@@ -82,7 +83,7 @@ namespace MDIMonitor_CS
                 CurForm[i].Parent = this.StripContainer.ContentPanel;
                 CurForm[i].Show();
                 CurForm[i].Visible = false;
-                CurForm[i].cur_node = i+1;
+                CurForm[i].cur_node = i + 1;
             }
 
             HisForm = new HisDataForm(this);
@@ -128,7 +129,7 @@ namespace MDIMonitor_CS
             //this.MeasureThread.Kill();
         }
 
-        public void PostMessage(int msgid, int thread_id,int node_id)
+        public void PostMessage(int msgid, int thread_id, int node_id)
         {
             if (thread_id == 0)
             {
@@ -231,8 +232,8 @@ namespace MDIMonitor_CS
 
             }
         }
-        public void PostPhoneMessage(int msgid, string msginfo=null)
-        {     
+        public void PostPhoneMessage(int msgid, string msginfo = null)
+        {
             if (msgid > 0)
                 this.phoneThread.PostMessage(msgid, msginfo);
             else if (msgid == -1)
@@ -242,10 +243,10 @@ namespace MDIMonitor_CS
             else if (msgid == -3)
                 this.phoneThread.Kill();
             else if (msgid == -4)
-                this.phoneThread.End();     
+                this.phoneThread.End();
         }
 
-        
+
 
         private void btn_TestCurData_Click(object sender, EventArgs e)
         {
@@ -261,9 +262,9 @@ namespace MDIMonitor_CS
             SerialForm.Show();
             SerialForm.BringToFront();
             this.Text = FromTitle + " - 串口设置";
-            this.PostMessage(10,1);//发送消息设置SerialForm窗口控件状态
+            this.PostMessage(10, 1);//发送消息设置SerialForm窗口控件状态
             this.PostPhoneMessage(3);
-           
+
             //SerialForm.TopMost = true;
         }
 
@@ -294,7 +295,7 @@ namespace MDIMonitor_CS
         private void menu_ScanPort_Click(object sender, EventArgs e)
         {
             //this.thread.PostMessage(1);//发送消息主动扫描测量节点内数据
-            this.PostMessage(2,0,0);//发送消息测试短信发送功能
+            this.PostMessage(2, 0, 0);//发送消息测试短信发送功能
             //this.PostMessage(1, 0);
         }
 
@@ -329,7 +330,7 @@ namespace MDIMonitor_CS
             HisForm.BringToFront();
             this.Text = FromTitle + " - 历史数据浏览";
             //HisForm.TopMost = true;
-            
+
         }
 
         private void FrameWin_FormClosing(object sender, FormClosingEventArgs e)
@@ -357,6 +358,10 @@ namespace MDIMonitor_CS
             {
                 if (this.thread[i].auto_measure != menu_auto.Checked)
                     this.thread[i].auto_measure = menu_auto.Checked;
+                if (menu_auto.Checked == false)
+                {
+                    this.thread[i].Clear();
+                }
             }
             if (menu_auto.Checked == false)
             {
@@ -455,8 +460,34 @@ namespace MDIMonitor_CS
 
         private void menu_zeros_Click(object sender, EventArgs e)
         {
-            PostMessage(8,1);
+            PostMessage(8, 1);
         }
 
+        private void menu_test_Click(object sender, EventArgs e)
+        {
+            if (_readThread == null)
+            {
+                _readThread = new Thread(WriteTestData);
+                _readThread.Start();
+            }
+            else
+            {
+                _readThread.Abort();
+                _readThread = null;
+                for (int i = 0; i < nodeNum; i++)
+                {
+                    this.thread[i].Clear(); 
+                }
+            }
+        }
+
+        public void WriteTestData()
+        {
+            while (true)
+            {
+                this.PostMessage(15,0,0);
+                Thread.Sleep(1000);
+            }
+        }
     }
 }

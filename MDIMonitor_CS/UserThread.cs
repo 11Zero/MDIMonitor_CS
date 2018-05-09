@@ -89,7 +89,10 @@ namespace MDIMonitor_CS
             if (!this.thread.IsAlive)//如果线程未开启，将启动线程
                 this.thread.Start();
         }
-
+        public void Clear()
+        {
+            msgQueue.Clear();
+        }
         public void Start()
         {
             if (end || kill)//如果线程已被结束或终止，将不执行任何动作
@@ -210,7 +213,8 @@ namespace MDIMonitor_CS
                             }
                             break;
                     }
-                    msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
+                    if(msgQueue.Count!=0)
+                        msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
                 }
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束
@@ -1185,7 +1189,7 @@ namespace MDIMonitor_CS
                                           //Console.WriteLine(dataUnit[5]);
 
                         SendDataToChartSQL(dataUnit);//发送扫描数据并存储与打印
-                                                     //WarningFunc(dataUnit);
+                        WarningFunc(dataUnit);
 
                         //string strview = "";
                         //for (int k = 0; k < 8; k++)
@@ -2101,6 +2105,25 @@ namespace MDIMonitor_CS
         }
         private void msgFunction_15()//向Warn端口发送数据
         {
+            string[] dataUnit = new string[9];
+            Random rd = new Random();
+            for (int j = 0; j < 4; j++)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    dataUnit[0] = String.Format("{0}", j + 1);//节点
+                    dataUnit[1] = String.Format("{0}", i + 1);//通道
+                    dataUnit[2] = String.Format("名称");//名称
+                    dataUnit[3] = String.Format("{0}", DateTime.Now.ToString("HH:mm:ss"));//时间
+                    dataUnit[4] = String.Format("{0}", 201);//灵敏度
+                    dataUnit[8] = String.Format("{0}", 100);//初始值
+                    dataUnit[5] = String.Format("{0:0.000}", rd.Next(1, 1000));//测量值
+                    dataUnit[6] = String.Format("单位");
+                    dataUnit[7] = String.Format("位置");
+                    SendDataToChartSQL(dataUnit);
+                    Thread.Sleep(5);
+                }
+            }
             //if (!portWarn.IsOpen)
             //{
             //    Parent.statusLabel.Text = "警报端口未开启";

@@ -45,6 +45,11 @@ namespace MDIMonitor_CS
                 this.thread.Start();
         }
 
+        public void Clear()
+        {
+            msgQueue.Clear();
+        }
+
         public void Start()
         {
             if (end || kill)//如果线程已被结束或终止，将不执行任何动作

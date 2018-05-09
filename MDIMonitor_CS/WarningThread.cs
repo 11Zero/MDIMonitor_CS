@@ -59,7 +59,10 @@ namespace MDIMonitor_CS
             if (!this.thread.IsAlive)//如果线程未开启，将启动线程
                 this.thread.Start();
         }
-
+        public void Clear()
+        {
+            msgQueue.Clear();
+        }
         public void Start()
         {
             if (end || kill)//如果线程已被结束或终止，将不执行任何动作
@@ -174,7 +177,8 @@ namespace MDIMonitor_CS
                             //        msgFunction_15();//例如消息码为2是，执行msgFunction_2()函数
                             //    } break;
                     }
-                    msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
+                    if (msgQueue.Count != 0)
+                        msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
                 }
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束

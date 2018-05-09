@@ -92,6 +92,11 @@ namespace MDIMonitor_CS
             if (!this.thread.IsAlive)//如果线程未开启，将启动线程
                 this.thread.Start();
         }
+
+        public void Clear()
+        {
+            msgQueue.Clear();
+        }
         public void Start()
         {
             if (end || kill)//如果线程已被结束或终止，将不执行任何动作
@@ -193,7 +198,8 @@ namespace MDIMonitor_CS
                             }
                             break;
                     }
-                    msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
+                    if(msgQueue.Count != 0)
+                        msgQueue.Dequeue();//比对完当前消息并执行相应动作后，消息队列扔掉当前消息
                 }
                 if (msgQueue.Count == 0 && end)//如果线程被结束时当前消息队列中没有消息，将结束此线程
                     //如果当前消息队列中仍有未执行消息，线程将执行完所有消息后结束
@@ -555,6 +561,9 @@ namespace MDIMonitor_CS
         {
             //for (int i = 0; i < 4; i++)
             //{
+            Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
+            Parent.CurForm[Form_id].CurChart.Series[_ch + 7].Points.Clear();
+            return;
             try
             {
                 //Parent.CurForm[Form_id].CurChart.Series[_ch+3].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
@@ -566,9 +575,10 @@ namespace MDIMonitor_CS
                     //    string str = "";
                     //}
                     DataTable dt = _dataTable.Copy();
+                    /*以下部分合并预测数据到datatable时出错，待解决,先抛弃预测部分*/
                     dt.Merge(dataForecast[_node - 1, _ch - 1].MakeForecast(0).Copy());
-                    //this.CurChart.Series[k].MarkerStyle = MarkerStyle.Triangle;
                     Parent.CurForm[Form_id].CurChart.Series[_ch + 7].Points.DataBind(dt.AsEnumerable(), dt.Columns[0].ColumnName, dt.Columns[1].ColumnName, "");
+
                     Parent.CurForm[Form_id].CurChart.Series[_ch - 1].Points.DataBind(_dataTable.AsEnumerable(), _dataTable.Columns[0].ColumnName, _dataTable.Columns[1].ColumnName, "");
                     //this.CurChart.Series[k].Points.DataBind(dataSet.Tables[k].AsEnumerable(), dataSet.Tables[k].Columns[0].ColumnName, dataSet.Tables[k].Columns[1].ColumnName, "");
                 }

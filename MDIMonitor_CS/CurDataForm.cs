@@ -47,7 +47,9 @@ namespace MDIMonitor_CS
             //this.m_ParentForm.PostMessage(6);
         }
         private void InitChart()//初始化chart
-        { 
+        {
+            CurChart.Width = this.Width;
+            CurChart.Height = this.Height;
             if (combox_Node.Items.Count < 1)
             {
                 for (int i = 0; i < this.m_ParentForm.nodeNum; i++)
@@ -231,6 +233,8 @@ namespace MDIMonitor_CS
 
         private void CurChart_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            int rows = 4;
+            int cols = 2;
              IsZoomed = !IsZoomed;
             if (IsZoomed)
             {
@@ -264,10 +268,10 @@ namespace MDIMonitor_CS
                 for (int i = 0; i < 8; i++)
                 {
                     CurChart.ChartAreas[i].Visible = true;
-                    CurChart.ChartAreas[i].Position.X = (i/4 ) * 50;
-                    CurChart.ChartAreas[i].Position.Y = (i % 4) * 25;
-                    CurChart.ChartAreas[i].Position.Width = 50;
-                    CurChart.ChartAreas[i].Position.Height = 25;
+                    CurChart.ChartAreas[i].Position.X = (i/ rows) * 100/cols;
+                    CurChart.ChartAreas[i].Position.Y = (i % rows) * 100/rows;
+                    CurChart.ChartAreas[i].Position.Width = 100 / cols;
+                    CurChart.ChartAreas[i].Position.Height = 100 / rows;
                 }
             }
         }
