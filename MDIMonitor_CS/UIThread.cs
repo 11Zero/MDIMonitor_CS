@@ -429,7 +429,7 @@ namespace MDIMonitor_CS
             {
                 for (int j = 0; j < userDataTable[i].Rows.Count; j++)
                 {
-                    sqlcmd = String.Format("update {0}_{9} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}',CH6='{7}',CH6='{8}' where NUM={10}",
+                    sqlcmd = String.Format("update {0}_{9} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}',CH7='{7}',CH8='{8}' where NUM={10}",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
                         userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][7], userDataTable[i].Rows[j][8], stage, userDataTable[i].Rows[j][0]);
                     if (j + 1 > totalNode)
@@ -877,7 +877,7 @@ namespace MDIMonitor_CS
             for (int i = 0; i < Parent.nodeNum; i++)
             {
                 for (int j = 0; j < 8; j++)
-                    init_val[i, j] = this.Parent.thread[i].origin_val[j];
+                    init_val[i, j] = this.Parent.thread[i].cur_node_val[j];
             }
             string[] tableName = { "InitialVal" };
             userDataTable[0] = ReadUserSQL("user.dat", String.Format("{0}_{1}", tableName[0], stage));
@@ -899,14 +899,14 @@ namespace MDIMonitor_CS
             {
                 for (int j = 0; j < userDataTable[i].Rows.Count; j++)
                 {
-                    sqlcmd = String.Format("update {0}_{8} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}' where NUM={7}",
+                    sqlcmd = String.Format("update {0}_{10} set CH1='{1}',CH2='{2}',CH3='{3}',CH4='{4}',CH5='{5}',CH6='{6}',CH7='{7}',CH8='{8}' where NUM={9}",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
-                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][7], userDataTable[i].Rows[j][8], userDataTable[i].Rows[j][0], stage);
                     if (j + 1 > Parent.nodeNum)
                     {
-                        sqlcmd = String.Format("insert into {0}_{8} (CH1,CH2,CH3,CH4,CH5,CH6) values('{1}','{2}','{3}','{4}','{5}','{6}')",
+                        sqlcmd = String.Format("insert into {0}_{10} (CH1,CH2,CH3,CH4,CH5,CH6,CH7,CH8) values('{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')",
                         tableName[i], userDataTable[i].Rows[j][1], userDataTable[i].Rows[j][2],
-                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][0], stage);
+                        userDataTable[i].Rows[j][3], userDataTable[i].Rows[j][4], userDataTable[i].Rows[j][5], userDataTable[i].Rows[j][6], userDataTable[i].Rows[j][7], userDataTable[i].Rows[j][8], userDataTable[i].Rows[j][0], stage);
                     }
                     SQLHelper.ExecuteNonQuery(sqlcmd, null);
                 }
